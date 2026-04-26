@@ -4,9 +4,10 @@
 The auction is live. Nomination slot 13 of 14. $1,000 budget.
 
 ### Immediate priorities
-- [ ] Build WR and RB player-specific bid ceilings (budget buckets exist, player-level ceilings don't)
-- [ ] Build a live auction tracker — HTML tool to track remaining budget, mark winners/losers, show remaining targets with ceilings
-- [ ] Complete roster: need QB2, 4 WR starters, 3 RB starters, 2nd TE, bench depth
+- [x] Build live auction tracker (auction-tracker.html — served at localhost:8765)
+- [x] Build player-specific bid ceilings for all positions — baked into tracker
+- [ ] Complete roster: need QB2, 2 TEs, 4 WR starters, 3 RB starters, bench depth
+- [ ] Keep tracker updated as picks are made during draft
 
 ### Confirmed roster
 | Player | Pos | Price |
@@ -18,7 +19,13 @@ The auction is live. Nomination slot 13 of 14. $1,000 budget.
 |---|---|
 | Trey McBride (TE) | $250 |
 | Brock Bowers (TE) | $200 |
-| QB2 (Nix/Love/Stroud) | $80 |
+| QB2 (Bo Nix preferred) | $65 |
+
+### Tracker notes
+- Run: `python3 -m http.server 8765` from `no-flex-zone/` directory
+- Open: `http://localhost:8765/auction-tracker.html`
+- State saves to localStorage (key: `nfz_v4`) — persists across reloads
+- Tracker is reusable template for future leagues
 
 ## Phase 2: Post-Draft Analysis
 - [ ] Roster strength assessment vs other teams

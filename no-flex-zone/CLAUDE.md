@@ -20,8 +20,14 @@
 - 20+ carry bonus: +1 pt flat for RBs with 20+ rush attempts in a week
 
 ## Draft status (as of 2026-04-26)
-Auction is live. Nomination timer: up to 4 hours per player.
-Ryan is nomination slot 13 of 14.
+Auction is live. Picks so far: Drake Maye (QB, $220). Josh Allen went to AmadorFSU ($251).
+
+## Auction tracker
+Single-file tool: `no-flex-zone/auction-tracker.html`
+- Serve: `python3 -m http.server 8765` from `no-flex-zone/` directory
+- Open: `http://localhost:8765/auction-tracker.html`
+- State persists in localStorage (key: `nfz_v4`)
+- Tracks: won/lost/hidden players, remaining budget, per-position spend, max safe bid
 
 ## Confirmed spend
 | Player | Pos | Price |
