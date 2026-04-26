@@ -12,12 +12,12 @@ TE re-prioritized above QB after 2-year PPG analysis showed McBride and Bowers s
 
 | Position | Budget | Notes |
 |---|---|---|
-| QB | $285 | QB1 spent. QB2 ~$65. |
-| TE | $300 | McBride ceil $250, Bowers ceil $200 |
+| QB1 | $220 | Drake Maye — spent |
+| TE | $450 | Targeting **both** McBride ($250 ceil) + Bowers ($200 ceil) |
+| QB2 | $65 | Bo Nix preferred |
 | WR | $155 | WR1 ~$70, WR2 ~$46, WR3 ~$26, WR4 ~$13 |
 | RB | $80 | RB1 ~$44, RB2 ~$24, RB3 ~$12 |
-| Bench | $50 | 19 spots, mostly $1–5 |
-| Remaining | $130 | flex/bidding wars |
+| Bench | $30 | 19 spots, mostly $1 bids |
 
 ## Results
 

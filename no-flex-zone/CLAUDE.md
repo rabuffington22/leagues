@@ -33,19 +33,19 @@ Remaining: $780
 ## Budget (remaining)
 | Position | Budget | Notes |
 |---|---|---|
-| TE | $300 | McBride ceil $250, Bowers ceil $200 |
-| QB2 | $65 | Stroud / Love / Nix tier |
+| TE | $450 | Targeting **both** McBride ($250 ceil) + Bowers ($200 ceil) |
+| QB2 | $65 | Bo Nix preferred |
 | WR | $155 | 4 starters, stars-and-scrubs |
 | RB | $80 | 3 starters minimum |
-| Bench | $50 | |
+| Bench | $30 | Mostly $1 bids |
 
 ## Priority order
-TE first (McBride/Bowers score at QB levels) → QB → WR → RB last
+TE first — go for **both** McBride AND Bowers → QB2 → WR → RB last
 
 ## Target ceilings
-- **Trey McBride** (TE, ARI): $250 — best PPG player in dataset (25.4 avg, 50/51 games)
+- **Trey McBride** (TE, ARI): $250 — best PPG player in dataset (22.4 avg, 50/51 games)
 - **Brock Bowers** (TE, LV): $200 — elite PPG but injury risk (29 games in 2 years)
-- **QB2**: $80 max — Bo Nix preferred (22.6 PPG, 34/34 games)
+- **QB2**: $65 max — Bo Nix preferred (22.6 PPG, 34/34 games)
 
 ## Players removed from target list
 - Justin Herbert — 18.5 PPG 3-yr avg, sack penalty consistently hurts him

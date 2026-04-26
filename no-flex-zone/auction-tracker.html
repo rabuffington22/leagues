@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NFZ Auction Tracker</title>
+  <style>
+    :root {
+      --bg: #0f1117;
+      --bg2: #1a1d2e;
+      --bg3: #252840;
+      --text: #e8eaf0;
+      --muted: #6b7280;
+      --green: #22c55e;
+      --red: #ef4444;
+      --yellow: #f59e0b;
+      --blue: #3b82f6;
+      --purple: #8b5cf6;
+      --border: #2d3148;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, 'Segoe UI', sans-serif;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    /* ── Header ── */
+    .header {
+      background: var(--bg2);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 24px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .header-title {
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .reset-btn {
+      font-size: 11px;
+      color: var(--muted);
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 3px 10px;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .reset-btn:hover { color: var(--red); border-color: var(--red); }
+
+    .budget-row {
+      display: flex;
+      gap: 28px;
+      align-items: baseline;
+      flex-wrap: wrap;
+    }
+
+    .budget-stat { display: flex; flex-direction: column; gap: 1px; }
+
+    .budget-stat label {
+      font-size: 10px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .budget-stat .val {
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .val-remaining { color: var(--green); }
+    .val-spent     { color: var(--yellow); }
+    .val-needed    { color: var(--muted); }
+    .val-maxbid    { color: var(--blue); }
+    .val-warn      { color: var(--yellow) !important; }
+    .val-danger    { color: var(--red) !important; }
+
+    /* ── Tabs ── */
+    .tabs {
+      display: flex;
+      gap: 2px;
+      padding: 0 24px;
+      background: var(--bg2);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .tab {
+      padding: 9px 18px;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      transition: all 0.12s;
+      user-select: none;
+    }
+
+    .tab:hover { color: var(--text); }
+    .tab.active { color: var(--text); border-bottom-color: var(--blue); }
+
+    /* ── Content ── */
+    .content {
+      padding: 20px 24px;
+      max-width: 860px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section-title { font-size: 16px; font-weight: 700; }
+
+    .section-meta {
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .section-meta span { color: var(--text); font-weight: 600; }
+
+    /* ── Player rows ── */
+    .player-list {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      margin-bottom: 28px;
+    }
+
+    .player-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      transition: border-color 0.12s;
+    }
+
+    .player-row:hover:not(.won):not(.lost) { border-color: #3d4265; }
+
+    .player-row.won {
+      border-color: rgba(34, 197, 94, 0.4);
+      background: rgba(34, 197, 94, 0.04);
+    }
+
+    .player-row.lost { opacity: 0.3; }
+
+    .player-info { flex: 1; min-width: 0; }
+
+    .player-name {
+      font-weight: 600;
+      font-size: 14px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .player-note {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 1px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .player-stat {
+      font-size: 12px;
+      color: var(--muted);
+      white-space: nowrap;
+      text-align: right;
+    }
+
+    .player-stat .hi {
+      color: var(--text);
+      font-weight: 600;
+      font-size: 13px;
+    }
+
+    .player-ceil {
+      font-weight: 700;
+      font-size: 13px;
+      white-space: nowrap;
+      min-width: 52px;
+      text-align: right;
+    }
+
+    /* ── Actions ── */
+    .player-actions {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .won-label {
+      color: var(--green);
+      font-weight: 700;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .lost-label {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    /* ── Buttons ── */
+    .btn {
+      padding: 5px 11px;
+      border-radius: 4px;
+      border: none;
+      font-family: inherit;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      transition: all 0.12s;
+      white-space: nowrap;
+    }
+
+    .btn-win {
+      background: rgba(34, 197, 94, 0.12);
+      color: var(--green);
+      border: 1px solid rgba(34, 197, 94, 0.25);
+    }
+    .btn-win:hover { background: rgba(34, 197, 94, 0.22); }
+
+    .btn-lost {
+      background: rgba(107, 114, 128, 0.1);
+      color: var(--muted);
+      border: 1px solid rgba(107, 114, 128, 0.18);
+    }
+    .btn-lost:hover { background: rgba(107, 114, 128, 0.2); color: var(--text); }
+
+    .btn-undo {
+      background: none;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      font-size: 10px;
+    }
+    .btn-undo:hover { color: var(--text); }
+
+    /* ── Price input ── */
+    .price-wrap {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .price-prefix {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .price-input {
+      width: 60px;
+      padding: 4px 6px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .price-input:focus {
+      outline: none;
+      border-color: var(--green);
+    }
+
+    /* ── Roster tab ── */
+    .roster-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 8px;
+      margin-bottom: 28px;
+    }
+
+    .roster-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 10px 12px;
+    }
+
+    .roster-card-pos {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      margin-bottom: 4px;
+    }
+
+    .roster-card-name {
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .roster-card-price {
+      color: var(--green);
+      font-weight: 700;
+      font-size: 16px;
+      margin-top: 4px;
+    }
+
+    .pos-QB { color: #60a5fa; }
+    .pos-TE { color: #a78bfa; }
+    .pos-WR { color: #4ade80; }
+    .pos-RB { color: #fbbf24; }
+
+    /* ── Tab panels ── */
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ── Empty state ── */
+    .empty-state {
+      color: var(--muted);
+      font-style: italic;
+      padding: 20px 0;
+    }
+
+    /* ── Budget breakdown ── */
+    .budget-breakdown {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .budget-pos {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 10px 12px;
+    }
+
+    .budget-pos-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-bottom: 3px;
+    }
+
+    .budget-pos-remaining {
+      font-size: 20px;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      line-height: 1.1;
+    }
+
+    .budget-pos-total {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .budget-bar {
+      height: 3px;
+      background: var(--bg3);
+      border-radius: 2px;
+      margin-top: 7px;
+      overflow: hidden;
+    }
+
+    .budget-bar-fill {
+      height: 100%;
+      border-radius: 2px;
+      transition: width 0.3s;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Header ── -->
+<div class="header">
+  <div class="header-top">
+    <div class="header-title">No Flex Zone — 2026 Startup Auction</div>
+    <button class="reset-btn" onclick="resetState()">Reset</button>
+  </div>
+  <div class="budget-row">
+    <div class="budget-stat">
+      <label>Remaining</label>
+      <div class="val val-remaining" id="stat-remaining">—</div>
+    </div>
+    <div class="budget-stat">
+      <label>Spent</label>
+      <div class="val val-spent" id="stat-spent">—</div>
+    </div>
+    <div class="budget-stat">
+      <label>Players Needed</label>
+      <div class="val val-needed" id="stat-needed">—</div>
+    </div>
+    <div class="budget-stat">
+      <label>Max Safe Bid</label>
+      <div class="val val-maxbid" id="stat-maxbid">—</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Tabs ── -->
+<div class="tabs">
+  <div class="tab active" data-tab="roster">Roster</div>
+  <div class="tab" data-tab="te">TE</div>
+  <div class="tab" data-tab="qb">QB2</div>
+  <div class="tab" data-tab="wr">WR</div>
+  <div class="tab" data-tab="rb">RB</div>
+</div>
+
+<!-- ── Content ── -->
+<div class="content">
+
+  <div class="tab-panel active" id="tab-roster">
+    <div class="section-header">
+      <div class="section-title">Current Roster</div>
+      <div class="section-meta" id="roster-meta"></div>
+    </div>
+    <div class="budget-breakdown" id="budget-breakdown"></div>
+    <div class="roster-grid" id="roster-grid"></div>
+  </div>
+
+  <div class="tab-panel" id="tab-te">
+    <div class="section-header">
+      <div class="section-title">Tight End</div>
+      <div class="section-meta" id="meta-te"></div>
+    </div>
+    <div class="player-list" id="list-te"></div>
+  </div>
+
+  <div class="tab-panel" id="tab-qb">
+    <div class="section-header">
+      <div class="section-title">QB2</div>
+      <div class="section-meta" id="meta-qb"></div>
+    </div>
+    <div class="player-list" id="list-qb"></div>
+  </div>
+
+  <div class="tab-panel" id="tab-wr">
+    <div class="section-header">
+      <div class="section-title">Wide Receiver</div>
+      <div class="section-meta" id="meta-wr"></div>
+    </div>
+    <div class="player-list" id="list-wr"></div>
+  </div>
+
+  <div class="tab-panel" id="tab-rb">
+    <div class="section-header">
+      <div class="section-title">Running Back</div>
+      <div class="section-meta" id="meta-rb"></div>
+    </div>
+    <div class="player-list" id="list-rb"></div>
+  </div>
+
+</div>
+
+<script>
+// ── Constants ────────────────────────────────────────────────────────────────
+
+const TOTAL_BUDGET  = 1000;
+const TOTAL_ROSTER  = 30;   // 11 starters + 19 bench
+
+const POS_SLOTS = [
+  { key: 'maye',  label: 'QB1',   budget: 220, color: '#60a5fa', fixed: true  },
+  { key: 'te',    label: 'TE',    budget: 450, color: '#a78bfa', fixed: false },
+  { key: 'qb',    label: 'QB2',   budget:  65, color: '#60a5fa', fixed: false },
+  { key: 'wr',    label: 'WR',    budget: 155, color: '#4ade80', fixed: false },
+  { key: 'rb',    label: 'RB',    budget:  80, color: '#fbbf24', fixed: false },
+  { key: 'bench', label: 'Bench', budget:  30, color: '#6b7280', fixed: true  },
+];
+
+// ── Target players ───────────────────────────────────────────────────────────
+
+const TARGETS = {
+  te: [
+    { id: 'mcbride',  name: 'Trey McBride',    age: 26, ppg: 22.4, games: 50, ceil: 250, note: '#1 dynasty TE · 50/51 games · ascending (278→378→461 pts)' },
+    { id: 'bowers',   name: 'Brock Bowers',    age: 23, ppg: 22.5, games: 29, ceil: 200, note: 'Elite PPG but 29 games in 2 seasons — walk above $200' },
+    { id: 'kittle',   name: 'George Kittle',   age: 32, ppg: 20.5, games: 42, ceil:  60, note: 'Elite PPG · age 32 · no dynasty premium' },
+    { id: 'laporta',  name: 'Sam LaPorta',     age: 25, ppg: 17.8, games: 42, ceil:  50, note: 'Declining trend (341→251→156) · caution' },
+    { id: 'pitts',    name: 'Kyle Pitts',      age: 25, ppg: 13.9, games: 51, ceil:  40, note: 'Ascending (204→187→319) · 51/51 games · value play' },
+    { id: 'warren',   name: 'Tyler Warren',    age: 23, ppg: 16.5, games: 17, ceil:  35, note: 'Rookie · 1 year of data · upside play' },
+    { id: 'fannin',   name: 'Harold Fannin',   age: 21, ppg: 16.7, games: 16, ceil:  35, note: 'Rookie · youngest TE on board · upside play' },
+    { id: 'loveland', name: 'Colston Loveland',age: 22, ppg: 14.9, games: 16, ceil:  30, note: 'Rookie · Bears TE · 1 year of data' },
+    { id: 'kelce',    name: 'Travis Kelce',    age: 36, ppg: 19.4, games: 48, ceil:  25, note: 'Age 36 · zero dynasty value · win-now only' },
+    { id: 'njoku',    name: 'David Njoku',     age: 29, ppg: 16.2, games: 39, ceil:  20, note: 'Declining (296→217→120) · depth only' },
+  ],
+  qb: [
+    { id: 'nix',      name: 'Bo Nix',          age: 26, ppg: 22.6, games: 34, ceil:  80, note: 'PREFERRED QB2 · 34/34 games · most durable mid-tier QB' },
+    { id: 'love',     name: 'Jordan Love',     age: 27, ppg: 21.0, games: 47, ceil:  70, note: '47 games played · solid floor · GB offense stays strong' },
+    { id: 'cwill',    name: 'Caleb Williams',  age: 24, ppg: 17.8, games: 34, ceil:  60, note: '12.3→23.2 PPG leap (2024→2025) · trajectory is elite' },
+    { id: 'stroud',   name: 'C.J. Stroud',     age: 24, ppg: 16.6, games: 46, ceil:  55, note: 'Fell off in 2025 (246 pts, 14g) · situation watch' },
+    { id: 'goff',     name: 'Jared Goff',      age: 31, ppg: 22.1, games: 51, ceil:  35, note: 'Best consistency (51/51) but age 31 · win-now value only' },
+    { id: 'prescott', name: 'Dak Prescott',    age: 32, ppg: 21.8, games: 42, ceil:  20, note: 'Age 32 · missed 9 games in 2024 · depth only' },
+  ],
+  wr: [
+    { id: 'chase',    name: "Ja'Marr Chase",   age: 26, ppg: 24.3, games: 49, ceil:  90, note: 'Elite PPG · 49/51 games · age 26 prime · top WR target' },
+    { id: 'arsb',     name: 'Amon-Ra St. Brown',age:26, ppg: 23.7, games: 50, ceil:  85, note: 'Most consistent WR (50/51 games) · underrated in auctions' },
+    { id: 'lamb',     name: 'CeeDee Lamb',     age: 27, ppg: 23.0, games: 46, ceil:  80, note: 'Declining (487→324→249) · elite PPG but wrong direction' },
+    { id: 'jsn',      name: 'Jaxon Smith-Njigba',age:24,ppg: 18.4, games: 51, ceil:  75, note: 'Best trajectory (182→312→442) · 51/51 games · best long-term value' },
+    { id: 'nacua',    name: 'Puka Nacua',      age: 24, ppg: 24.6, games: 44, ceil:  65, note: 'Highest WR PPG · injury risk (missed all 2024) · age 24' },
+    { id: 'jefferson',name: 'Justin Jefferson', age:26, ppg: 20.3, games: 44, ceil:  65, note: 'Consistent elite · missed 2023 (10g) · full seasons since' },
+    { id: 'nabers',   name: 'Malik Nabers',    age: 22, ppg: 21.2, games: 19, ceil:  55, note: 'Elite PPG in 2024 (15g) · only 4g in 2025 · small sample' },
+    { id: 'collins',  name: 'Nico Collins',    age: 27, ppg: 20.2, games: 42, ceil:  50, note: 'Consistent when healthy · injury concern (12g in 2024)' },
+    { id: 'ajbrown',  name: 'A.J. Brown',      age: 28, ppg: 19.9, games: 45, ceil:  45, note: 'Solid but aging · missed games each year · age 28' },
+    { id: 'pickens',  name: 'George Pickens',  age: 25, ppg: 17.2, games: 48, ceil:  40, note: 'Ascending (258→207→360) · age 25 · value at mid price' },
+    { id: 'london',   name: 'Drake London',    age: 24, ppg: 18.0, games: 45, ceil:  35, note: 'Solid · 12g in 2025 · ATL offense situational' },
+    { id: 'hill',     name: 'Tyreek Hill',     age: 31, ppg: 21.6, games: 37, ceil:  20, note: 'Age 31 · only 4g in 2025 · dynasty liability · depth only' },
+  ],
+  rb: [
+    { id: 'gibbs',    name: 'Jahmyr Gibbs',    age: 24, ppg: 21.0, games: 49, ceil:  65, note: 'Ascending (256→383→388) · age 24 · top dynasty RB' },
+    { id: 'bijan',    name: 'Bijan Robinson',  age: 24, ppg: 20.6, games: 51, ceil:  60, note: 'Most durable elite RB (51/51 games) · improving each year' },
+    { id: 'achane',   name: "De'Von Achane",   age: 24, ppg: 19.6, games: 44, ceil:  50, note: 'High ceiling · missed 3g in 2025 · age 24' },
+    { id: 'jtaylor',  name: 'Jonathan Taylor', age: 27, ppg: 19.8, games: 41, ceil:  45, note: 'Ascending (168→262→381) · health concerns through 2023/24' },
+    { id: 'kwill',    name: 'Kyren Williams',  age: 25, ppg: 18.8, games: 45, ceil:  40, note: 'Consistent workhorse · volume-based value in this format' },
+    { id: 'barkley',  name: 'Saquon Barkley',  age: 29, ppg: 19.0, games: 46, ceil:  30, note: 'Declining (379→250 in 2025) · age 29 · win-now only' },
+    { id: 'cook',     name: 'James Cook',      age: 26, ppg: 17.1, games: 50, ceil:  30, note: 'Consistent 50/51 games · ascending (262→272→321)' },
+    { id: 'jeanty',   name: 'Ashton Jeanty',   age: 22, ppg: 15.5, games: 17, ceil:  25, note: 'Rookie · 1 year data · youngest RB · high upside' },
+    { id: 'hall',     name: 'Breece Hall',     age: 24, ppg: 16.7, games: 49, ceil:  20, note: 'Declining (318→262→237) · still young but wrong direction' },
+    { id: 'cbrown',   name: 'Chase Brown',     age: 26, ppg: 14.2, games: 45, ceil:  15, note: 'Ascending (60→277→304) · volume back in Cincinnati' },
+  ]
+};
+
+// ── State ────────────────────────────────────────────────────────────────────
+
+const SEED = {
+  spent: 220,
+  won: 1,
+  picks: { drake_maye: { name: 'Drake Maye', pos: 'QB', price: 220 } }
+};
+
+function loadState() {
+  try {
+    const s = localStorage.getItem('nfz_v3');
+    return s ? JSON.parse(s) : JSON.parse(JSON.stringify(SEED));
+  } catch { return JSON.parse(JSON.stringify(SEED)); }
+}
+
+function save(st) {
+  localStorage.setItem('nfz_v3', JSON.stringify(st));
+}
+
+let S = loadState();
+
+// ── Computed ─────────────────────────────────────────────────────────────────
+
+const remaining  = () => TOTAL_BUDGET - S.spent;
+const needed     = () => TOTAL_ROSTER - S.won;
+const maxSafeBid = () => Math.max(1, remaining() - (needed() - 1));
+
+// ── Render header ────────────────────────────────────────────────────────────
+
+function renderHeader() {
+  const r = remaining();
+  const mb = maxSafeBid();
+
+  document.getElementById('stat-remaining').textContent = `$${r}`;
+  document.getElementById('stat-spent').textContent     = `$${S.spent}`;
+  document.getElementById('stat-needed').textContent    = needed();
+  document.getElementById('stat-maxbid').textContent    = `$${mb}`;
+
+  const el = document.getElementById('stat-remaining');
+  el.className = 'val val-remaining';
+  if (r < 100)       el.classList.add('val-danger');
+  else if (r < 250)  el.classList.add('val-warn');
+
+  const mb_el = document.getElementById('stat-maxbid');
+  mb_el.className = 'val val-maxbid';
+  if (mb < 50)       mb_el.classList.add('val-danger');
+  else if (mb < 150) mb_el.classList.add('val-warn');
+}
+
+// ── Render roster ────────────────────────────────────────────────────────────
+
+function renderRoster() {
+  const picks = Object.values(S.picks);
+  document.getElementById('roster-meta').innerHTML =
+    `<span>${picks.length}</span> players &nbsp;·&nbsp; <span>$${S.spent}</span> spent`;
+
+  const grid = document.getElementById('roster-grid');
+
+  if (picks.length === 0) {
+    grid.innerHTML = '<p class="empty-state">No players won yet.</p>';
+    return;
+  }
+
+  const order = { QB: 0, TE: 1, WR: 2, RB: 3 };
+  const sorted = picks.slice().sort((a, b) => (order[a.pos] ?? 9) - (order[b.pos] ?? 9));
+
+  grid.innerHTML = sorted.map(p => `
+    <div class="roster-card">
+      <div class="roster-card-pos pos-${p.pos}">${p.pos}</div>
+      <div class="roster-card-name">${p.name}</div>
+      <div class="roster-card-price">$${p.price}</div>
+    </div>
+  `).join('');
+}
+
+// ── Render position list ─────────────────────────────────────────────────────
+
+function ceilColor(c) {
+  if (c >= 150) return '#f59e0b';
+  if (c >= 60)  return '#fbbf24';
+  return 'var(--muted)';
+}
+
+function renderPos(pos) {
+  const el = document.getElementById(`list-${pos}`);
+
+  el.innerHTML = TARGETS[pos].map(p => {
+    const pick  = S.picks[p.id];
+    const lost  = S.lost?.[p.id];
+
+    let statusClass = '';
+    let actionsHtml = '';
+
+    if (pick) {
+      statusClass = 'won';
+      actionsHtml = `
+        <div class="player-actions">
+          <span class="won-label">WON $${pick.price}</span>
+          <button class="btn btn-undo" onclick="undoPick('${p.id}','${pos}')">undo</button>
+        </div>`;
+    } else if (lost) {
+      statusClass = 'lost';
+      actionsHtml = `
+        <div class="player-actions">
+          <span class="lost-label">lost</span>
+          <button class="btn btn-undo" onclick="undoLost('${p.id}')">undo</button>
+        </div>`;
+    } else {
+      actionsHtml = `
+        <div class="player-actions">
+          <div class="price-wrap">
+            <span class="price-prefix">$</span>
+            <input class="price-input" id="inp-${p.id}" type="number" min="1"
+              placeholder="${p.ceil}"
+              onkeydown="if(event.key==='Enter') winPick('${p.id}','${pos}')">
+          </div>
+          <button class="btn btn-win"  onclick="winPick('${p.id}','${pos}')">Won</button>
+          <button class="btn btn-lost" onclick="markLost('${p.id}')">Lost</button>
+        </div>`;
+    }
+
+    return `
+      <div class="player-row ${statusClass}" id="row-${p.id}">
+        <div class="player-info">
+          <div class="player-name">${p.name}</div>
+          <div class="player-note">${p.note}</div>
+        </div>
+        <div class="player-stat"><span class="hi">${p.ppg}</span> ppg</div>
+        <div class="player-stat"><span class="hi">${p.games}</span>g</div>
+        <div class="player-ceil" style="color:${ceilColor(p.ceil)}">≤$${p.ceil}</div>
+        ${actionsHtml}
+      </div>`;
+  }).join('');
+}
+
+// ── Actions ──────────────────────────────────────────────────────────────────
+
+function playerMeta(id, pos) {
+  return TARGETS[pos]?.find(p => p.id === id);
+}
+
+function winPick(id, pos) {
+  const inp = document.getElementById(`inp-${id}`);
+  const price = parseInt(inp?.value);
+  if (!price || price < 1) { inp?.focus(); return; }
+
+  const p = playerMeta(id, pos);
+  if (!p) return;
+
+  if (!S.picks) S.picks = {};
+  S.picks[id] = { name: p.name, pos: pos.toUpperCase(), tab: pos, price };
+  S.spent += price;
+  S.won   += 1;
+
+  save(S);
+  renderAll();
+}
+
+function markLost(id) {
+  if (!S.lost) S.lost = {};
+  S.lost[id] = true;
+  save(S);
+  renderAll();
+}
+
+function undoPick(id, pos) {
+  const pick = S.picks?.[id];
+  if (pick) {
+    S.spent -= pick.price;
+    S.won   -= 1;
+    delete S.picks[id];
+  }
+  save(S);
+  renderAll();
+}
+
+function undoLost(id) {
+  delete S.lost[id];
+  save(S);
+  renderAll();
+}
+
+function resetState() {
+  if (!confirm('Reset all picks? This cannot be undone.')) return;
+  S = JSON.parse(JSON.stringify(SEED));
+  save(S);
+  renderAll();
+}
+
+// ── Tabs ─────────────────────────────────────────────────────────────────────
+
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById(`tab-${tab.dataset.tab}`).classList.add('active');
+  });
+});
+
+// ── Init ─────────────────────────────────────────────────────────────────────
+
+function posBudgetSpent(tabKey) {
+  return Object.values(S.picks)
+    .filter(p => p.tab === tabKey)
+    .reduce((sum, p) => sum + p.price, 0);
+}
+
+function renderBudgetBreakdown() {
+  const el = document.getElementById('budget-breakdown');
+  el.innerHTML = POS_SLOTS.map(s => {
+    const spent   = s.fixed ? (s.key === 'maye' ? 220 : 0) : posBudgetSpent(s.key);
+    const rem     = s.budget - spent;
+    const pct     = Math.min(100, (spent / s.budget) * 100);
+    const over    = rem < 0;
+    const warn    = !over && rem < s.budget * 0.25;
+    const remColor = over ? 'var(--red)' : warn ? 'var(--yellow)' : s.color;
+    const barBg    = s.key === 'maye' || s.key === 'bench' ? 'var(--muted)' :
+                     over ? 'var(--red)' : warn ? 'var(--yellow)' : s.color;
+    return `
+      <div class="budget-pos">
+        <div class="budget-pos-label">${s.label}</div>
+        <div class="budget-pos-remaining" style="color:${remColor}">$${rem}</div>
+        <div class="budget-pos-total">of $${s.budget}</div>
+        <div class="budget-bar">
+          <div class="budget-bar-fill" style="width:${pct}%;background:${barBg}"></div>
+        </div>
+      </div>`;
+  }).join('');
+
+  // Update section-meta for each position tab
+  const metas = [
+    { key: 'te', budget: 450, suffix: '· targeting McBride + Bowers' },
+    { key: 'qb', budget:  65, suffix: '· Maye is QB1' },
+    { key: 'wr', budget: 155, suffix: '· stars-and-scrubs' },
+    { key: 'rb', budget:  80, suffix: '· need 3' },
+  ];
+  metas.forEach(m => {
+    const metaEl = document.getElementById(`meta-${m.key}`);
+    if (!metaEl) return;
+    const spent = posBudgetSpent(m.key);
+    const rem   = m.budget - spent;
+    const over  = rem < 0;
+    const warn  = !over && rem < m.budget * 0.25;
+    const color = over ? 'var(--red)' : warn ? 'var(--yellow)' : '';
+    const style = color ? ` style="color:${color}"` : '';
+    metaEl.innerHTML = `Budget: <span${style}>$${rem}</span> / $${m.budget} ${m.suffix}`;
+  });
+}
+
+function renderAll() {
+  renderHeader();
+  renderRoster();
+  renderBudgetBreakdown();
+  ['te', 'qb', 'wr', 'rb'].forEach(renderPos);
+}
+
+renderAll();
+</script>
+</body>
+</html>
