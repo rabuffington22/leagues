@@ -1,0 +1,52 @@
+{
+  "name": "No Flex Zone",
+  "sleeper_league_id": "1312167756132536320",
+  "sleeper_draft_id": "1312167756782645248",
+  "season": 2026,
+  "type": "dynasty",
+  "draft_type": "auction",
+  "teams": 14,
+  "budget": 1000,
+  "draft_rounds": 30,
+  "roster_positions": ["QB", "QB", "RB", "RB", "RB", "WR", "WR", "WR", "WR", "TE", "TE"],
+  "bench_spots": 19,
+  "starters": {
+    "QB": 2,
+    "RB": 3,
+    "WR": 4,
+    "TE": 2
+  },
+  "scoring_settings": {
+    "pass_td": 6,
+    "pass_yd": 0.04,
+    "pass_int": -3,
+    "pass_int_td": -4,
+    "pass_sack": -2.5,
+    "pass_fd": 0.5,
+    "pass_cmp": 0.005,
+    "pass_inc": -0.008,
+    "pass_2pt": 3,
+    "rush_td": 5,
+    "rush_yd": 0.1,
+    "rush_fd": 0.4,
+    "rush_2pt": 3,
+    "bonus_rush_att_20": 1,
+    "rec": 1.0,
+    "rec_yd": 0.1,
+    "rec_td": 6,
+    "rec_fd": 0.5,
+    "rec_2pt": 2,
+    "bonus_rec_te": 0.9,
+    "bonus_rec_wr": 0.25,
+    "rec_20_29": 0.5,
+    "rec_30_39": 0.5,
+    "rec_40p": 1.0,
+    "fum_lost": -2
+  },
+  "notes": {
+    "te_effective_ppr": 1.9,
+    "wr_effective_ppr": 1.25,
+    "no_flex": true,
+    "waiver_budget": 1000
+  }
+}
