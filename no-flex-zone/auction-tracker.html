@@ -648,15 +648,15 @@ const POS_SLOTS = [
 
 const ROSTER_SLOTS_CONFIG = [
   { pos: 'QB', key: 'qb', label: 'QB', color: '#0a84ff', total: 4  },
-  { pos: 'WR', key: 'wr', label: 'WR', color: '#30d158', total: 10 },
-  { pos: 'TE', key: 'te', label: 'TE', color: '#bf5af2', total: 6  },
+  { pos: 'WR', key: 'wr', label: 'WR', color: '#30d158', total: 13 },
+  { pos: 'TE', key: 'te', label: 'TE', color: '#bf5af2', total: 7  },
   { pos: 'RB', key: 'rb', label: 'RB', color: '#ff9f0a', total: 6  },
 ];
 
 const DEFAULT_SLOT_BUDGETS = {
   qb1: 220, qb2: 65, qb3: 1,  qb4: 1,
-  wr1: 60,  wr2: 40, wr3: 25, wr4: 20, wr5: 5, wr6: 1, wr7: 1, wr8: 1, wr9: 1, wr10: 1,
-  te1: 250, te2: 196, te3: 1,  te4: 1,  te5: 1, te6: 1,
+  wr1: 60,  wr2: 40, wr3: 25, wr4: 20, wr5: 5, wr6: 1, wr7: 1, wr8: 1, wr9: 1, wr10: 1, wr11: 1, wr12: 1, wr13: 1,
+  te1: 250, te2: 196, te3: 1,  te4: 1,  te5: 1, te6: 1, te7: 1,
   rb1: 35,  rb2: 25, rb3: 15, rb4: 3,  rb5: 1, rb6: 1,
 };
 
@@ -782,6 +782,10 @@ function loadState() {
     if (!st.hidden)      st.hidden      = {};
     if (!st.lost)        st.lost        = {};
     if (!st.slotBudgets) st.slotBudgets = { ...DEFAULT_SLOT_BUDGETS };
+    // Seed any new slot keys added since last session
+    Object.entries(DEFAULT_SLOT_BUDGETS).forEach(([k, v]) => {
+      if (!(k in st.slotBudgets)) st.slotBudgets[k] = v;
+    });
     // Merge newly off-the-board players without resetting existing state
     Object.keys(SEED.lost || {}).forEach(id => {
       if (!st.picks?.[id]) st.lost[id] = true;

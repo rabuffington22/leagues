@@ -20,14 +20,36 @@
 - 20+ carry bonus: +1 pt flat for RBs with 20+ rush attempts in a week
 
 ## Draft status (as of 2026-04-26)
-Auction is live. Picks so far: Drake Maye (QB, $220). Josh Allen went to AmadorFSU ($251).
+Auction is live. 9 picks made so far — market running hot.
+
+### Off the board
+| Player | Pos | $ | Winner |
+|---|---|---|---|
+| Drake Maye | QB | $220 | **RYAN** |
+| Josh Allen | QB | $251 | Other |
+| Jayden Daniels | QB | $220 | Other |
+| Bijan Robinson | RB | $223 | Other |
+| De'Von Achane | RB | $165 | Other |
+| Jeremiyah Love | RB | $175 | Other |
+| Jordan Mason | RB | $25 | Other |
+| Ja'Marr Chase | WR | $238 | Other |
+| Malik Nabers | WR | $190 | Other |
+
+### Market calibration
+RB and WR market is running 2–4× above pre-draft ceilings. TE market not yet tested — McBride and Bowers still available.
 
 ## Auction tracker
 Single-file tool: `no-flex-zone/auction-tracker.html`
 - Serve: `python3 -m http.server 8765` from `no-flex-zone/` directory
 - Open: `http://localhost:8765/auction-tracker.html`
 - State persists in localStorage (key: `nfz_v4`)
-- Tracks: won/lost/hidden players, remaining budget, per-position spend, max safe bid
+- Tracks: won/lost/hidden players, remaining budget, per-position spend, max safe bid, per-slot budget planning with live pool
+
+### Tracker architecture notes
+- Player picks stored as `S.picks[id] = { name, pos, tab, price }` — `pos` is uppercase (QB/WR/TE/RB), `tab` is lowercase position key except QB1 which uses `'qb1'` to avoid being matched as QB2
+- Slot budgets stored in `S.slotBudgets` (26 keys: qb1–4, wr1–10, te1–6, rb1–6); defaults in `DEFAULT_SLOT_BUDGETS` constant
+- Pool = remaining budget minus sum of open slot budgets; displayed in section-meta header
+- SEED includes all known off-the-board players as `lost`; `loadState()` merges new lost players on every load without wiping existing state
 
 ## Confirmed spend
 | Player | Pos | Price |
