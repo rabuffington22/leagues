@@ -23,6 +23,13 @@
 - Jordan Mason ($25, AmadorFSU) was missing from design file's TARGETS — added to RB list and SEED.lost.
 - Design artifacts (zip, design-drop/, header-design.html) deleted before commit; not worth tracking.
 
+## 2026-04-27 — Session 4 (Docs commit + Frozen Tundra spinup)
+- Committed pending session docs from Session 3 (design system notes, slot budget count fix)
+- Verified SEED in auction-tracker.html — all 9 off-the-board picks confirmed present and attributed
+- Spun up `frozen-tundra/` directory as a second league using the same tracker template
+- Frozen Tundra is a 12-team linear rookie draft (not auction); built draft-tracker.html adapted for snake/linear format
+- Draft-tracker reuses the exact CSS system from auction-tracker; first version had flat styles and needed a full CSS rewrite to match
+
 ## 2026-04-26 — Session 2 (Tracker build + draft start)
 - Auction went live during this session. Josh Allen nominated first — bid up to $251, won by AmadorFSU.
 - Bijan Robinson nominated second by tking.

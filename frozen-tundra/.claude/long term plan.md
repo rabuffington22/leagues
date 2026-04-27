@@ -16,7 +16,8 @@ Draft is live. 12-team, 4-round, linear format, SuperFlex PPR.
 | 4.02 | 38 | — |
 
 ### Immediate priorities
-- [ ] Use draft-tracker.html during live draft
+- [x] Build draft-tracker.html with SF-adjusted consensus rankings baked in
+- [ ] Use draft-tracker.html during live draft — server ready on port 8766
 - [ ] Record all picks (Mine / Gone) in real time
 - [ ] Update this file with final roster after draft completes
 
