@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Frozen Tundra Draft Tracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-0:   #020203;
+      --bg-1:   #07070a;
+      --bg-2:   #0e0e12;
+      --bg-3:   #16161b;
+      --line:   rgba(220,200,160,0.06);
+      --line-2: rgba(220,200,160,0.14);
+
+      --text:   #f4ead2;
+      --text-2: #b3a988;
+      --text-3: #6f6852;
+      --text-4: #3a3829;
+
+      --accent:      #c9a14b;
+      --accent-2:    #e8c876;
+      --accent-deep: #8a6924;
+      --accent-soft: rgba(201,161,75,0.12);
+      --accent-line: rgba(201,161,75,0.36);
+
+      --good:      #7fbf6e;
+      --good-soft: rgba(127,191,110,0.10);
+      --good-line: rgba(127,191,110,0.32);
+
+      --warn:      #d4a259;
+      --bad:       #b3463f;
+      --bad-2:     #d56961;
+      --bad-deep:  #6e1f1b;
+      --bad-soft:  rgba(179,70,63,0.12);
+      --bad-soft-2:rgba(179,70,63,0.20);
+      --bad-line:  rgba(179,70,63,0.40);
+      --bad-line-2:rgba(179,70,63,0.60);
+
+      --serif: 'Fraunces', 'Times New Roman', Georgia, serif;
+      --mono:  'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+      --sans:  'Inter', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      color: var(--text);
+      font-family: var(--sans);
+      font-size: 13px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      font-feature-settings: "ss01", "cv11";
+    }
+
+    button { font-family: inherit; }
+
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(ellipse at 50% -10%, rgba(201,161,75,0.05), transparent 45%),
+        radial-gradient(ellipse at 50% 120%, rgba(0,0,0,0.7), transparent 55%),
+        url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.04  0 0 0 0 0.04  0 0 0 0 0.03  0 0 0 0.16 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>"),
+        linear-gradient(180deg, #020203, #000000);
+      background-attachment: fixed;
+    }
+
+    .num, .mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+
+    /* ── Header ─────────────────────────────────────────────── */
+    .header {
+      background:
+        radial-gradient(1400px 500px at 18% -30%, rgba(232,200,118,0.07), transparent 60%),
+        radial-gradient(900px 400px at 88% -20%, rgba(201,161,75,0.04), transparent 70%),
+        linear-gradient(180deg, #07070a 0%, #020203 100%);
+      border-bottom: 1px solid var(--line);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 24px rgba(0,0,0,0.5);
+    }
+    .header::before {
+      content: '';
+      position: absolute;
+      left: 0; right: 0; top: 0;
+      height: 3px;
+      background: linear-gradient(180deg, var(--accent-deep), var(--accent) 30%, var(--accent-2) 50%, var(--accent) 70%, var(--accent-deep));
+      box-shadow: 0 0 12px rgba(232,200,118,0.35);
+    }
+
+    .header-top {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      padding: 26px 32px 22px;
+      gap: 32px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: flex-end;
+      gap: 18px;
+      min-width: 0;
+    }
+
+    .brand-mark {
+      flex-shrink: 0;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #4a1a18, #2a0c0b 65%, #160605 100%);
+      box-shadow:
+        inset 0 0 0 2px var(--accent-deep),
+        inset 0 0 0 3px var(--accent),
+        inset 0 0 0 4px var(--accent-2),
+        inset 0 0 0 5px var(--accent),
+        inset 0 0 0 6px var(--accent-deep),
+        inset 0 -8px 14px rgba(0,0,0,0.4),
+        0 2px 16px rgba(0,0,0,0.6);
+      display: grid;
+      place-items: center;
+      position: relative;
+      transform: translateY(2px);
+    }
+    .brand-mark .glyph {
+      font-family: var(--serif);
+      font-style: italic;
+      font-weight: 700;
+      font-size: 30px;
+      line-height: 1;
+      transform: translate(-1px, -2px);
+      background: linear-gradient(180deg, var(--accent-2), var(--accent) 55%, var(--accent-deep));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      filter: drop-shadow(0 1px 0 rgba(0,0,0,0.5));
+    }
+
+    .brand-text { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+
+    .brand-eyebrow {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.32em;
+      font-weight: 500;
+      color: var(--accent);
+      text-transform: uppercase;
+    }
+    .brand-eyebrow .sep { color: var(--bad); margin: 0 8px; opacity: 0.85; }
+
+    .brand-title {
+      font-family: var(--serif);
+      font-variation-settings: 'opsz' 144;
+      font-size: 42px;
+      font-weight: 600;
+      letter-spacing: -0.025em;
+      line-height: 0.95;
+      color: var(--text);
+      text-shadow: 0 1px 0 rgba(0,0,0,0.5), 0 0 30px rgba(244,234,210,0.06);
+    }
+    .brand-title .ital {
+      font-style: italic;
+      font-weight: 500;
+      background: linear-gradient(180deg, var(--accent-2), var(--accent) 60%, var(--accent-deep));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .brand-sub {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text-3);
+      letter-spacing: 0.04em;
+      margin-top: 2px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-shrink: 0;
+    }
+
+    .live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--bad);
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      padding: 7px 12px 7px 13px;
+      background: linear-gradient(180deg, rgba(179,70,63,0.10), rgba(179,70,63,0.04));
+      border: 1px solid var(--bad-line);
+      border-radius: 4px;
+      box-shadow: inset 0 1px 0 rgba(255,180,170,0.08), 0 1px 0 rgba(0,0,0,0.4);
+    }
+    .live-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--bad);
+      animation: live-pulse 2s ease-in-out infinite;
+    }
+    @keyframes live-pulse {
+      0%, 100% { box-shadow: 0 0 8px 0 rgba(179,70,63,0.7); }
+      70%       { box-shadow: 0 0 0 6px rgba(179,70,63,0); }
+    }
+
+    .reset-btn {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-3);
+      background: transparent;
+      border: 1px solid var(--line-2);
+      border-radius: 4px;
+      padding: 7px 14px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .reset-btn:hover { color: var(--bad); border-color: var(--bad-line); background: var(--bad-soft); }
+
+    /* ── Pick stats row (replaces budget-row) ─────────────── */
+    .budget-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-top: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(0,0,0,0.45), rgba(0,0,0,0.25) 50%), linear-gradient(180deg, var(--bg-1), var(--bg-0));
+      position: relative;
+    }
+    .budget-row::before {
+      content: '';
+      position: absolute;
+      left: 0; right: 0; top: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(201,161,75,0.45) 50%, transparent);
+    }
+    .budget-stat {
+      padding: 18px 32px 22px;
+      border-right: 1px solid var(--line);
+      position: relative;
+    }
+    .budget-stat:last-child { border-right: none; }
+
+    .budget-stat label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--text-3);
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      font-weight: 500;
+      margin-bottom: 10px;
+    }
+    .budget-stat label::before {
+      content: '♦';
+      color: var(--accent);
+      font-size: 9px;
+    }
+
+    .budget-stat .val {
+      font-family: var(--mono);
+      font-variant-numeric: tabular-nums;
+      font-size: 36px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      color: var(--text);
+    }
+    .budget-stat .val .sym {
+      font-weight: 400;
+      color: var(--bad);
+      margin-right: 1px;
+      font-size: 0.55em;
+      vertical-align: 0.22em;
+      opacity: 0.85;
+    }
+    .stat-sub {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text-3);
+      margin-top: 10px;
+      letter-spacing: 0.02em;
+    }
+    .val-good   { color: var(--good) !important; }
+    .val-warn   { color: var(--warn) !important; }
+    .val-danger { color: var(--bad)  !important; }
+
+    /* ── Tabs ────────────────────────────────────────────────── */
+    .tabs {
+      display: flex;
+      padding: 0 32px;
+      background: var(--bg-0);
+      border-top: 1px solid var(--line);
+    }
+    .tab {
+      padding: 14px 0;
+      margin-right: 32px;
+      cursor: pointer;
+      border-bottom: 1px solid transparent;
+      color: var(--text-3);
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      transition: color 0.12s, border-color 0.12s;
+      user-select: none;
+      margin-bottom: -1px;
+      position: relative;
+    }
+    .tab:hover { color: var(--text-2); }
+    .tab.active {
+      color: var(--bad-2);
+      border-bottom-color: var(--bad);
+      text-shadow: 0 0 12px rgba(213,105,97,0.3);
+    }
+    .tab.active::before {
+      content: '';
+      position: absolute;
+      left: 0; right: 0; bottom: -1px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--bad-2), transparent);
+      filter: blur(2px);
+      opacity: 0.7;
+    }
+
+    /* ── Content ─────────────────────────────────────────────── */
+    .content { padding: 24px 32px 64px; max-width: 1600px; }
+
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 18px;
+      padding-bottom: 16px;
+      position: relative;
+      border-bottom: none;
+    }
+    .section-header::after {
+      content: '';
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      height: 1px;
+      background:
+        linear-gradient(90deg,
+          transparent 0%,
+          rgba(201,161,75,0.0) 2%,
+          rgba(201,161,75,0.45) 18%,
+          rgba(201,161,75,0.55) 48%,
+          transparent 49%,
+          transparent 51%,
+          rgba(201,161,75,0.55) 52%,
+          rgba(201,161,75,0.45) 82%,
+          rgba(201,161,75,0.0) 98%,
+          transparent 100%);
+    }
+    .section-header::before {
+      content: '';
+      position: absolute;
+      left: 50%; bottom: -4px;
+      width: 9px; height: 9px;
+      transform: translateX(-50%) rotate(45deg);
+      background: linear-gradient(135deg, var(--bad-2), var(--bad) 50%, var(--bad-deep));
+      box-shadow:
+        inset 0 0 0 1px rgba(0,0,0,0.4),
+        0 0 8px rgba(201,161,75,0.3),
+        0 0 0 3px var(--bg-0);
+    }
+    .section-title {
+      font-family: var(--serif);
+      font-variation-settings: 'opsz' 144;
+      font-size: 22px;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      color: var(--text);
+    }
+    .section-title .ital { font-style: italic; color: var(--bad-2); font-weight: 400; }
+    .section-meta {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text-3);
+      letter-spacing: 0.02em;
+    }
+    .section-meta .hi { color: var(--text); font-weight: 500; }
+
+    /* ── Position filter ──────────────────────────────────────── */
+    .pos-filter {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 20px;
+    }
+    .pos-btn {
+      padding: 5px 14px;
+      border-radius: 4px;
+      border: 1px solid var(--line-2);
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      background: transparent;
+      color: var(--text-3);
+      transition: all 0.12s;
+    }
+    .pos-btn:hover { color: var(--text-2); border-color: var(--line-2); background: var(--bg-2); }
+    .pos-btn.active {
+      color: var(--bad-2);
+      border-color: var(--bad-line);
+      background: var(--bad-soft);
+    }
+
+    /* ── Dividers ─────────────────────────────────────────────── */
+    .starter-divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 14px 0 6px;
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--text-3);
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      font-weight: 500;
+    }
+    .starter-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--line);
+    }
+
+    .gone-divider {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--text-3);
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      padding: 18px 0 6px;
+    }
+
+    /* ── Player rows ──────────────────────────────────────────── */
+    .player-list { display: flex; flex-direction: column; }
+
+    .player-row {
+      display: grid;
+      grid-template-columns: 36px 1fr 50px auto;
+      align-items: center;
+      gap: 14px;
+      padding: 11px 14px;
+      background: transparent;
+      border-bottom: 1px solid var(--line);
+      transition: background 0.12s;
+    }
+    .player-row:hover:not(.won):not(.lost) { background: var(--bg-1); }
+    .player-row.won {
+      background: linear-gradient(90deg, rgba(127,191,110,0.18), rgba(127,191,110,0.05));
+      border-bottom-color: var(--good-line);
+      box-shadow: inset 3px 0 0 var(--good);
+    }
+    .player-row.lost { opacity: 0.42; }
+
+    .player-rank {
+      font-family: var(--mono);
+      font-variant-numeric: tabular-nums;
+      font-size: 12px;
+      color: var(--text-3);
+      text-align: right;
+    }
+
+    .player-info { min-width: 0; }
+    .player-name {
+      font-weight: 600;
+      font-size: 14px;
+      letter-spacing: -0.01em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: var(--text);
+    }
+    .player-note {
+      font-size: 11px;
+      color: var(--text-3);
+      margin-top: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .player-pos {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--bad-2);
+      text-align: center;
+      letter-spacing: 0.04em;
+    }
+
+    .player-actions {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      justify-content: flex-end;
+      flex-shrink: 0;
+    }
+
+    .won-label {
+      font-family: var(--mono);
+      color: var(--good);
+      font-weight: 600;
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .won-pick {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text-3);
+      letter-spacing: 0.02em;
+    }
+    .lost-label {
+      font-family: var(--mono);
+      color: var(--text-3);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    /* ── Buttons ──────────────────────────────────────────────── */
+    .btn {
+      padding: 6px 12px;
+      border-radius: 4px;
+      border: 1px solid transparent;
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.12s;
+      white-space: nowrap;
+      background: transparent;
+      color: var(--text-2);
+    }
+    .btn:hover { color: var(--text); border-color: var(--line-2); }
+
+    .btn-win {
+      background: linear-gradient(180deg, rgba(201,161,75,0.20), rgba(201,161,75,0.08));
+      border-color: var(--accent-line);
+      color: var(--accent-2);
+      box-shadow: inset 0 1px 0 rgba(232,200,118,0.18), inset 0 -1px 0 rgba(0,0,0,0.25);
+    }
+    .btn-win:hover {
+      background: linear-gradient(180deg, rgba(232,200,118,0.30), rgba(201,161,75,0.14));
+      border-color: var(--accent);
+      color: var(--accent-2);
+      box-shadow: inset 0 1px 0 rgba(232,200,118,0.3), 0 0 12px rgba(201,161,75,0.2);
+    }
+
+    .btn-lost {
+      background: transparent;
+      border-color: var(--bad-line);
+      color: var(--bad);
+    }
+    .btn-lost:hover { color: var(--bad-2); border-color: var(--bad); background: var(--bad-soft-2); }
+
+    .btn-undo {
+      background: transparent;
+      border-color: var(--line);
+      color: var(--text-3);
+      padding: 5px 10px;
+    }
+    .btn-undo:hover { color: var(--text); border-color: var(--line-2); }
+
+    /* ── Pick counter controls ───────────────────────────────── */
+    .pick-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    .btn-pick {
+      padding: 6px 14px;
+      border-radius: 4px;
+      border: 1px solid var(--line-2);
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      background: transparent;
+      color: var(--text-3);
+      transition: all 0.12s;
+    }
+    .btn-pick:hover { color: var(--text-2); border-color: var(--line-2); background: var(--bg-2); }
+    .btn-skip {
+      background: linear-gradient(180deg, rgba(179,70,63,0.18), rgba(179,70,63,0.07));
+      border-color: var(--bad-line);
+      color: var(--bad-2);
+      box-shadow: inset 0 1px 0 rgba(255,180,170,0.1);
+    }
+    .btn-skip:hover {
+      background: linear-gradient(180deg, rgba(179,70,63,0.28), rgba(179,70,63,0.14));
+      border-color: var(--bad);
+      color: var(--bad-2);
+    }
+    .pick-label-inline {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text-3);
+      letter-spacing: 0.06em;
+    }
+    .pick-label-inline .hi { color: var(--text-2); font-weight: 500; }
+
+    /* ── Draft Board ─────────────────────────────────────────── */
+    .draft-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+    .round-col { display: flex; flex-direction: column; gap: 3px; }
+    .round-hdr {
+      font-family: var(--mono);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--text-3);
+      padding: 6px 10px 8px;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 3px;
+    }
+    .board-cell {
+      background: var(--bg-1);
+      border: 1px solid var(--line);
+      padding: 7px 10px;
+      min-height: 52px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      transition: background 0.1s;
+    }
+    .board-cell.ryan {
+      border-color: var(--bad-line);
+      background: linear-gradient(180deg, rgba(179,70,63,0.08), rgba(179,70,63,0.03));
+    }
+    .board-cell.current {
+      border-color: var(--accent-line) !important;
+      background: var(--accent-soft) !important;
+      box-shadow: 0 0 0 1px var(--accent-line), inset 0 1px 0 rgba(232,200,118,0.1);
+    }
+    .cell-pick-label {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--text-3);
+      letter-spacing: 0.04em;
+    }
+    .board-cell.ryan .cell-pick-label  { color: var(--bad-2); }
+    .board-cell.current .cell-pick-label { color: var(--accent-2); }
+    .cell-team {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--text-4);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .board-cell.ryan .cell-team { color: var(--bad-deep); color: rgba(213,105,97,0.5); }
+    .cell-player {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-2);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      margin-top: 1px;
+    }
+    .board-cell.ryan .cell-player { color: var(--good); }
+
+    /* ── My Team / Roster ────────────────────────────────────── */
+    .roster-columns {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0,1fr));
+      gap: 16px;
+    }
+    .roster-section {
+      background: linear-gradient(180deg, var(--bg-1), #020203);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      box-shadow: inset 0 1px 0 rgba(220,200,160,0.04), 0 1px 2px rgba(0,0,0,0.5);
+    }
+    .roster-section::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--bad-line), transparent);
+      opacity: 0.75;
+    }
+    .roster-section-header {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      padding: 14px 16px 12px;
+      border-bottom: 1px solid var(--line);
+      background: var(--bg-1);
+    }
+    .roster-section-pos {
+      font-family: var(--serif);
+      font-variation-settings: 'opsz' 144;
+      font-style: italic;
+      font-size: 26px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      color: var(--bad-2);
+    }
+    .roster-section-count {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text-3);
+      letter-spacing: 0.02em;
+    }
+    .roster-slot {
+      display: grid;
+      grid-template-columns: 44px 1fr auto;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 16px;
+      border-top: 1px solid var(--line);
+    }
+    .roster-slot:first-of-type { border-top: none; }
+    .slot-label {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 500;
+      color: var(--text-3);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .slot-player {
+      font-weight: 500;
+      font-size: 12px;
+      letter-spacing: -0.005em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .slot-pick {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--good);
+      white-space: nowrap;
+    }
+    .slot-empty {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--text-4);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .empty-state {
+      color: var(--text-3);
+      font-style: italic;
+      padding: 24px 0;
+      font-size: 13px;
+    }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+  </style>
+</head>
+<body>
+
+<!-- ── Header ── -->
+<div class="header">
+  <div class="header-top">
+    <div class="brand">
+      <div class="brand-mark"><span class="glyph">F</span></div>
+      <div class="brand-text">
+        <div class="brand-eyebrow">Dynasty Rookie <span class="sep">/</span> Season 26</div>
+        <div class="brand-title">The Frozen Tundra <span class="ital">Draft</span></div>
+        <div class="brand-sub">est. 2026 · 12-team · 4 rounds · superflex ppr</div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <span class="live-badge"><span class="live-dot"></span>Live</span>
+      <button class="reset-btn" onclick="resetDraft()">Reset</button>
+    </div>
+  </div>
+
+  <div class="budget-row">
+    <div class="budget-stat">
+      <label>Current Pick</label>
+      <div class="val" id="stat-current">1</div>
+      <div class="stat-sub">of 48 total picks</div>
+    </div>
+    <div class="budget-stat">
+      <label>Picks Left</label>
+      <div class="val" id="stat-left">8</div>
+      <div class="stat-sub" id="stat-sub-left">of 8 Ryan picks</div>
+    </div>
+    <div class="budget-stat">
+      <label>Next Pick</label>
+      <div class="val" id="stat-next">1.02</div>
+      <div class="stat-sub" id="stat-sub-next">up now</div>
+    </div>
+    <div class="budget-stat">
+      <label>Status</label>
+      <div class="val val-good" id="stat-status" style="font-size:22px;padding-top:6px;">On Deck</div>
+      <div class="stat-sub" id="stat-sub-status">—</div>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" data-tab="pool">Pool</div>
+    <div class="tab" data-tab="board">Board</div>
+    <div class="tab" data-tab="team">My Team</div>
+  </div>
+</div>
+
+<!-- ── Content ── -->
+<div class="content">
+
+  <div class="tab-panel active" id="tab-pool">
+    <div class="section-header">
+      <div class="section-title">Draft <span class="ital">Pool</span></div>
+      <div class="section-meta" id="meta-pool"></div>
+    </div>
+    <div class="pos-filter">
+      <button class="pos-btn active" onclick="setPos('ALL',this)">All</button>
+      <button class="pos-btn" onclick="setPos('QB',this)">QB</button>
+      <button class="pos-btn" onclick="setPos('RB',this)">RB</button>
+      <button class="pos-btn" onclick="setPos('WR',this)">WR</button>
+      <button class="pos-btn" onclick="setPos('TE',this)">TE</button>
+    </div>
+    <div class="pick-controls">
+      <button class="btn-pick" onclick="adjustPick(-1)">← Back</button>
+      <button class="btn-pick btn-skip" onclick="adjustPick(1)">Skip Pick +1 →</button>
+      <span class="pick-label-inline">pick <span class="hi" id="pick-inline">1</span> of 48</span>
+    </div>
+    <div class="player-list" id="list-pool"></div>
+  </div>
+
+  <div class="tab-panel" id="tab-board">
+    <div class="section-header">
+      <div class="section-title">Draft <span class="ital">Board</span></div>
+      <div class="section-meta">12 teams · linear · 4 rounds</div>
+    </div>
+    <div class="draft-grid" id="board-grid"></div>
+  </div>
+
+  <div class="tab-panel" id="tab-team">
+    <div class="section-header">
+      <div class="section-title">My <span class="ital">Team</span></div>
+      <div class="section-meta" id="meta-team"></div>
+    </div>
+    <div class="roster-columns" id="roster-cols"></div>
+  </div>
+
+</div>
+
+<script>
+// ── Constants ────────────────────────────────────────────────────────────
+
+const TOTAL  = 48;
+const TEAMS  = 12;
+const ROUNDS = 4;
+
+const RYAN_PICKS = new Set([2, 12, 14, 23, 26, 30, 33, 38]);
+
+const SLOT_TEAM = [
+  'fe_b',                     // 1
+  'Old ass Play-Doh',         // 2 — Ryan
+  'The Flock',                // 3
+  'Bump and Run',             // 4
+  'DAKstreet Boys',           // 5
+  'lordsimkins',              // 6
+  'No Really, We Suck',       // 7
+  'Hawk Tua',                 // 8
+  'Belichick Film School',    // 9
+  'Ra Doggin in the LaPorta', // 10
+  'Innis To Win This',        // 11
+  'prestond',                 // 12
+];
+
+// SuperFlex-adjusted consensus: Mendoza #3, Ty Simpson #9, Nussmeier #23
+const PLAYERS = [
+  { id:'jlove',      name:'Jeremiyah Love',     pos:'RB', nfl:'ARI' },
+  { id:'ctate',      name:'Carnell Tate',        pos:'WR', nfl:'TEN' },
+  { id:'fmendoza',   name:'Fernando Mendoza',    pos:'QB', nfl:'LVR' },
+  { id:'jtyson',     name:'Jordyn Tyson',        pos:'WR', nfl:'NOR' },
+  { id:'mlemon',     name:'Makai Lemon',         pos:'WR', nfl:'PHI' },
+  { id:'kconc',      name:'KC Concepcion',       pos:'WR', nfl:'CLE' },
+  { id:'jprice',     name:'Jadarian Price',      pos:'RB', nfl:'SEA' },
+  { id:'ksadiq',     name:'Kenyon Sadiq',        pos:'TE', nfl:'NYJ' },
+  { id:'tsimpson',   name:'Ty Simpson',          pos:'QB', nfl:'LAR' },
+  { id:'ocooper',    name:'Omar Cooper Jr.',     pos:'WR', nfl:'NYJ' },
+  { id:'dboston',    name:'Denzel Boston',       pos:'WR', nfl:'CLE' },
+  { id:'estowers',   name:'Eli Stowers',         pos:'TE', nfl:'PHI' },
+  { id:'jcoleman',   name:'Jonah Coleman',       pos:'RB', nfl:'DEN' },
+  { id:'nsingleton', name:'Nicholas Singleton',  pos:'RB', nfl:'TEN' },
+  { id:'cbell',      name:'Chris Bell',          pos:'WR', nfl:'MIA' },
+  { id:'gbernard',   name:'Germie Bernard',      pos:'WR', nfl:'PIT' },
+  { id:'cbrazzell',  name:'Chris Brazzell II',   pos:'WR', nfl:'CAR' },
+  { id:'esarratt',   name:'Elijah Sarratt',      pos:'WR', nfl:'BAL' },
+  { id:'mwashjr',    name:'Mike Washington Jr.', pos:'RB', nfl:'LVR' },
+  { id:'ejohnson',   name:'Emmett Johnson',      pos:'RB', nfl:'KCC' },
+  { id:'mfields',    name:'Malachi Fields',      pos:'WR', nfl:'NYG' },
+  { id:'zbranch',    name:'Zachariah Branch',    pos:'WR', nfl:'ATL' },
+  { id:'gnuss',      name:'Garrett Nussmeier',   pos:'QB', nfl:'KCC' },
+  { id:'kallen',     name:'Kaytron Allen',       pos:'RB', nfl:'WAS' },
+  { id:'jklane',     name:"Ja'Kobi Lane",        pos:'WR', nfl:'BAL' },
+  { id:'awilliams',  name:'Antonio Williams',    pos:'WR', nfl:'WAS' },
+  { id:'dstrib',     name:"De'Zhaun Stribling",  pos:'WR', nfl:'SF'  },
+  { id:'sbell',      name:'Skyler Bell',         pos:'WR', nfl:'BUF' },
+  { id:'thurst',     name:'Ted Hurst',           pos:'WR', nfl:'TBB' },
+  { id:'mklare',     name:'Max Klare',           pos:'TE', nfl:'LAR' },
+  { id:'odelp',      name:'Oscar Delp',          pos:'TE', nfl:'NOR' },
+  { id:'cklubnik',   name:'Cade Klubnik',        pos:'QB', nfl:'NYJ' },
+  { id:'kcoleman',   name:'Kevin Coleman Jr.',   pos:'WR', nfl:'MIA' },
+  { id:'cbeck',      name:'Carson Beck',         pos:'QB', nfl:'ARI' },
+  { id:'dclaiborne', name:'Demond Claiborne',    pos:'RB', nfl:'MIN' },
+  { id:'mtrigg',     name:'Michael Trigg',       pos:'TE', nfl:'UFA' },
+  { id:'dallar',     name:'Drew Allar',          pos:'QB', nfl:'PIT' },
+  { id:'dburks',     name:'Deion Burks',         pos:'WR', nfl:'WAS' },
+  { id:'jmiller',    name:'Jam Miller',          pos:'RB', nfl:'NEP' },
+  { id:'arandall',   name:'Adam Randall',        pos:'RB', nfl:'BAL' },
+];
+
+// ── Helpers ──────────────────────────────────────────────────────────────
+
+function pickLabel(n) {
+  const r = Math.ceil(n / TEAMS);
+  const s = ((n - 1) % TEAMS) + 1;
+  return `${r}.${String(s).padStart(2,'0')}`;
+}
+function slotOf(n)       { return ((n - 1) % TEAMS) + 1; }
+function isRyan(n)       { return RYAN_PICKS.has(n); }
+function nextRyan(from)  {
+  for (let i = from; i <= TOTAL; i++) if (isRyan(i)) return i;
+  return null;
+}
+function picksLeft(from) {
+  let c = 0;
+  for (let i = from; i <= TOTAL; i++) if (isRyan(i)) c++;
+  return c;
+}
+
+// ── State ─────────────────────────────────────────────────────────────────
+
+const SEED = { cur: 1, picks: {}, gone: {} };
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem('ftz_v1');
+    if (!raw) return JSON.parse(JSON.stringify(SEED));
+    const s = JSON.parse(raw);
+    if (!s.picks) s.picks = {};
+    if (!s.gone)  s.gone  = {};
+    if (!s.cur)   s.cur   = 1;
+    return s;
+  } catch { return JSON.parse(JSON.stringify(SEED)); }
+}
+function save() { localStorage.setItem('ftz_v1', JSON.stringify(S)); }
+
+let S = loadState();
+
+// ── Actions ───────────────────────────────────────────────────────────────
+
+function markMine(id) {
+  const p = PLAYERS.find(x => x.id === id);
+  if (!p) return;
+  S.picks[id] = { name: p.name, pos: p.pos, nfl: p.nfl, pickNum: S.cur };
+  delete S.gone[id];
+  S.cur = Math.min(S.cur + 1, TOTAL + 1);
+  save(); render();
+}
+
+function markGone(id) {
+  const p = PLAYERS.find(x => x.id === id);
+  if (!p) return;
+  S.gone[id] = { name: p.name, pickNum: S.cur };
+  delete S.picks[id];
+  S.cur = Math.min(S.cur + 1, TOTAL + 1);
+  save(); render();
+}
+
+function undoPick(id) {
+  delete S.picks[id];
+  delete S.gone[id];
+  save(); render();
+}
+
+function adjustPick(d) {
+  S.cur = Math.max(1, Math.min(TOTAL + 1, S.cur + d));
+  save(); render();
+}
+
+function resetDraft() {
+  if (!confirm('Reset all draft data?')) return;
+  localStorage.removeItem('ftz_v1');
+  S = JSON.parse(JSON.stringify(SEED));
+  save(); render();
+}
+
+// ── Tab switching ─────────────────────────────────────────────────────────
+
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+    render();
+  });
+});
+
+let activePos = 'ALL';
+
+function setPos(pos, btn) {
+  activePos = pos;
+  document.querySelectorAll('.pos-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderPool();
+}
+
+// ── Render: Header Stats ──────────────────────────────────────────────────
+
+function renderStats() {
+  const cur    = Math.min(S.cur, TOTAL);
+  const nLeft  = picksLeft(S.cur);
+  const next   = nextRyan(S.cur);
+  const myPicks = Object.keys(S.picks).length;
+
+  document.getElementById('stat-current').textContent = cur;
+  document.getElementById('stat-left').textContent    = nLeft;
+  document.getElementById('stat-sub-left').textContent = `of 8 · ${myPicks} drafted`;
+  document.getElementById('pick-inline').textContent  = cur;
+
+  if (next) {
+    document.getElementById('stat-next').textContent = pickLabel(next);
+    const away = next - S.cur;
+    document.getElementById('stat-sub-next').textContent =
+      away === 0 ? 'up now' : `${away} pick${away !== 1 ? 's' : ''} away`;
+  } else {
+    document.getElementById('stat-next').textContent      = '—';
+    document.getElementById('stat-sub-next').textContent  = 'all picks used';
+  }
+
+  const statusEl    = document.getElementById('stat-status');
+  const statusSubEl = document.getElementById('stat-sub-status');
+  if (S.cur > TOTAL) {
+    statusEl.textContent = 'Done';
+    statusEl.className   = 'val val-warn';
+    statusSubEl.textContent = 'draft complete';
+  } else if (isRyan(S.cur)) {
+    statusEl.textContent = 'On Clock';
+    statusEl.className   = 'val val-danger';
+    statusSubEl.textContent = `pick ${pickLabel(S.cur)} — make your selection`;
+  } else if (next && next - S.cur <= 3) {
+    statusEl.textContent = 'On Deck';
+    statusEl.className   = 'val val-warn';
+    statusSubEl.textContent = `${next - S.cur} pick${next - S.cur !== 1 ? 's' : ''} until ${pickLabel(next)}`;
+  } else {
+    statusEl.textContent = 'Watching';
+    statusEl.className   = 'val';
+    statusSubEl.textContent = next ? `next pick: ${pickLabel(next)}` : '—';
+  }
+}
+
+// ── Render: Pool ──────────────────────────────────────────────────────────
+
+function renderPool() {
+  const all       = activePos === 'ALL' ? PLAYERS : PLAYERS.filter(p => p.pos === activePos);
+  const available = all.filter(p => !S.picks[p.id] && !S.gone[p.id]);
+  const mine      = all.filter(p =>  S.picks[p.id]);
+  const gone      = all.filter(p =>  S.gone[p.id]);
+
+  document.getElementById('meta-pool').innerHTML =
+    `<span class="hi">${available.length}</span> available · ${mine.length} picked · ${gone.length} gone`;
+
+  let h = '';
+
+  if (available.length) {
+    h += `<div class="starter-divider">Available — ${available.length}</div>`;
+    for (const p of available) {
+      const rank = PLAYERS.indexOf(p) + 1;
+      h += `<div class="player-row">
+        <div class="player-rank">${rank}</div>
+        <div class="player-info">
+          <div class="player-name">${p.name}</div>
+          <div class="player-note">${p.nfl}</div>
+        </div>
+        <div class="player-pos">${p.pos}</div>
+        <div class="player-actions">
+          <button class="btn btn-win" onclick="markMine('${p.id}')">Mine</button>
+          <button class="btn btn-lost" onclick="markGone('${p.id}')">Gone</button>
+        </div>
+      </div>`;
+    }
+  }
+
+  if (mine.length) {
+    h += `<div class="gone-divider">My Picks — ${mine.length}</div>`;
+    for (const p of mine) {
+      const rank = PLAYERS.indexOf(p) + 1;
+      const d    = S.picks[p.id];
+      h += `<div class="player-row won">
+        <div class="player-rank">${rank}</div>
+        <div class="player-info">
+          <div class="player-name">${p.name}</div>
+          <div class="player-note">${p.nfl}</div>
+        </div>
+        <div class="player-pos">${p.pos}</div>
+        <div class="player-actions">
+          <span class="won-label">Picked</span>
+          <span class="won-pick">${d ? pickLabel(d.pickNum) : ''}</span>
+          <button class="btn btn-undo" onclick="undoPick('${p.id}')">Undo</button>
+        </div>
+      </div>`;
+    }
+  }
+
+  if (gone.length) {
+    h += `<div class="gone-divider">Gone — ${gone.length}</div>`;
+    for (const p of gone) {
+      const rank = PLAYERS.indexOf(p) + 1;
+      h += `<div class="player-row lost">
+        <div class="player-rank">${rank}</div>
+        <div class="player-info">
+          <div class="player-name">${p.name}</div>
+          <div class="player-note">${p.nfl}</div>
+        </div>
+        <div class="player-pos">${p.pos}</div>
+        <div class="player-actions">
+          <span class="lost-label">Taken</span>
+          <button class="btn btn-undo" onclick="undoPick('${p.id}')">Undo</button>
+        </div>
+      </div>`;
+    }
+  }
+
+  document.getElementById('list-pool').innerHTML = h;
+}
+
+// ── Render: Board ─────────────────────────────────────────────────────────
+
+function renderBoard() {
+  // Map overall pick number → player name
+  const filled = {};
+  for (const [id, d] of Object.entries(S.picks)) {
+    if (d.pickNum) filled[d.pickNum] = d.name;
+  }
+  for (const [id, d] of Object.entries(S.gone)) {
+    if (d.pickNum) filled[d.pickNum] = d.name;
+  }
+
+  let h = '';
+  for (let r = 1; r <= ROUNDS; r++) {
+    h += `<div class="round-col"><div class="round-hdr">Round ${r}</div>`;
+    for (let slot = 1; slot <= TEAMS; slot++) {
+      const overall = (r - 1) * TEAMS + slot;
+      const ryan    = isRyan(overall);
+      const cur     = overall === S.cur;
+      let cls = 'board-cell';
+      if (ryan) cls += ' ryan';
+      if (cur)  cls += ' current';
+      h += `<div class="${cls}">
+        <div class="cell-pick-label">${pickLabel(overall)}${cur ? ' ▶' : ''}</div>
+        <div class="cell-team">${ryan ? '★ Ryan' : SLOT_TEAM[slot-1]}</div>
+        ${filled[overall] ? `<div class="cell-player">${filled[overall]}</div>` : ''}
+      </div>`;
+    }
+    h += `</div>`;
+  }
+  document.getElementById('board-grid').innerHTML = h;
+}
+
+// ── Render: My Team ───────────────────────────────────────────────────────
+
+function renderTeam() {
+  const myPicks = Object.entries(S.picks)
+    .map(([id, d]) => ({ id, ...d }))
+    .sort((a, b) => a.pickNum - b.pickNum);
+
+  const total = Object.keys(S.picks).length;
+  document.getElementById('meta-team').innerHTML =
+    `<span class="hi">${total}</span> of 8 picks used`;
+
+  if (!myPicks.length) {
+    document.getElementById('roster-cols').innerHTML =
+      `<div class="empty-state">No picks yet — go get your guys.</div>`;
+    return;
+  }
+
+  const byPos = { QB: [], RB: [], WR: [], TE: [] };
+  for (const p of myPicks) {
+    (byPos[p.pos] || byPos.WR).push(p);
+  }
+
+  let h = '';
+  for (const [pos, players] of Object.entries(byPos)) {
+    if (!players.length) continue;
+    h += `<div class="roster-section">
+      <div class="roster-section-header">
+        <div class="roster-section-pos">${pos}</div>
+        <div class="roster-section-count">${players.length} picked</div>
+      </div>`;
+    for (const p of players) {
+      h += `<div class="roster-slot">
+        <div class="slot-label">${pickLabel(p.pickNum)}</div>
+        <div class="slot-player">${p.name}</div>
+        <div class="slot-pick">${p.nfl}</div>
+      </div>`;
+    }
+    h += `</div>`;
+  }
+  document.getElementById('roster-cols').innerHTML = h;
+}
+
+// ── Render ────────────────────────────────────────────────────────────────
+
+function render() {
+  renderStats();
+  const active = document.querySelector('.tab.active')?.dataset.tab;
+  if (active === 'pool')  renderPool();
+  if (active === 'board') renderBoard();
+  if (active === 'team')  renderTeam();
+}
+
+render();
+</script>
+</body>
+</html>
