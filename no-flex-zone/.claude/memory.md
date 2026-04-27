@@ -13,6 +13,16 @@
 - Built live auction tracker (auction-tracker.html) — served at localhost:8765.
 - Herbert and Burrow explicitly removed from targets.
 
+## 2026-04-27 — Session 3 (Design overhaul)
+- Sent tracker to Claude Design via `header-design.html` (full-page copy of the tracker).
+- Received `Draft Tracker v2.html` design handoff — complete visual redesign with a "dimly-lit auction room" aesthetic.
+- Design system: true black (#020203), oxblood (#b3463f) as dominant accent, brass (#c9a14b) for luxury moments. All four positions share the same oxblood color — no QB-blue / WR-green / etc.
+- Fonts: Fraunces (serif, headings + stat numbers), JetBrains Mono (labels, stats, buttons), Inter (body). Loaded from Google Fonts.
+- Key components: 60×60 casino chip "N" brand mark with concentric brass ring box-shadows; engraved section dividers with center diamond rune; large stat cells redesigned (user asked to dial back from 48px Fraunces to 36px JetBrains Mono for readability).
+- Dropped in design file as the new `auction-tracker.html` — JS logic preserved, CSS/HTML fully replaced.
+- Jordan Mason ($25, AmadorFSU) was missing from design file's TARGETS — added to RB list and SEED.lost.
+- Design artifacts (zip, design-drop/, header-design.html) deleted before commit; not worth tracking.
+
 ## 2026-04-26 — Session 2 (Tracker build + draft start)
 - Auction went live during this session. Josh Allen nominated first — bid up to $251, won by AmadorFSU.
 - Bijan Robinson nominated second by tking.

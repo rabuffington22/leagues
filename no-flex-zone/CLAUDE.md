@@ -47,13 +47,19 @@ Single-file tool: `no-flex-zone/auction-tracker.html`
 
 ### Tracker architecture notes
 - Player picks stored as `S.picks[id] = { name, pos, tab, price }` — `pos` is uppercase (QB/WR/TE/RB), `tab` is lowercase position key except QB1 which uses `'qb1'` to avoid being matched as QB2
-- Slot budgets stored in `S.slotBudgets` (26 keys: qb1–4, wr1–10, te1–6, rb1–6); defaults in `DEFAULT_SLOT_BUDGETS` constant
+- Slot budgets stored in `S.slotBudgets` (30 keys: qb1–4, wr1–13, te1–7, rb1–6); defaults in `DEFAULT_SLOT_BUDGETS` constant
 - Pool = remaining budget minus sum of open slot budgets; displayed in section-meta header
 - SEED includes all known off-the-board players as `lost`; `loadState()` merges new lost players on every load without wiping existing state
 - Lost picks stored as `S.lost[id] = { team, price }` (attributed) or `true` (unattributed); merge logic upgrades unattributed entries when SEED has team info
 - `S.teams` = array of known team names, seeded from Sleeper API data, used for autocomplete when attributing picks
 - League tab shows all team cards (Ryan first, others by spend); Unattributed section for picks with no team assigned yet
 - Sleeper usernames for known teams: AmadorFSU, coleh44, revskip, kolt78, Chauncey — others still TBD as draft continues
+
+### Tracker design system (as of 2026-04-27)
+- Aesthetic: "dimly-lit auction room" — true black, no rounded cards, sharp architectural feel
+- Colors: oxblood (`#b3463f`) is dominant accent; brass (`#c9a14b`) for luxury moments (title, Won buttons); sage green (`#7fbf6e`) for won state only. All positions share oxblood — no QB-blue/WR-green color coding.
+- Fonts: Fraunces (serif, headings + brand title), JetBrains Mono (labels, stat numbers, buttons), Inter (body) — all from Google Fonts
+- Do not use `border-radius > 6px`, drop shadows larger than 1–2px, or position-specific colors when modifying this file
 
 ## Confirmed spend
 | Player | Pos | Price |

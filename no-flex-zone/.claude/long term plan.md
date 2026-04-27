@@ -26,6 +26,7 @@ The auction is live. Nomination slot 13 of 14. $1,000 budget.
 - Open: `http://localhost:8765/auction-tracker.html`
 - State saves to localStorage (key: `nfz_v4`) — persists across reloads
 - Tracker is reusable template for future leagues
+- [x] Full visual redesign — casino-room aesthetic (oxblood/brass, Fraunces + JetBrains Mono, chip brand mark)
 
 ## Phase 2: Post-Draft Analysis
 - [ ] Roster strength assessment vs other teams
