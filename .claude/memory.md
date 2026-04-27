@@ -60,3 +60,24 @@
 
 ### Deferred
 - No long term plan.md created yet — created this session (see below)
+
+## 2026-04-27 — Session 3: League tab + pick attribution
+
+### What we did
+- Added a **League tab** to the auction tracker showing all 14 teams as cards
+- Each team card shows starter slots (QB1/2, WR1–4, TE1/2, RB1–3) + bench, player name + price per slot, budget remaining (~$1000 - attributed spend)
+- Updated the **Lost button flow**: clicking Lost now shows an inline attribution form (team name + price) with Save/Skip, so other teams' picks can be attributed on the fly
+- Already-lost picks show team + price inline; "edit" button to reassign
+- Added **Unattributed section** at top of League tab for quick batch-attribution of picks with unknown teams
+- Pulled real draft data from Sleeper API (`/draft/{id}/picks` + `/league/{id}/users` + rosters) to identify the actual teams behind the 9 known picks
+- Seeded SEED.lost with full `{ team, price }` objects for all 9 known picks
+- Fixed loadState merge bug: was overwriting all lost entries to `true` on every load; now non-destructive — preserves attributions, upgrades bare entries when SEED has team info
+
+### Key decisions
+- **No toggle/filter** on League tab — just show all teams, simpler
+- **No position section headers** in team cards — slot labels (QB1, QB2 etc.) carry enough context via color
+- **Teams seeded from API**: AmadorFSU (Josh Allen, Bijan, Achane, J.Mason), coleh44 (Jayden Daniels), revskip (J. Love), kolt78 (Ja'Marr Chase), Chauncey (Malik Nabers)
+- SEED.teams pre-populated with these 5 names for autocomplete on future picks
+
+### Deferred
+- Auto-sync picks from Sleeper API (would eliminate manual attribution entirely)

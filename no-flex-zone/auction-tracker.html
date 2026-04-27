@@ -545,6 +545,119 @@
       border-radius: 2px;
       transition: width 0.3s ease;
     }
+
+    /* ── Attribution inline ── */
+    .attr-label { font-size: 11px; color: var(--muted); white-space: nowrap; }
+    .attr-input {
+      width: 90px;
+      padding: 6px 8px;
+      background: var(--bg3);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .attr-input:focus {
+      outline: none;
+      border-color: rgba(255,69,58,0.6);
+      background: rgba(255,69,58,0.06);
+    }
+    .attr-team-label { font-size: 12px; font-weight: 600; color: var(--muted); white-space: nowrap; }
+    .attr-price-label { font-size: 12px; font-weight: 700; color: var(--red); white-space: nowrap; }
+
+    /* ── Segmented control ── */
+    .seg-control {
+      display: inline-flex;
+      background: rgba(255,255,255,0.06);
+      border-radius: 10px;
+      padding: 3px;
+      gap: 2px;
+      margin-bottom: 20px;
+    }
+    .seg {
+      padding: 6px 18px;
+      border-radius: 8px;
+      border: none;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--muted);
+      background: none;
+      transition: all 0.15s;
+      letter-spacing: -0.01em;
+    }
+    .seg:hover { color: var(--text); }
+    .seg.active {
+      background: rgba(255,255,255,0.12);
+      color: var(--text);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    }
+
+    /* ── Team cards ── */
+    .teams-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .team-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+    .team-card.is-me { border-color: rgba(10,132,255,0.35); background: rgba(10,132,255,0.04); }
+    .team-card-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      padding: 12px 14px 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .team-card-name { font-weight: 700; font-size: 14px; letter-spacing: -0.02em; }
+    .team-card.is-me .team-card-name { color: var(--blue); }
+    .team-card-stats { font-size: 11px; color: var(--muted); text-align: right; line-height: 1.6; }
+    .team-pos-block { border-top: 1px solid rgba(255,255,255,0.04); }
+    .team-pos-label {
+      font-size: 9px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.1em; padding: 7px 14px 2px; color: var(--muted);
+    }
+    .team-slot-row { display: flex; align-items: center; gap: 8px; padding: 3px 14px; }
+    .team-slot-id {
+      font-size: 9px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.05em; width: 30px; flex-shrink: 0; color: var(--muted);
+    }
+    .team-slot-player {
+      font-size: 12px; font-weight: 600; flex: 1;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; letter-spacing: -0.01em;
+    }
+    .team-slot-price { font-size: 11px; font-weight: 700; color: var(--green); font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .team-slot-empty { font-size: 11px; color: rgba(255,255,255,0.15); flex: 1; }
+
+    /* ── Unattributed section ── */
+    .unattr-header {
+      font-size: 11px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--yellow); margin-bottom: 8px;
+    }
+    .unattr-row {
+      display: flex; align-items: center; gap: 8px;
+      padding: 7px 14px; flex-wrap: wrap;
+      background: rgba(255,159,10,0.05);
+      border: 1px solid rgba(255,159,10,0.15);
+      border-radius: 10px; margin-bottom: 4px;
+    }
+    .unattr-pos { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; width: 26px; flex-shrink: 0; }
+    .unattr-name { font-weight: 600; font-size: 13px; flex: 1; min-width: 100px; }
+
+    /* ── Btn assign ── */
+    .btn-assign {
+      background: none; color: var(--muted);
+      border: 1px solid var(--border); font-size: 11px; padding: 4px 8px;
+    }
+    .btn-assign:hover { color: var(--text); }
   </style>
 </head>
 <body>
@@ -585,6 +698,7 @@
   <div class="tab" data-tab="wr">WR</div>
   <div class="tab" data-tab="te">TE</div>
   <div class="tab" data-tab="rb">RB</div>
+  <div class="tab" data-tab="league">League</div>
 </div>
 
 <!-- ── Content ── -->
@@ -628,6 +742,14 @@
       <div class="section-meta" id="meta-rb"></div>
     </div>
     <div class="player-list" id="list-rb"></div>
+  </div>
+
+  <div class="tab-panel" id="tab-league">
+    <div class="section-header">
+      <div class="section-title">League</div>
+      <div class="section-meta" id="meta-league"></div>
+    </div>
+    <div id="league-content"></div>
   </div>
 
 </div>
@@ -763,16 +885,17 @@ const SEED = {
     maye: { name: 'Drake Maye', pos: 'QB', tab: 'qb1', price: 220 }
   },
   lost: {
-    allen:    true,  // Josh Allen — QB, $251 to other
-    bijan:    true,  // Bijan Robinson — RB, $223 to other
-    nabers:   true,  // Malik Nabers — WR, $190 to other
-    jlove:    true,  // Jeremiyah Love — RB, $175 to other
-    jdaniels: true,  // Jayden Daniels — QB, $220 to other
-    achane:   true,  // De'Von Achane — RB, $165 to other
-    chase:    true,  // Ja'Marr Chase — WR, $238 to other
+    allen:    { price: 251, team: 'AmadorFSU' },
+    bijan:    { price: 223, team: 'AmadorFSU' },
+    nabers:   { price: 190, team: 'Chauncey'  },
+    jlove:    { price: 175, team: 'revskip'   },
+    jdaniels: { price: 220, team: 'coleh44'   },
+    achane:   { price: 165, team: 'AmadorFSU' },
+    chase:    { price: 238, team: 'kolt78'    },
   },
   hidden: {},
-  slotBudgets: { ...DEFAULT_SLOT_BUDGETS }
+  slotBudgets: { ...DEFAULT_SLOT_BUDGETS },
+  teams: ['AmadorFSU', 'Chauncey', 'revskip', 'coleh44', 'kolt78']
 };
 
 function loadState() {
@@ -782,13 +905,21 @@ function loadState() {
     if (!st.hidden)      st.hidden      = {};
     if (!st.lost)        st.lost        = {};
     if (!st.slotBudgets) st.slotBudgets = { ...DEFAULT_SLOT_BUDGETS };
+    if (!st.teams)       st.teams       = [];
     // Seed any new slot keys added since last session
     Object.entries(DEFAULT_SLOT_BUDGETS).forEach(([k, v]) => {
       if (!(k in st.slotBudgets)) st.slotBudgets[k] = v;
     });
-    // Merge newly off-the-board players without resetting existing state
-    Object.keys(SEED.lost || {}).forEach(id => {
-      if (!st.picks?.[id]) st.lost[id] = true;
+    // Merge newly off-the-board players without clobbering existing attributions
+    Object.entries(SEED.lost || {}).forEach(([id, seedVal]) => {
+      if (st.picks?.[id]) return;                                              // user won this player
+      if (!st.lost?.[id]) { st.lost[id] = seedVal; return; }                  // new entry — add from seed
+      const cur = st.lost[id];
+      const curHasTeam = typeof cur === 'object' && cur?.team;
+      if (!curHasTeam && typeof seedVal === 'object' && seedVal?.team) {
+        st.lost[id] = seedVal;                                                 // upgrade to attributed seed value
+      }
+      // otherwise preserve existing user attribution
     });
     // Fix Maye's tab key if old state has him as 'qb' (would show as QB2)
     if (st.picks?.maye?.tab === 'qb') st.picks.maye.tab = 'qb1';
@@ -865,11 +996,24 @@ function playerRow(p, pos) {
       </div>`;
   } else if (lost) {
     statusClass = 'lost';
-    actionsHtml = `
-      <div class="player-actions">
-        <span class="lost-label">lost</span>
-        <button class="btn btn-undo" onclick="undoLost('${p.id}')">undo</button>
-      </div>`;
+    const lostTeam  = (typeof lost === 'object') ? (lost.team  || null) : null;
+    const lostPrice = (typeof lost === 'object') ? (lost.price || null) : null;
+    if (lostTeam || lostPrice) {
+      actionsHtml = `
+        <div class="player-actions">
+          ${lostTeam  ? `<span class="attr-team-label">${lostTeam}</span>` : ''}
+          ${lostPrice ? `<span class="attr-price-label">$${lostPrice}</span>` : ''}
+          <button class="btn btn-assign" onclick="startLostAttribution('${p.id}',true)">edit</button>
+          <button class="btn btn-undo"   onclick="undoLost('${p.id}')">undo</button>
+        </div>`;
+    } else {
+      actionsHtml = `
+        <div class="player-actions">
+          <span class="lost-label">lost</span>
+          <button class="btn btn-assign" onclick="startLostAttribution('${p.id}',true)" title="Assign to team">+team</button>
+          <button class="btn btn-undo"   onclick="undoLost('${p.id}')">undo</button>
+        </div>`;
+    }
   } else {
     actionsHtml = `
       <div class="player-actions">
@@ -880,7 +1024,7 @@ function playerRow(p, pos) {
             onkeydown="if(event.key==='Enter') winPick('${p.id}','${pos}')">
         </div>
         <button class="btn btn-win"  onclick="winPick('${p.id}','${pos}')">Won</button>
-        <button class="btn btn-lost" onclick="markLost('${p.id}')">Lost</button>
+        <button class="btn btn-lost" onclick="startLostAttribution('${p.id}',false)">Lost</button>
         <button class="btn btn-hide" onclick="hidePlayer('${p.id}')" title="Hide">–</button>
       </div>`;
   }
@@ -966,7 +1110,53 @@ function winPick(id, pos) {
   renderAll();
 }
 
-function markLost(id) {
+function startLostAttribution(id, isRetroactive) {
+  const rowEl = document.getElementById(`row-${id}`);
+  if (!rowEl) return;
+  const actionsEl = rowEl.querySelector('.player-actions');
+  if (!actionsEl) return;
+  const existing = (typeof S.lost?.[id] === 'object') ? S.lost[id] : {};
+  const opts = (S.teams || []).map(t => `<option value="${t}">`).join('');
+  actionsEl.innerHTML = `
+    <datalist id="tdl-${id}">${opts}</datalist>
+    <span class="attr-label">Won by:</span>
+    <input id="at-${id}" class="attr-input" type="text" placeholder="Team" list="tdl-${id}" value="${existing.team || ''}">
+    <span class="price-prefix">$</span>
+    <input id="ap-${id}" class="price-input" type="number" min="1" placeholder="—" value="${existing.price || ''}"
+      onkeydown="if(event.key==='Enter')confirmLost('${id}')">
+    <button class="btn btn-win" onclick="confirmLost('${id}')" style="padding:5px 10px">✓</button>
+    ${isRetroactive ? '' : `<button class="btn btn-undo" onclick="skipLost('${id}')">Skip</button>`}
+  `;
+  setTimeout(() => document.getElementById(`ap-${id}`)?.focus(), 30);
+}
+
+function confirmLost(id) {
+  const team  = document.getElementById(`at-${id}`)?.value.trim() || null;
+  const price = parseInt(document.getElementById(`ap-${id}`)?.value) || null;
+  if (!S.lost) S.lost = {};
+  S.lost[id] = { team, price };
+  if (team && !(S.teams || []).includes(team)) {
+    if (!S.teams) S.teams = [];
+    S.teams.push(team);
+  }
+  save(S);
+  renderAll();
+}
+
+function attributeFromLeague(id) {
+  const team  = document.getElementById(`ut-${id}`)?.value.trim() || null;
+  const price = parseInt(document.getElementById(`up-${id}`)?.value) || null;
+  if (!S.lost) S.lost = {};
+  S.lost[id] = { team, price };
+  if (team && !(S.teams || []).includes(team)) {
+    if (!S.teams) S.teams = [];
+    S.teams.push(team);
+  }
+  save(S);
+  renderAll();
+}
+
+function skipLost(id) {
   if (!S.lost) S.lost = {};
   S.lost[id] = true;
   save(S);
@@ -1131,11 +1321,167 @@ function renderRosterPage() {
   });
 }
 
+// ── League tab ───────────────────────────────────────────────────────────────
+
+function findPlayerById(id) {
+  for (const [posKey, players] of Object.entries(TARGETS)) {
+    const p = players.find(pl => pl.id === id);
+    if (p) return { ...p, posLabel: posKey.toUpperCase() };
+  }
+  return null;
+}
+
+function getAllTeams() {
+  const teams = {};
+  teams['Ryan'] = { name: 'Ryan', picks: [], isMe: true, totalSpent: S.spent };
+  Object.values(S.picks || {}).forEach(p => {
+    teams['Ryan'].picks.push({ name: p.name, pos: p.pos.toUpperCase(), price: p.price });
+  });
+  Object.entries(S.lost || {}).forEach(([id, val]) => {
+    if (!val || val === true || typeof val !== 'object' || !val.team) return;
+    const { team, price } = val;
+    if (!teams[team]) teams[team] = { name: team, picks: [], isMe: false, totalSpent: 0 };
+    const player = findPlayerById(id);
+    if (player) {
+      teams[team].picks.push({ name: player.name, pos: player.posLabel, price: price || 0 });
+      teams[team].totalSpent += (price || 0);
+    }
+  });
+  return teams;
+}
+
+function getUnattributed() {
+  return Object.entries(S.lost || {})
+    .filter(([, val]) => val === true || (typeof val === 'object' && val && !val.team))
+    .map(([id, val]) => {
+      const p = findPlayerById(id);
+      const existingPrice = (typeof val === 'object' && val?.price) ? val.price : null;
+      return p ? { id, ...p, existingPrice } : null;
+    })
+    .filter(Boolean);
+}
+
+const TC_STARTERS  = { QB: 2, WR: 4, TE: 2, RB: 3 };
+const TC_POS_ORDER = ['QB', 'WR', 'TE', 'RB'];
+const TC_COLORS    = { QB: '#0a84ff', WR: '#30d158', TE: '#bf5af2', RB: '#ff9f0a' };
+
+function renderTeamCard(team) {
+  const byPos = { QB: [], WR: [], TE: [], RB: [] };
+  const bench = [];
+  team.picks.forEach(p => {
+    const pos = p.pos.toUpperCase();
+    if (byPos[pos]) byPos[pos].push(p);
+    else bench.push(p);
+  });
+  TC_POS_ORDER.forEach(pos => {
+    byPos[pos].sort((a, b) => (b.price || 0) - (a.price || 0));
+    bench.push(...byPos[pos].slice(TC_STARTERS[pos]));
+    byPos[pos] = byPos[pos].slice(0, TC_STARTERS[pos]);
+  });
+  bench.sort((a, b) => (b.price || 0) - (a.price || 0));
+
+  const spent = team.totalSpent;
+  const left  = 1000 - spent;
+  const leftColor = left < 200 ? 'var(--red)' : left < 400 ? 'var(--yellow)' : 'var(--green)';
+
+  let html = `<div class="team-card ${team.isMe ? 'is-me' : ''}">
+    <div class="team-card-header">
+      <div class="team-card-name">${team.name}${team.isMe ? ' <span style="font-size:10px;font-weight:500;color:var(--muted)">(you)</span>' : ''}</div>
+      <div class="team-card-stats">
+        ${spent > 0 ? `$${spent} spent<br>` : ''}
+        <span style="color:${leftColor};font-weight:700">~$${left} left</span>
+      </div>
+    </div>`;
+
+  TC_POS_ORDER.forEach(pos => {
+    const color = TC_COLORS[pos];
+    html += `<div class="team-pos-block">`;
+    for (let i = 0; i < TC_STARTERS[pos]; i++) {
+      const p = byPos[pos][i];
+      html += `<div class="team-slot-row">
+        <span class="team-slot-id" style="color:${color}">${pos}${i + 1}</span>
+        ${p ? `<span class="team-slot-player">${p.name}</span><span class="team-slot-price">$${p.price || '?'}</span>`
+            : `<span class="team-slot-empty">—</span>`}
+      </div>`;
+    }
+    html += `</div>`;
+  });
+
+  if (bench.length > 0) {
+    html += `<div class="team-pos-block"><div class="team-pos-label">Bench</div>`;
+    bench.forEach((p, i) => {
+      const color = TC_COLORS[p.pos.toUpperCase()] || 'var(--muted)';
+      html += `<div class="team-slot-row">
+        <span class="team-slot-id" style="color:${color}">BN${i + 1}</span>
+        <span class="team-slot-player">${p.name}</span>
+        <span class="team-slot-price">$${p.price || '?'}</span>
+      </div>`;
+    });
+    html += `</div>`;
+  }
+
+  if (!team.picks.length) {
+    html += `<div style="padding:12px 14px;font-size:12px;color:var(--muted);font-style:italic">No picks tracked yet</div>`;
+  }
+
+  html += `</div>`;
+  return html;
+}
+
+function renderLeague() {
+  const allTeams  = getAllTeams();
+  const unattr    = getUnattributed();
+  const teamOpts  = (S.teams || []).map(t => `<option value="${t}">`).join('');
+
+  let html = '';
+
+  if (unattr.length > 0) {
+    html += `<div style="margin-bottom:24px">
+      <div class="unattr-header">Unattributed (${unattr.length})</div>`;
+    unattr.forEach(p => {
+      html += `<div class="unattr-row">
+        <span class="unattr-pos pos-${p.posLabel}">${p.posLabel}</span>
+        <span class="unattr-name">${p.name}</span>
+        <datalist id="udl-${p.id}">${teamOpts}</datalist>
+        <input id="ut-${p.id}" class="attr-input" type="text" placeholder="Team" list="udl-${p.id}">
+        <span class="price-prefix">$</span>
+        <input id="up-${p.id}" class="price-input" type="number" min="1" placeholder="—"
+          value="${p.existingPrice || ''}"
+          onkeydown="if(event.key==='Enter')attributeFromLeague('${p.id}')">
+        <button class="btn btn-win" onclick="attributeFromLeague('${p.id}')" style="padding:5px 12px">→</button>
+      </div>`;
+    });
+    html += `</div>`;
+  }
+
+  const show = Object.values(allTeams);
+  show.sort((a, b) => {
+    if (a.isMe) return -1;
+    if (b.isMe) return 1;
+    return b.totalSpent - a.totalSpent;
+  });
+
+  if (show.length === 0 && unattr.length === 0) {
+    html += `<p class="empty-state">No teams tracked yet — use the Lost → attribution flow on player rows.</p>`;
+  } else if (show.length > 0) {
+    html += `<div class="teams-grid">`;
+    show.forEach(t => html += renderTeamCard(t));
+    html += `</div>`;
+  }
+
+  document.getElementById('league-content').innerHTML = html;
+
+  const otherCount = Object.values(allTeams).filter(t => !t.isMe).length;
+  document.getElementById('meta-league').innerHTML =
+    `<span>${otherCount}</span> other teams &nbsp;·&nbsp; <span>${unattr.length}</span> unattributed`;
+}
+
 function renderAll() {
   renderHeader();
   renderRoster();
   renderRosterPage();
   ['te', 'qb', 'wr', 'rb'].forEach(renderPos);
+  renderLeague();
 }
 
 renderAll();

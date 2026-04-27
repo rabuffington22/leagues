@@ -26,14 +26,14 @@ Auction is live. 9 picks made so far — market running hot.
 | Player | Pos | $ | Winner |
 |---|---|---|---|
 | Drake Maye | QB | $220 | **RYAN** |
-| Josh Allen | QB | $251 | Other |
-| Jayden Daniels | QB | $220 | Other |
-| Bijan Robinson | RB | $223 | Other |
-| De'Von Achane | RB | $165 | Other |
-| Jeremiyah Love | RB | $175 | Other |
-| Jordan Mason | RB | $25 | Other |
-| Ja'Marr Chase | WR | $238 | Other |
-| Malik Nabers | WR | $190 | Other |
+| Josh Allen | QB | $251 | AmadorFSU |
+| Jayden Daniels | QB | $220 | coleh44 |
+| Bijan Robinson | RB | $223 | AmadorFSU |
+| De'Von Achane | RB | $165 | AmadorFSU |
+| Jeremiyah Love | RB | $175 | revskip |
+| Jordan Mason | RB | $25 | AmadorFSU |
+| Ja'Marr Chase | WR | $238 | kolt78 |
+| Malik Nabers | WR | $190 | Chauncey |
 
 ### Market calibration
 RB and WR market is running 2–4× above pre-draft ceilings. TE market not yet tested — McBride and Bowers still available.
@@ -50,6 +50,10 @@ Single-file tool: `no-flex-zone/auction-tracker.html`
 - Slot budgets stored in `S.slotBudgets` (26 keys: qb1–4, wr1–10, te1–6, rb1–6); defaults in `DEFAULT_SLOT_BUDGETS` constant
 - Pool = remaining budget minus sum of open slot budgets; displayed in section-meta header
 - SEED includes all known off-the-board players as `lost`; `loadState()` merges new lost players on every load without wiping existing state
+- Lost picks stored as `S.lost[id] = { team, price }` (attributed) or `true` (unattributed); merge logic upgrades unattributed entries when SEED has team info
+- `S.teams` = array of known team names, seeded from Sleeper API data, used for autocomplete when attributing picks
+- League tab shows all team cards (Ryan first, others by spend); Unattributed section for picks with no team assigned yet
+- Sleeper usernames for known teams: AmadorFSU, coleh44, revskip, kolt78, Chauncey — others still TBD as draft continues
 
 ## Confirmed spend
 | Player | Pos | Price |
