@@ -4,225 +4,486 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NFZ Auction Tracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg:     #000000;
-      --bg2:    #0d1421;
-      --bg3:    #162033;
-      --text:   #ffffff;
-      --muted:  rgba(255, 255, 255, 0.45);
-      --green:  #30d158;
-      --red:    #ff453a;
-      --yellow: #ff9f0a;
-      --blue:   #0a84ff;
-      --purple: #bf5af2;
-      --border: rgba(255, 255, 255, 0.1);
+      /* True black room — brass and ivory carry it */
+      --bg-0:   #020203;          /* page — near pure black */
+      --bg-1:   #07070a;          /* surface */
+      --bg-2:   #0e0e12;          /* elevated */
+      --bg-3:   #16161b;          /* hover */
+      --line:   rgba(220,200,160,0.06);
+      --line-2: rgba(220,200,160,0.14);
+
+      --text:   #f4ead2;
+      --text-2: #b3a988;
+      --text-3: #6f6852;
+      --text-4: #3a3829;
+
+      /* Brass */
+      --accent:      #c9a14b;
+      --accent-2:    #e8c876;
+      --accent-deep: #8a6924;
+      --accent-soft: rgba(201,161,75,0.12);
+      --accent-line: rgba(201,161,75,0.36);
+
+      --good:   #7fbf6e;
+      --good-soft: rgba(127,191,110,0.10);
+      --good-line: rgba(127,191,110,0.32);
+
+      --warn:   #d4a259;
+      /* Oxblood — the dominant accent */
+      --bad:    #b3463f;
+      --bad-2:  #d56961;
+      --bad-deep: #6e1f1b;
+      --bad-soft: rgba(179,70,63,0.12);
+      --bad-soft-2: rgba(179,70,63,0.20);
+      --bad-line: rgba(179,70,63,0.40);
+      --bad-line-2: rgba(179,70,63,0.60);
+
+      /* Position differentiation = type only. */
+      --pos-qb: var(--bad-2);
+      --pos-wr: var(--bad-2);
+      --pos-te: var(--bad-2);
+      --pos-rb: var(--bad-2);
+
+      --serif: 'Fraunces', 'Times New Roman', Georgia, serif;
+      --mono:  'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+      --sans:  'Inter', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    body {
-      background: var(--bg);
+    html, body {
       color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif;
-      font-size: 14px;
+      font-family: var(--sans);
+      font-size: 13px;
       line-height: 1.5;
       -webkit-font-smoothing: antialiased;
+      font-feature-settings: "ss01", "cv11";
     }
 
-    /* ── Header ── */
+    button { font-family: inherit; }
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(ellipse at 50% -10%, rgba(201,161,75,0.05), transparent 45%),
+        radial-gradient(ellipse at 50% 120%, rgba(0,0,0,0.7), transparent 55%),
+        url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.04  0 0 0 0 0.04  0 0 0 0 0.03  0 0 0 0.16 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>"),
+        linear-gradient(180deg, #020203, #000000);
+      background-attachment: fixed;
+    }
+    input  { font-family: inherit; }
+
+    /* Tabular numerals everywhere they appear */
+    .num, .mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+
+    /* ──────────────────────────────────────────────────── Header */
     .header {
-      background: rgba(6, 12, 24, 0.92);
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
-      border-bottom: 1px solid var(--border);
-      padding: 20px 32px 18px;
+      background:
+        radial-gradient(1400px 500px at 18% -30%, rgba(232,200,118,0.07), transparent 60%),
+        radial-gradient(900px 400px at 88% -20%, rgba(201,161,75,0.04), transparent 70%),
+        linear-gradient(180deg, #07070a 0%, #020203 100%);
+      border-bottom: 1px solid var(--line);
       position: sticky;
       top: 0;
       z-index: 100;
+      box-shadow: 0 2px 24px rgba(0,0,0,0.5);
+    }
+    .header::before {
+      content: '';
+      position: absolute;
+      left: 0; right: 0; top: 0;
+      height: 3px;
+      background: linear-gradient(180deg, var(--accent-deep), var(--accent) 30%, var(--accent-2) 50%, var(--accent) 70%, var(--accent-deep));
+      box-shadow: 0 0 12px rgba(232,200,118,0.35);
     }
 
     .header-top {
       display: flex;
-      align-items: flex-start;
+      align-items: flex-end;
       justify-content: space-between;
-      margin-bottom: 16px;
+      padding: 26px 32px 22px;
+      gap: 32px;
     }
 
-    .header-title {
-      font-size: 22px;
+    .brand {
+      display: flex;
+      align-items: flex-end;
+      gap: 18px;
+      min-width: 0;
+    }
+
+    /* Casino chip mark — oxblood with concentric brass rings */
+    .brand-mark {
+      flex-shrink: 0;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #4a1a18, #2a0c0b 65%, #160605 100%);
+      box-shadow:
+        inset 0 0 0 2px var(--accent-deep),
+        inset 0 0 0 3px var(--accent),
+        inset 0 0 0 4px var(--accent-2),
+        inset 0 0 0 5px var(--accent),
+        inset 0 0 0 6px var(--accent-deep),
+        inset 0 -8px 14px rgba(0,0,0,0.4),
+        0 2px 16px rgba(0,0,0,0.6);
+      display: grid;
+      place-items: center;
+      position: relative;
+      transform: translateY(2px);
+      background-clip: padding-box;
+    }
+    .brand-mark .glyph {
+      font-family: var(--serif);
+      font-style: italic;
       font-weight: 700;
-      letter-spacing: -0.025em;
-      line-height: 1.1;
+      font-size: 30px;
+      line-height: 1;
+      letter-spacing: 0;
+      /* optical centering for italic N: it leans right + has heavier bottom-left */
+      transform: translate(-2px, -2px);
+      background: linear-gradient(180deg, var(--accent-2), var(--accent) 55%, var(--accent-deep));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      filter: drop-shadow(0 1px 0 rgba(0,0,0,0.5));
     }
 
-    .header-subtitle {
-      font-size: 11px;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      margin-top: 4px;
+    .brand-text { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+
+    .brand-eyebrow {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.32em !important;
       font-weight: 500;
+      color: var(--accent);
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+    }
+    .brand-eyebrow .sep { color: var(--bad); margin: 0 8px; opacity: 0.85; }
+
+    .brand-title {
+      font-family: var(--serif);
+      font-variation-settings: 'opsz' 144;
+      font-size: 42px;
+      font-weight: 600;
+      letter-spacing: -0.025em;
+      line-height: 0.95;
+      color: var(--text);
+      text-shadow: 0 1px 0 rgba(0,0,0,0.5), 0 0 30px rgba(244,234,210,0.06);
+    }
+    .brand-title .ital {
+      font-style: italic;
+      font-weight: 500;
+      background: linear-gradient(180deg, var(--accent-2), var(--accent) 60%, var(--accent-deep));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
     }
 
-    /* ── Starter divider ── */
-    .starter-divider {
+    .brand-sub {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text-3);
+      letter-spacing: 0.04em;
+      margin-top: 2px;
+    }
+
+    .header-actions {
       display: flex;
       align-items: center;
-      gap: 8px;
-      margin: 12px 0 6px;
-      font-size: 10px;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      font-weight: 600;
+      gap: 14px;
+      flex-shrink: 0;
     }
-    .starter-divider::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: var(--border);
+
+    .live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--bad);
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      padding: 7px 12px 7px 13px;
+      background: linear-gradient(180deg, rgba(179,70,63,0.10), rgba(179,70,63,0.04));
+      border: 1px solid var(--bad-line);
+      border-radius: 4px;
+      box-shadow: inset 0 1px 0 rgba(255,180,170,0.08), 0 1px 0 rgba(0,0,0,0.4);
+    }
+    .live-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--bad);
+      animation: live-pulse 2s ease-in-out infinite;
+    }
+    @keyframes live-pulse {
+      0%, 100% { box-shadow: 0 0 8px 0 rgba(179,70,63,0.7); }
+      70%      { box-shadow: 0 0 0 6px rgba(179,70,63,0); }
     }
 
     .reset-btn {
-      font-size: 12px;
-      color: var(--red);
-      background: rgba(255, 69, 58, 0.1);
-      border: none;
-      border-radius: 8px;
-      padding: 7px 16px;
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-3);
+      background: transparent;
+      border: 1px solid var(--line-2);
+      border-radius: 4px;
+      padding: 7px 14px;
       cursor: pointer;
-      font-family: inherit;
-      font-weight: 500;
-      transition: background 0.15s;
+      transition: all 0.15s;
     }
-    .reset-btn:hover { background: rgba(255, 69, 58, 0.2); }
+    .reset-btn:hover { color: var(--bad); border-color: var(--bad-line); background: var(--bad-soft); }
 
     .budget-row {
-      display: flex;
-      gap: 40px;
-      align-items: baseline;
-      flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-top: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(0,0,0,0.45), rgba(0,0,0,0.25) 50%), linear-gradient(180deg, var(--bg-1), var(--bg-0));
+      position: relative;
     }
-
-    .budget-stat { display: flex; flex-direction: column; gap: 2px; }
+    .budget-row::before {
+      content: '';
+      position: absolute;
+      left: 0; right: 0; top: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(201,161,75,0.45) 50%, transparent);
+    }
+    .budget-stat {
+      padding: 18px 32px 22px;
+      border-right: 1px solid var(--line);
+      position: relative;
+    }
+    .budget-stat:last-child { border-right: none; }
 
     .budget-stat label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--mono);
       font-size: 10px;
-      color: var(--muted);
+      color: var(--text-3);
       text-transform: uppercase;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.18em;
       font-weight: 500;
+      margin-bottom: 10px;
+    }
+    .budget-stat label::before {
+      content: '♦';
+      color: var(--accent);
+      font-size: 9px;
     }
 
     .budget-stat .val {
-      font-size: 30px;
-      font-weight: 700;
-      letter-spacing: -0.03em;
+      font-family: var(--mono);
       font-variant-numeric: tabular-nums;
+      font-size: 36px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      color: var(--text);
+    }
+    .budget-stat .val .sym {
+      font-weight: 400;
+      color: var(--bad);
+      margin-right: 1px;
+      font-size: 0.55em;
+      vertical-align: 0.22em;
+      opacity: 0.85;
     }
 
-    .val-remaining { color: var(--green); }
-    .val-spent     { color: var(--yellow); }
-    .val-needed    { color: var(--muted); }
-    .val-maxbid    { color: var(--blue); }
-    .val-warn      { color: var(--yellow) !important; }
-    .val-danger    { color: var(--red) !important; }
+    .stat-sub {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text-3);
+      margin-top: 10px;
+      letter-spacing: 0.02em;
+    }
 
-    /* ── Tabs ── */
+    .val-warn   { color: var(--warn) !important; }
+    .val-danger { color: var(--bad)  !important; }
+
+    /* Tabs */
     .tabs {
       display: flex;
       padding: 0 32px;
-      background: var(--bg2);
-      border-bottom: 1px solid var(--border);
+      background: var(--bg-0);
+      border-top: 1px solid var(--line);
     }
-
     .tab {
-      padding: 12px 22px;
+      padding: 14px 0;
+      margin-right: 32px;
       cursor: pointer;
-      border-bottom: 2px solid transparent;
-      color: var(--muted);
-      font-size: 12px;
-      font-weight: 600;
+      border-bottom: 1px solid transparent;
+      color: var(--text-3);
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 500;
       text-transform: uppercase;
-      letter-spacing: 0.07em;
-      transition: color 0.15s, border-color 0.15s;
+      letter-spacing: 0.18em;
+      transition: color 0.12s, border-color 0.12s;
       user-select: none;
+      margin-bottom: -1px;
+      position: relative;
+    }
+    .tab:hover { color: var(--text-2); }
+    .tab.active {
+      color: var(--bad-2);
+      border-bottom-color: var(--bad);
+      text-shadow: 0 0 12px rgba(213,105,97,0.3);
+    }
+    .tab.active::before {
+      content: '';
+      position: absolute;
+      left: 0; right: 0; bottom: -1px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--bad-2), transparent);
+      filter: blur(2px);
+      opacity: 0.7;
+    }
+    .tab.legacy-dot::before {
+      content: '•';
+      position: absolute;
+      left: -10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--accent);
+      font-size: 14px;
+      line-height: 0;
     }
 
-    .tab:hover { color: rgba(255, 255, 255, 0.75); }
-    .tab.active { color: var(--text); border-bottom-color: var(--blue); }
+    /* ──────────────────────────────────────────────────── Content */
+    .content { padding: 24px 32px 64px; max-width: 1600px; }
 
-    /* ── Content ── */
-    .content {
-      padding: 24px 32px;
-    }
-
+    /* Engraved brass section divider — menu-style */
     .section-header {
       display: flex;
       align-items: baseline;
       justify-content: space-between;
       margin-bottom: 18px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid var(--border);
+      padding-bottom: 16px;
+      position: relative;
+      border-bottom: none;
     }
-
+    .section-header::after {
+      content: '';
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      height: 1px;
+      background:
+        linear-gradient(90deg,
+          transparent 0%,
+          rgba(201,161,75,0.0) 2%,
+          rgba(201,161,75,0.45) 18%,
+          rgba(201,161,75,0.55) 48%,
+          transparent 49%,
+          transparent 51%,
+          rgba(201,161,75,0.55) 52%,
+          rgba(201,161,75,0.45) 82%,
+          rgba(201,161,75,0.0) 98%,
+          transparent 100%);
+    }
+    .section-header::before {
+      content: '';
+      position: absolute;
+      left: 50%; bottom: -4px;
+      width: 9px; height: 9px;
+      transform: translateX(-50%) rotate(45deg);
+      background: linear-gradient(135deg, var(--bad-2), var(--bad) 50%, var(--bad-deep));
+      box-shadow:
+        inset 0 0 0 1px rgba(0,0,0,0.4),
+        0 0 8px rgba(201,161,75,0.3),
+        0 0 0 3px var(--bg-0);
+    }
     .section-title {
-      font-size: 17px;
-      font-weight: 700;
+      font-family: var(--serif);
+      font-variation-settings: 'opsz' 144;
+      font-size: 22px;
+      font-weight: 500;
       letter-spacing: -0.02em;
+      color: var(--text);
+      text-transform: none;
     }
-
+    .section-title .ital { font-style: italic; color: var(--bad-2); font-weight: 400; }
     .section-meta {
-      font-size: 12px;
-      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text-3);
+      letter-spacing: 0.02em;
     }
-    .section-meta span { color: var(--text); font-weight: 600; }
+    .section-meta .hi { color: var(--text); font-weight: 500; }
 
-    /* ── Player rows ── */
-    .player-list {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      margin-bottom: 32px;
-    }
+    /* ──────────────────────────────────────────────────── Player rows */
+    .player-list { display: flex; flex-direction: column; }
 
-    .player-row {
+    .starter-divider {
       display: flex;
       align-items: center;
       gap: 12px;
-      padding: 12px 16px;
-      background: var(--bg2);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      border-radius: 12px;
-      transition: background 0.15s;
+      margin: 14px 0 6px;
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--text-3);
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      font-weight: 500;
+    }
+    .starter-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--line);
     }
 
+    .gone-divider {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--text-3);
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      padding: 18px 0 6px;
+    }
+
+    .player-row {
+      display: grid;
+      grid-template-columns: 1fr 70px 60px 70px auto;
+      align-items: center;
+      gap: 14px;
+      padding: 11px 14px;
+      background: transparent;
+      border-bottom: 1px solid var(--line);
+      transition: background 0.12s;
+    }
     .player-row:hover:not(.won):not(.lost) {
-      background: rgba(255, 255, 255, 0.04);
+      background: var(--bg-1);
     }
-
     .player-row.won {
-      border-color: rgba(48, 209, 88, 0.25);
-      background: rgba(48, 209, 88, 0.07);
+      background: linear-gradient(90deg, rgba(127,191,110,0.18), rgba(127,191,110,0.05));
+      border-bottom-color: var(--good-line);
+      box-shadow: inset 3px 0 0 var(--good);
     }
+    .player-row.lost { opacity: 0.42; }
 
-    .player-row.lost { opacity: 0.25; }
-
-    .player-info { flex: 1; min-width: 0; }
-
+    .player-info { min-width: 0; }
     .player-name {
       font-weight: 600;
       font-size: 14px;
+      letter-spacing: -0.01em;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      letter-spacing: -0.01em;
+      color: var(--text);
     }
-
     .player-note {
       font-size: 11px;
-      color: var(--muted);
+      color: var(--text-3);
       margin-top: 2px;
       white-space: nowrap;
       overflow: hidden;
@@ -230,434 +491,495 @@
     }
 
     .player-stat {
+      font-family: var(--mono);
+      font-variant-numeric: tabular-nums;
       font-size: 12px;
-      color: var(--muted);
-      white-space: nowrap;
+      color: var(--text-3);
       text-align: right;
+      letter-spacing: -0.01em;
     }
-
-    .player-stat .hi {
-      color: var(--text);
-      font-weight: 600;
-      font-size: 13px;
-    }
+    .player-stat .hi { color: var(--text); font-weight: 500; }
+    .player-stat .unit { color: var(--text-4); margin-left: 3px; font-size: 10px; }
 
     .player-ceil {
-      font-weight: 700;
+      font-family: var(--mono);
+      font-variant-numeric: tabular-nums;
+      font-weight: 500;
       font-size: 13px;
-      white-space: nowrap;
-      min-width: 52px;
       text-align: right;
+      letter-spacing: -0.01em;
     }
+    .ceil-hi { color: var(--accent); }
+    .ceil-md { color: var(--text-2); }
+    .ceil-lo { color: var(--text-4); }
 
-    /* ── Actions ── */
     .player-actions {
       display: flex;
       gap: 6px;
       align-items: center;
+      justify-content: flex-end;
       flex-shrink: 0;
     }
 
     .won-label {
-      color: var(--green);
-      font-weight: 700;
-      font-size: 13px;
-      white-space: nowrap;
-    }
-
-    .lost-label {
-      color: var(--muted);
-      font-size: 12px;
-    }
-
-    /* ── Buttons ── */
-    .btn {
-      padding: 6px 14px;
-      border-radius: 8px;
-      border: none;
-      font-family: inherit;
-      font-size: 12px;
+      font-family: var(--mono);
+      color: var(--good);
       font-weight: 600;
-      cursor: pointer;
-      transition: all 0.15s;
-      white-space: nowrap;
-      letter-spacing: -0.01em;
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
     }
+    .lost-label {
+      font-family: var(--mono);
+      color: var(--text-3);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    /* Buttons */
+    .btn {
+      padding: 6px 12px;
+      border-radius: 4px;
+      border: 1px solid transparent;
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.12s;
+      white-space: nowrap;
+      background: transparent;
+      color: var(--text-2);
+    }
+    .btn:hover { color: var(--text); border-color: var(--line-2); }
 
     .btn-win {
-      background: rgba(48, 209, 88, 0.15);
-      color: var(--green);
+      background: linear-gradient(180deg, rgba(201,161,75,0.20), rgba(201,161,75,0.08));
+      border-color: var(--accent-line);
+      color: var(--accent-2);
+      box-shadow: inset 0 1px 0 rgba(232,200,118,0.18), inset 0 -1px 0 rgba(0,0,0,0.25);
     }
-    .btn-win:hover { background: rgba(48, 209, 88, 0.25); }
+    .btn-win:hover {
+      background: linear-gradient(180deg, rgba(232,200,118,0.30), rgba(201,161,75,0.14));
+      border-color: var(--accent);
+      color: var(--accent-2);
+      box-shadow: inset 0 1px 0 rgba(232,200,118,0.3), 0 0 12px rgba(201,161,75,0.2);
+    }
 
     .btn-lost {
-      background: rgba(255, 255, 255, 0.07);
-      color: var(--muted);
+      background: transparent;
+      border-color: var(--bad-line);
+      color: var(--bad);
     }
-    .btn-lost:hover { background: rgba(255, 255, 255, 0.12); color: var(--text); }
+    .btn-lost:hover { color: var(--bad-2); border-color: var(--bad); background: var(--bad-soft-2); }
 
-    .btn-undo {
-      background: none;
-      color: var(--muted);
-      border: 1px solid var(--border);
-      font-size: 11px;
+    .btn-undo, .btn-assign {
+      background: transparent;
+      border-color: var(--line);
+      color: var(--text-3);
+      padding: 5px 10px;
     }
-    .btn-undo:hover { color: var(--text); background: rgba(255, 255, 255, 0.05); }
+    .btn-undo:hover, .btn-assign:hover { color: var(--text); border-color: var(--line-2); }
 
     .btn-hide {
-      background: none;
-      color: rgba(255, 255, 255, 0.18);
-      border: 1px solid var(--border);
-      font-size: 11px;
+      background: transparent;
+      border-color: var(--line);
+      color: var(--text-4);
       padding: 5px 9px;
     }
-    .btn-hide:hover { color: var(--muted); }
+    .btn-hide:hover { color: var(--text-3); }
 
-    /* ── Hidden section ── */
+    /* Hidden section */
     .hidden-toggle {
-      font-size: 11px;
-      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--text-3);
       cursor: pointer;
-      padding: 12px 0 6px;
+      padding: 14px 0 6px;
       user-select: none;
       text-transform: uppercase;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.18em;
       font-weight: 500;
     }
-    .hidden-toggle:hover { color: var(--text); }
-
+    .hidden-toggle:hover { color: var(--text-2); }
     .hidden-list { display: none; }
-    .hidden-list.open { display: flex; flex-direction: column; gap: 4px; }
+    .hidden-list.open { display: flex; flex-direction: column; }
 
-    /* ── Price input ── */
+    /* Price input */
     .price-wrap {
+      display: inline-flex;
+      align-items: center;
+      background: var(--bg-2);
+      border: 1px solid var(--line-2);
+      border-radius: 4px;
+      padding: 0 0 0 8px;
+      transition: border-color 0.12s, background 0.12s;
+    }
+    .price-wrap:focus-within {
+      border-color: var(--accent);
+      background: var(--bg-2);
+    }
+    .price-prefix {
+      color: var(--bad);
+      font-family: var(--mono);
+      font-size: 12px;
+      opacity: 0.85;
+    }
+    .price-input {
+      width: 56px;
+      padding: 6px 6px;
+      background: transparent;
+      border: none;
+      color: var(--text);
+      font-family: var(--mono);
+      font-variant-numeric: tabular-nums;
+      font-size: 12px;
+      font-weight: 500;
+      text-align: right;
+    }
+    .price-input:focus { outline: none; }
+    .price-input::placeholder { color: var(--text-4); }
+
+    /* ──────────────────────────────────────────────────── Roster page */
+    .roster-columns {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .roster-section {
+      background: linear-gradient(180deg, var(--bg-1), #020203);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      box-shadow: inset 0 1px 0 rgba(220,200,160,0.04), 0 1px 2px rgba(0,0,0,0.5);
+    }
+    .roster-section::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, currentColor, transparent);
+      opacity: 0.85;
+    }
+    /* All position headers share brass; differentiation is type-only */
+    .roster-section.is-qb,
+    .roster-section.is-qb,
+    .roster-section.is-wr,
+    .roster-section.is-te,
+    .roster-section.is-rb { color: var(--bad-2); }
+
+    .roster-section.is-qb::before,
+    .roster-section.is-wr::before,
+    .roster-section.is-te::before,
+    .roster-section.is-rb::before {
+      background: linear-gradient(90deg, transparent, var(--bad-line), transparent);
+      opacity: 0.75;
+    }
+
+    .roster-section-header {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      padding: 14px 16px 12px;
+      border-bottom: 1px solid var(--line);
+      background: var(--bg-1);
+    }
+
+    .roster-section-pos {
+      font-family: var(--serif);
+      font-variation-settings: 'opsz' 144;
+      font-style: italic;
+      font-size: 26px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1;
+    }
+
+    .roster-section-count {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text-3);
+      letter-spacing: 0.02em;
+    }
+
+    .roster-section-budget {
+      margin-left: auto;
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--text-3);
+      letter-spacing: 0.02em;
+      text-align: right;
+    }
+    .roster-section-budget .num { color: var(--text-2); }
+
+    .roster-slot {
+      display: grid;
+      grid-template-columns: 36px 1fr auto;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 16px;
+      border-top: 1px solid var(--line);
+      font-size: 12px;
+    }
+    .roster-slot:first-of-type { border-top: none; }
+
+    .slot-label {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 500;
+      color: var(--text-3);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .slot-player {
+      font-weight: 500;
+      letter-spacing: -0.005em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .slot-price-filled {
+      font-family: var(--mono);
+      font-variant-numeric: tabular-nums;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--good);
+    }
+    .slot-empty {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--text-4);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .slot-budget-wrap {
+      display: inline-flex;
+      align-items: center;
+      background: var(--bg-2);
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      padding: 0 6px;
+      transition: border-color 0.12s;
+    }
+    .slot-budget-wrap:focus-within { border-color: var(--accent); }
+    .slot-budget-prefix {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text-4);
+    }
+    .slot-budget-input {
+      width: 44px;
+      background: transparent;
+      border: none;
+      color: var(--text-2);
+      font-family: var(--mono);
+      font-variant-numeric: tabular-nums;
+      font-size: 12px;
+      padding: 4px 4px;
+      text-align: right;
+    }
+    .slot-budget-input:focus { outline: none; color: var(--text); }
+
+    /* Position type accent — brass for all */
+    .pos-QB, .pos-WR, .pos-TE, .pos-RB { color: var(--bad-2); }
+
+    /* Attribution chips */
+    .attr-label {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--text-3);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      white-space: nowrap;
+    }
+    .attr-input {
+      width: 100px;
+      padding: 6px 8px;
+      background: var(--bg-2);
+      border: 1px solid var(--line-2);
+      border-radius: 4px;
+      color: var(--text);
+      font-family: var(--mono);
+      font-size: 12px;
+    }
+    .attr-input:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+    .attr-team-label {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-2);
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+    }
+    .attr-price-label {
+      font-family: var(--mono);
+      font-variant-numeric: tabular-nums;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-3);
+      white-space: nowrap;
+    }
+
+    /* Team cards (League) */
+    .teams-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .team-card {
+      background: linear-gradient(180deg, var(--bg-1), #020203);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: inset 0 1px 0 rgba(220,200,160,0.04), 0 1px 2px rgba(0,0,0,0.5);
+    }
+    /* No special highlight for "my team" — first position is enough */
+    .team-card-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      padding: 14px 14px 12px;
+      border-bottom: 1px solid var(--line);
+    }
+    .team-card-name {
+      font-family: var(--serif);
+      font-variation-settings: 'opsz' 144;
+      font-weight: 500;
+      font-size: 16px;
+      letter-spacing: -0.015em;
+    }
+
+    .team-card-name .you-tag {
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 500;
+      color: var(--text-3);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-left: 6px;
+    }
+    .team-card-stats {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--text-3);
+      text-align: right;
+      line-height: 1.6;
+      letter-spacing: 0.02em;
+    }
+    .team-pos-block { border-top: 1px solid var(--line); }
+    .team-pos-block:first-of-type { border-top: none; }
+    .team-pos-label {
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      padding: 8px 14px 4px;
+      color: var(--text-3);
+    }
+    .team-slot-row {
+      display: grid;
+      grid-template-columns: 32px 1fr auto;
+      gap: 8px;
+      align-items: center;
+      padding: 4px 14px;
+    }
+    .team-slot-id {
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+    }
+    .team-slot-player {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: -0.005em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .team-slot-price {
+      font-family: var(--mono);
+      font-variant-numeric: tabular-nums;
+      font-size: 11px;
+      color: var(--good);
+      white-space: nowrap;
+    }
+    .team-slot-empty {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--text-4);
+      letter-spacing: 0.08em;
+    }
+
+    /* Unattributed */
+    .unattr-block { margin-bottom: 24px; }
+    .unattr-header {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--warn);
+      margin-bottom: 10px;
+      padding: 10px 14px;
+      background: rgba(200,154,91,0.06);
+      border: 1px solid rgba(200,154,91,0.20);
+      border-radius: 4px 4px 0 0;
+      border-bottom: none;
+    }
+    .unattr-row {
       display: flex;
       align-items: center;
-      gap: 3px;
+      gap: 10px;
+      padding: 10px 14px;
+      background: var(--bg-1);
+      border: 1px solid var(--line);
+      border-top: none;
     }
-
-    .price-prefix {
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    .price-input {
-      width: 60px;
-      padding: 6px 8px;
-      background: var(--bg3);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 8px;
-      color: var(--text);
-      font-family: inherit;
-      font-size: 13px;
-      font-weight: 600;
-      text-align: center;
-      transition: border-color 0.15s, background 0.15s;
-    }
-
-    .price-input:focus {
-      outline: none;
-      border-color: var(--green);
-      background: rgba(48, 209, 88, 0.06);
-    }
-
-    /* ── Roster tab ── */
-    .roster-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 8px;
-      margin-bottom: 28px;
-    }
-
-    .roster-card {
-      background: var(--bg2);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 12px 14px;
-    }
-
-    .roster-card-pos {
+    .unattr-row:last-child { border-radius: 0 0 4px 4px; }
+    .unattr-pos {
+      font-family: var(--mono);
       font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      margin-bottom: 4px;
+      font-weight: 600;
       text-transform: uppercase;
+      letter-spacing: 0.08em;
+      width: 28px;
+      flex-shrink: 0;
+    }
+    .unattr-name {
+      font-weight: 500;
+      font-size: 13px;
+      flex: 1;
+      min-width: 100px;
     }
 
-    .roster-card-name { font-weight: 600; font-size: 14px; }
-
-    .roster-card-price {
-      color: var(--green);
-      font-weight: 700;
-      font-size: 16px;
-      margin-top: 4px;
-    }
-
-    .pos-QB { color: #0a84ff; }
-    .pos-TE { color: #bf5af2; }
-    .pos-WR { color: #30d158; }
-    .pos-RB { color: #ff9f0a; }
-
-    /* ── Tab panels ── */
-    .tab-panel { display: none; }
-    .tab-panel.active { display: block; }
-
-    /* ── Empty state ── */
+    /* Empty state */
     .empty-state {
-      color: var(--muted);
+      color: var(--text-3);
       font-style: italic;
       padding: 24px 0;
       font-size: 13px;
     }
 
-    /* ── Roster page ── */
-    .budget-breakdown {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      margin-bottom: 20px;
-    }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
 
-    .roster-columns {
-      display: flex;
-      gap: 16px;
-      align-items: flex-start;
-    }
-
-    .roster-section {
-      flex: 1;
-      min-width: 0;
-      border-radius: 14px;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .roster-section-header {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 14px 18px;
-      background: var(--bg2);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .roster-section-pos {
-      font-size: 22px;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-    }
-
-    .roster-section-count {
-      font-size: 12px;
-      color: var(--muted);
-      font-variant-numeric: tabular-nums;
-    }
-
-    .roster-section-budget {
-      margin-left: auto;
-      font-size: 11px;
-      color: var(--muted);
-    }
-
-    .roster-slot {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 10px 18px;
-      background: var(--bg2);
-      border-top: 1px solid rgba(255, 255, 255, 0.05);
-      font-size: 13px;
-    }
-
-    .slot-label {
-      font-size: 10px;
-      font-weight: 700;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      width: 36px;
-      flex-shrink: 0;
-    }
-
-    .slot-player {
-      font-weight: 600;
-      flex: 1;
-      letter-spacing: -0.01em;
-    }
-
-    .slot-price-filled {
-      font-size: 13px;
-      font-weight: 700;
-      font-variant-numeric: tabular-nums;
-      color: var(--green);
-    }
-
-    .slot-empty {
-      flex: 1;
-      font-size: 11px;
-      color: rgba(255, 255, 255, 0.15);
-    }
-
-    .slot-budget-wrap {
-      display: flex;
-      align-items: center;
-      gap: 2px;
-      margin-left: auto;
-    }
-
-    .slot-budget-prefix {
-      font-size: 12px;
-      color: var(--muted);
-    }
-
-    .slot-budget-input {
-      width: 56px;
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 8px;
-      color: var(--text);
-      font-family: inherit;
-      font-size: 13px;
-      font-variant-numeric: tabular-nums;
-      padding: 4px 8px;
-      text-align: right;
-      transition: border-color 0.15s, background 0.15s;
-    }
-
-    .slot-budget-input:focus {
-      outline: none;
-      border-color: var(--blue);
-      background: rgba(10, 132, 255, 0.08);
-    }
-
-    /* ── Position-tab budget bar ── */
-    .budget-bar {
-      height: 2px;
-      background: rgba(255, 255, 255, 0.06);
-      border-radius: 2px;
-      margin-top: 8px;
-      overflow: hidden;
-    }
-
-    .budget-bar-fill {
-      height: 100%;
-      border-radius: 2px;
-      transition: width 0.3s ease;
-    }
-
-    /* ── Attribution inline ── */
-    .attr-label { font-size: 11px; color: var(--muted); white-space: nowrap; }
-    .attr-input {
-      width: 90px;
-      padding: 6px 8px;
-      background: var(--bg3);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 8px;
-      color: var(--text);
-      font-family: inherit;
-      font-size: 12px;
-      font-weight: 600;
-    }
-    .attr-input:focus {
-      outline: none;
-      border-color: rgba(255,69,58,0.6);
-      background: rgba(255,69,58,0.06);
-    }
-    .attr-team-label { font-size: 12px; font-weight: 600; color: var(--muted); white-space: nowrap; }
-    .attr-price-label { font-size: 12px; font-weight: 700; color: var(--red); white-space: nowrap; }
-
-    /* ── Segmented control ── */
-    .seg-control {
-      display: inline-flex;
-      background: rgba(255,255,255,0.06);
-      border-radius: 10px;
-      padding: 3px;
-      gap: 2px;
-      margin-bottom: 20px;
-    }
-    .seg {
-      padding: 6px 18px;
-      border-radius: 8px;
-      border: none;
-      font-family: inherit;
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      color: var(--muted);
-      background: none;
-      transition: all 0.15s;
-      letter-spacing: -0.01em;
-    }
-    .seg:hover { color: var(--text); }
-    .seg.active {
-      background: rgba(255,255,255,0.12);
-      color: var(--text);
-      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
-    }
-
-    /* ── Team cards ── */
-    .teams-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 12px;
-      margin-bottom: 24px;
-    }
-    .team-card {
-      background: var(--bg2);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      overflow: hidden;
-    }
-    .team-card.is-me { border-color: rgba(10,132,255,0.35); background: rgba(10,132,255,0.04); }
-    .team-card-header {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      padding: 12px 14px 10px;
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-    }
-    .team-card-name { font-weight: 700; font-size: 14px; letter-spacing: -0.02em; }
-    .team-card.is-me .team-card-name { color: var(--blue); }
-    .team-card-stats { font-size: 11px; color: var(--muted); text-align: right; line-height: 1.6; }
-    .team-pos-block { border-top: 1px solid rgba(255,255,255,0.04); }
-    .team-pos-label {
-      font-size: 9px; font-weight: 700; text-transform: uppercase;
-      letter-spacing: 0.1em; padding: 7px 14px 2px; color: var(--muted);
-    }
-    .team-slot-row { display: flex; align-items: center; gap: 8px; padding: 3px 14px; }
-    .team-slot-id {
-      font-size: 9px; font-weight: 700; text-transform: uppercase;
-      letter-spacing: 0.05em; width: 30px; flex-shrink: 0; color: var(--muted);
-    }
-    .team-slot-player {
-      font-size: 12px; font-weight: 600; flex: 1;
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; letter-spacing: -0.01em;
-    }
-    .team-slot-price { font-size: 11px; font-weight: 700; color: var(--green); font-variant-numeric: tabular-nums; white-space: nowrap; }
-    .team-slot-empty { font-size: 11px; color: rgba(255,255,255,0.15); flex: 1; }
-
-    /* ── Unattributed section ── */
-    .unattr-header {
-      font-size: 11px; font-weight: 600; text-transform: uppercase;
-      letter-spacing: 0.08em; color: var(--yellow); margin-bottom: 8px;
-    }
-    .unattr-row {
-      display: flex; align-items: center; gap: 8px;
-      padding: 7px 14px; flex-wrap: wrap;
-      background: rgba(255,159,10,0.05);
-      border: 1px solid rgba(255,159,10,0.15);
-      border-radius: 10px; margin-bottom: 4px;
-    }
-    .unattr-pos { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; width: 26px; flex-shrink: 0; }
-    .unattr-name { font-weight: 600; font-size: 13px; flex: 1; min-width: 100px; }
-
-    /* ── Btn assign ── */
-    .btn-assign {
-      background: none; color: var(--muted);
-      border: 1px solid var(--border); font-size: 11px; padding: 4px 8px;
-    }
-    .btn-assign:hover { color: var(--text); }
+    /* Hide native number-input spinners */
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+    input[type=number] { -moz-appearance: textfield; }
   </style>
 </head>
 <body>
@@ -665,40 +987,49 @@
 <!-- ── Header ── -->
 <div class="header">
   <div class="header-top">
-    <div>
-      <div class="header-title">No Flex Zone</div>
-      <div class="header-subtitle">2026 Dynasty Startup Auction</div>
+    <div class="brand">
+      <div class="brand-mark"><span class="glyph">N</span></div>
+      <div class="brand-text">
+        <div class="brand-eyebrow">Dynasty Startup <span class="sep">/</span> Season 26</div>
+        <div class="brand-title">No Flex Zone <span class="ital">Auction</span></div>
+        <div class="brand-sub">est. 2026 · 12-team · 30-man rosters · $1,000 cap</div>
+      </div>
     </div>
-    <button class="reset-btn" onclick="resetState()">Reset</button>
+    <div class="header-actions">
+      <span class="live-badge"><span class="live-dot"></span>Live</span>
+      <button class="reset-btn" onclick="resetState()">Reset</button>
+    </div>
   </div>
   <div class="budget-row">
     <div class="budget-stat">
       <label>Remaining</label>
-      <div class="val val-remaining" id="stat-remaining">—</div>
+      <div class="val" id="stat-remaining">—</div>
+      <div class="stat-sub">of $1,000 budget</div>
     </div>
     <div class="budget-stat">
       <label>Spent</label>
-      <div class="val val-spent" id="stat-spent">—</div>
+      <div class="val" id="stat-spent">—</div>
+      <div class="stat-sub" id="stat-sub-spent">— players won</div>
     </div>
     <div class="budget-stat">
-      <label>Players Needed</label>
-      <div class="val val-needed" id="stat-needed">—</div>
+      <label>Slots Open</label>
+      <div class="val" id="stat-needed">—</div>
+      <div class="stat-sub">of 30 roster slots</div>
     </div>
     <div class="budget-stat">
       <label>Max Safe Bid</label>
-      <div class="val val-maxbid" id="stat-maxbid">—</div>
+      <div class="val" id="stat-maxbid">—</div>
+      <div class="stat-sub">leaves $1 for each open slot</div>
     </div>
   </div>
-</div>
-
-<!-- ── Tabs ── -->
-<div class="tabs">
-  <div class="tab active" data-tab="roster">Roster</div>
-  <div class="tab" data-tab="qb">QB</div>
-  <div class="tab" data-tab="wr">WR</div>
-  <div class="tab" data-tab="te">TE</div>
-  <div class="tab" data-tab="rb">RB</div>
-  <div class="tab" data-tab="league">League</div>
+  <div class="tabs">
+    <div class="tab active" data-tab="roster">Roster</div>
+    <div class="tab" data-tab="qb">QB</div>
+    <div class="tab" data-tab="wr">WR</div>
+    <div class="tab" data-tab="te">TE</div>
+    <div class="tab" data-tab="rb">RB</div>
+    <div class="tab" data-tab="league">League</div>
+  </div>
 </div>
 
 <!-- ── Content ── -->
@@ -706,7 +1037,7 @@
 
   <div class="tab-panel active" id="tab-roster">
     <div class="section-header">
-      <div class="section-title">Current Roster</div>
+      <div class="section-title">Current <span class="ital">Roster</span></div>
       <div class="section-meta" id="roster-meta"></div>
     </div>
     <div class="budget-breakdown" id="budget-breakdown"></div>
@@ -714,7 +1045,7 @@
 
   <div class="tab-panel" id="tab-te">
     <div class="section-header">
-      <div class="section-title">Tight End</div>
+      <div class="section-title">Tight <span class="ital">End</span></div>
       <div class="section-meta" id="meta-te"></div>
     </div>
     <div class="player-list" id="list-te"></div>
@@ -722,7 +1053,7 @@
 
   <div class="tab-panel" id="tab-qb">
     <div class="section-header">
-      <div class="section-title">Quarterback</div>
+      <div class="section-title"><span class="ital">Quarter</span>back</div>
       <div class="section-meta" id="meta-qb"></div>
     </div>
     <div class="player-list" id="list-qb"></div>
@@ -730,7 +1061,7 @@
 
   <div class="tab-panel" id="tab-wr">
     <div class="section-header">
-      <div class="section-title">Wide Receiver</div>
+      <div class="section-title">Wide <span class="ital">Receiver</span></div>
       <div class="section-meta" id="meta-wr"></div>
     </div>
     <div class="player-list" id="list-wr"></div>
@@ -738,7 +1069,7 @@
 
   <div class="tab-panel" id="tab-rb">
     <div class="section-header">
-      <div class="section-title">Running Back</div>
+      <div class="section-title">Running <span class="ital">Back</span></div>
       <div class="section-meta" id="meta-rb"></div>
     </div>
     <div class="player-list" id="list-rb"></div>
@@ -746,7 +1077,7 @@
 
   <div class="tab-panel" id="tab-league">
     <div class="section-header">
-      <div class="section-title">League</div>
+      <div class="section-title">The <span class="ital">League</span></div>
       <div class="section-meta" id="meta-league"></div>
     </div>
     <div id="league-content"></div>
@@ -756,23 +1087,22 @@
 
 <script>
 // ── Constants ────────────────────────────────────────────────────────────────
-
 const TOTAL_BUDGET  = 1000;
 const TOTAL_ROSTER  = 30;
 const STARTER_SLOTS = { te: 2, qb: 2, wr: 4, rb: 3 };
 
-const POS_SLOTS = [
-  { key: 'qb',    label: 'QB',    budget: 285, color: '#0a84ff', isQB: true },
-  { key: 'te',    label: 'TE',    budget: 450, color: '#bf5af2'             },
-  { key: 'wr',    label: 'WR',    budget: 155, color: '#30d158'             },
-  { key: 'rb',    label: 'RB',    budget:  80, color: '#ff9f0a'             },
-];
+const POS_COLOR = {
+  QB: 'var(--bad-2)',
+  WR: 'var(--bad-2)',
+  TE: 'var(--bad-2)',
+  RB: 'var(--bad-2)',
+};
 
 const ROSTER_SLOTS_CONFIG = [
-  { pos: 'QB', key: 'qb', label: 'QB', color: '#0a84ff', total: 4  },
-  { pos: 'WR', key: 'wr', label: 'WR', color: '#30d158', total: 13 },
-  { pos: 'TE', key: 'te', label: 'TE', color: '#bf5af2', total: 7  },
-  { pos: 'RB', key: 'rb', label: 'RB', color: '#ff9f0a', total: 6  },
+  { pos: 'QB', key: 'qb', label: 'QB', total: 4  },
+  { pos: 'WR', key: 'wr', label: 'WR', total: 13 },
+  { pos: 'TE', key: 'te', label: 'TE', total: 7  },
+  { pos: 'RB', key: 'rb', label: 'RB', total: 6  },
 ];
 
 const DEFAULT_SLOT_BUDGETS = {
@@ -783,7 +1113,6 @@ const DEFAULT_SLOT_BUDGETS = {
 };
 
 // ── Target players ───────────────────────────────────────────────────────────
-
 const TARGETS = {
   te: [
     { id: 'mcbride',   name: 'Trey McBride',     age: 26, ppg: 22.4, games: 50, ceil: 250, note: '#1 dynasty TE · 50/51 games · ascending (278→378→461)' },
@@ -873,11 +1202,11 @@ const TARGETS = {
     { id: 'judkins',   name: 'Quinshon Judkins', age: 22, ppg: 12.0, games: 17, ceil:  15, note: 'CLE · 2025 rookie · est. PPG' },
     { id: 'chubbard',  name: 'Chuba Hubbard',    age: 26, ppg: 11.5, games: 44, ceil:  10, note: 'CAR · consistent depth · est. PPG' },
     { id: 'rdowdle',   name: 'Rico Dowdle',      age: 26, ppg: 11.0, games: 32, ceil:  10, note: 'DAL · 2025 starter · est. PPG' },
+    { id: 'jmason',    name: 'Jordan Mason',     age: 26, ppg:  9.5, games: 34, ceil:   5, note: 'SF · depth back · est. PPG' },
   ]
 };
 
 // ── State ────────────────────────────────────────────────────────────────────
-
 const SEED = {
   spent: 220,
   won: 1,
@@ -892,6 +1221,7 @@ const SEED = {
     jdaniels: { price: 220, team: 'coleh44'   },
     achane:   { price: 165, team: 'AmadorFSU' },
     chase:    { price: 238, team: 'kolt78'    },
+    jmason:   { price:  25, team: 'AmadorFSU' },
   },
   hidden: {},
   slotBudgets: { ...DEFAULT_SLOT_BUDGETS },
@@ -906,78 +1236,70 @@ function loadState() {
     if (!st.lost)        st.lost        = {};
     if (!st.slotBudgets) st.slotBudgets = { ...DEFAULT_SLOT_BUDGETS };
     if (!st.teams)       st.teams       = [];
-    // Seed any new slot keys added since last session
     Object.entries(DEFAULT_SLOT_BUDGETS).forEach(([k, v]) => {
       if (!(k in st.slotBudgets)) st.slotBudgets[k] = v;
     });
-    // Merge newly off-the-board players without clobbering existing attributions
     Object.entries(SEED.lost || {}).forEach(([id, seedVal]) => {
-      if (st.picks?.[id]) return;                                              // user won this player
-      if (!st.lost?.[id]) { st.lost[id] = seedVal; return; }                  // new entry — add from seed
+      if (st.picks?.[id]) return;
+      if (!st.lost?.[id]) { st.lost[id] = seedVal; return; }
       const cur = st.lost[id];
       const curHasTeam = typeof cur === 'object' && cur?.team;
       if (!curHasTeam && typeof seedVal === 'object' && seedVal?.team) {
-        st.lost[id] = seedVal;                                                 // upgrade to attributed seed value
+        st.lost[id] = seedVal;
       }
-      // otherwise preserve existing user attribution
     });
-    // Fix Maye's tab key if old state has him as 'qb' (would show as QB2)
     if (st.picks?.maye?.tab === 'qb') st.picks.maye.tab = 'qb1';
     save(st);
     return st;
   } catch { return JSON.parse(JSON.stringify(SEED)); }
 }
 
-function save(st) {
-  localStorage.setItem('nfz_v4', JSON.stringify(st));
-}
+function save(st) { localStorage.setItem('nfz_v4', JSON.stringify(st)); }
 
 let S = loadState();
 
 // ── Computed ─────────────────────────────────────────────────────────────────
-
 const remaining  = () => TOTAL_BUDGET - S.spent;
 const needed     = () => TOTAL_ROSTER - S.won;
 const maxSafeBid = () => Math.max(1, remaining() - (needed() - 1));
 
 // ── Render header ────────────────────────────────────────────────────────────
-
 function renderHeader() {
   const r = remaining();
   const mb = maxSafeBid();
 
-  document.getElementById('stat-remaining').textContent = `$${r}`;
-  document.getElementById('stat-spent').textContent     = `$${S.spent}`;
-  document.getElementById('stat-needed').textContent    = needed();
-  document.getElementById('stat-maxbid').textContent    = `$${mb}`;
+  document.getElementById('stat-remaining').innerHTML = `<span class="sym">$</span>${r}`;
+  document.getElementById('stat-spent').innerHTML     = `<span class="sym">$</span>${S.spent}`;
+  document.getElementById('stat-needed').textContent  = needed();
+  document.getElementById('stat-maxbid').innerHTML    = `<span class="sym">$</span>${mb}`;
+
+  const wonCount = Object.keys(S.picks).length;
+  document.getElementById('stat-sub-spent').textContent = `${wonCount} player${wonCount !== 1 ? 's' : ''} won`;
 
   const el = document.getElementById('stat-remaining');
-  el.className = 'val val-remaining';
+  el.className = 'val';
   if (r < 100)       el.classList.add('val-danger');
   else if (r < 250)  el.classList.add('val-warn');
 
   const mb_el = document.getElementById('stat-maxbid');
-  mb_el.className = 'val val-maxbid';
+  mb_el.className = 'val';
   if (mb < 50)       mb_el.classList.add('val-danger');
   else if (mb < 150) mb_el.classList.add('val-warn');
 }
 
 // ── Render roster ────────────────────────────────────────────────────────────
-
 function renderRoster() {
   const picks = Object.values(S.picks);
   const pool  = calcPool();
-  const poolColor = pool < 0 ? 'var(--red)' : pool > 0 ? 'var(--green)' : 'var(--muted)';
+  const poolColor = pool < 0 ? 'var(--bad)' : pool > 0 ? 'var(--good)' : 'var(--text-3)';
   document.getElementById('roster-meta').innerHTML =
-    `<span>${picks.length}</span> players &nbsp;·&nbsp; <span>$${S.spent}</span> spent &nbsp;·&nbsp; pool: <span style="color:${poolColor}">$${pool}</span>`;
+    `<span class="hi">${picks.length}</span> picks &nbsp;·&nbsp; <span class="hi">$${S.spent}</span> spent &nbsp;·&nbsp; pool: <span style="color:${poolColor}">$${pool}</span>`;
 }
 
-// ── Render position list ─────────────────────────────────────────────────────
-
-function ceilColor(c) {
-  if (c >= 150) return '#f59e0b';
-  if (c >= 60)  return '#fbbf24';
-  return 'var(--muted)';
+function ceilClass(c) {
+  if (c >= 150) return 'ceil-hi';
+  if (c >= 60)  return 'ceil-md';
+  return 'ceil-lo';
 }
 
 function playerRow(p, pos) {
@@ -991,8 +1313,8 @@ function playerRow(p, pos) {
     statusClass = 'won';
     actionsHtml = `
       <div class="player-actions">
-        <span class="won-label">WON $${pick.price}</span>
-        <button class="btn btn-undo" onclick="undoPick('${p.id}','${pos}')">undo</button>
+        <span class="won-label">Won · $${pick.price}</span>
+        <button class="btn btn-undo" onclick="undoPick('${p.id}','${pos}')">Undo</button>
       </div>`;
   } else if (lost) {
     statusClass = 'lost';
@@ -1003,15 +1325,15 @@ function playerRow(p, pos) {
         <div class="player-actions">
           ${lostTeam  ? `<span class="attr-team-label">${lostTeam}</span>` : ''}
           ${lostPrice ? `<span class="attr-price-label">$${lostPrice}</span>` : ''}
-          <button class="btn btn-assign" onclick="startLostAttribution('${p.id}',true)">edit</button>
-          <button class="btn btn-undo"   onclick="undoLost('${p.id}')">undo</button>
+          <button class="btn btn-assign" onclick="startLostAttribution('${p.id}',true)">Edit</button>
+          <button class="btn btn-undo"   onclick="undoLost('${p.id}')">Undo</button>
         </div>`;
     } else {
       actionsHtml = `
         <div class="player-actions">
           <span class="lost-label">lost</span>
-          <button class="btn btn-assign" onclick="startLostAttribution('${p.id}',true)" title="Assign to team">+team</button>
-          <button class="btn btn-undo"   onclick="undoLost('${p.id}')">undo</button>
+          <button class="btn btn-assign" onclick="startLostAttribution('${p.id}',true)">+ team</button>
+          <button class="btn btn-undo"   onclick="undoLost('${p.id}')">Undo</button>
         </div>`;
     }
   } else {
@@ -1025,7 +1347,7 @@ function playerRow(p, pos) {
         </div>
         <button class="btn btn-win"  onclick="winPick('${p.id}','${pos}')">Won</button>
         <button class="btn btn-lost" onclick="startLostAttribution('${p.id}',false)">Lost</button>
-        <button class="btn btn-hide" onclick="hidePlayer('${p.id}')" title="Hide">–</button>
+        <button class="btn btn-hide" onclick="hidePlayer('${p.id}')" title="Hide">×</button>
       </div>`;
   }
 
@@ -1035,9 +1357,9 @@ function playerRow(p, pos) {
         <div class="player-name">${p.name}</div>
         <div class="player-note">${p.note}</div>
       </div>
-      <div class="player-stat"><span class="hi">${p.ppg}</span> ppg</div>
-      <div class="player-stat"><span class="hi">${p.games}</span>g</div>
-      <div class="player-ceil" style="color:${ceilColor(p.ceil)}">≤$${p.ceil}</div>
+      <div class="player-stat"><span class="hi">${p.ppg}</span><span class="unit">PPG</span></div>
+      <div class="player-stat"><span class="hi">${p.games}</span><span class="unit">G</span></div>
+      <div class="player-ceil ${ceilClass(p.ceil)}">≤ $${p.ceil}</div>
       ${actionsHtml}
     </div>`;
 }
@@ -1060,13 +1382,13 @@ function renderPos(pos) {
   });
 
   if (gone.length > 0) {
-    html += `<div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;padding:12px 0 6px;">Gone</div>`;
+    html += `<div class="gone-divider">Off the board</div>`;
     html += gone.map(p => playerRow(p, pos)).join('');
   }
 
   if (hidden.length > 0) {
     const hid = `hid-${pos}`;
-    html += `<div class="hidden-toggle" onclick="document.getElementById('${hid}').classList.toggle('open')">Hidden (${hidden.length}) ▸</div>`;
+    html += `<div class="hidden-toggle" onclick="document.getElementById('${hid}').classList.toggle('open')">Hidden (${hidden.length})  ▸</div>`;
     html += `<div class="hidden-list" id="${hid}">`;
     html += hidden.map(p => `
       <div class="player-row lost" id="row-${p.id}">
@@ -1074,9 +1396,9 @@ function renderPos(pos) {
           <div class="player-name">${p.name}</div>
           <div class="player-note">${p.note}</div>
         </div>
-        <div class="player-stat"><span class="hi">${p.ppg}</span> ppg</div>
-        <div class="player-stat"><span class="hi">${p.games}</span>g</div>
-        <div class="player-ceil" style="color:${ceilColor(p.ceil)}">≤$${p.ceil}</div>
+        <div class="player-stat"><span class="hi">${p.ppg}</span><span class="unit">PPG</span></div>
+        <div class="player-stat"><span class="hi">${p.games}</span><span class="unit">G</span></div>
+        <div class="player-ceil ${ceilClass(p.ceil)}">≤ $${p.ceil}</div>
         <div class="player-actions">
           <button class="btn btn-undo" onclick="unhidePlayer('${p.id}')">Unhide</button>
         </div>
@@ -1088,24 +1410,18 @@ function renderPos(pos) {
 }
 
 // ── Actions ──────────────────────────────────────────────────────────────────
-
-function playerMeta(id, pos) {
-  return TARGETS[pos]?.find(p => p.id === id);
-}
+function playerMeta(id, pos) { return TARGETS[pos]?.find(p => p.id === id); }
 
 function winPick(id, pos) {
   const inp = document.getElementById(`inp-${id}`);
   const price = parseInt(inp?.value);
   if (!price || price < 1) { inp?.focus(); return; }
-
   const p = playerMeta(id, pos);
   if (!p) return;
-
   if (!S.picks) S.picks = {};
   S.picks[id] = { name: p.name, pos: pos.toUpperCase(), tab: pos, price };
   S.spent += price;
   S.won   += 1;
-
   save(S);
   renderAll();
 }
@@ -1119,12 +1435,14 @@ function startLostAttribution(id, isRetroactive) {
   const opts = (S.teams || []).map(t => `<option value="${t}">`).join('');
   actionsEl.innerHTML = `
     <datalist id="tdl-${id}">${opts}</datalist>
-    <span class="attr-label">Won by:</span>
+    <span class="attr-label">Won by</span>
     <input id="at-${id}" class="attr-input" type="text" placeholder="Team" list="tdl-${id}" value="${existing.team || ''}">
-    <span class="price-prefix">$</span>
-    <input id="ap-${id}" class="price-input" type="number" min="1" placeholder="—" value="${existing.price || ''}"
-      onkeydown="if(event.key==='Enter')confirmLost('${id}')">
-    <button class="btn btn-win" onclick="confirmLost('${id}')" style="padding:5px 10px">✓</button>
+    <div class="price-wrap">
+      <span class="price-prefix">$</span>
+      <input id="ap-${id}" class="price-input" type="number" min="1" placeholder="—" value="${existing.price || ''}"
+        onkeydown="if(event.key==='Enter')confirmLost('${id}')">
+    </div>
+    <button class="btn btn-win" onclick="confirmLost('${id}')">Save</button>
     ${isRetroactive ? '' : `<button class="btn btn-undo" onclick="skipLost('${id}')">Skip</button>`}
   `;
   setTimeout(() => document.getElementById(`ap-${id}`)?.focus(), 30);
@@ -1163,17 +1481,8 @@ function skipLost(id) {
   renderAll();
 }
 
-function hidePlayer(id) {
-  S.hidden[id] = true;
-  save(S);
-  renderAll();
-}
-
-function unhidePlayer(id) {
-  delete S.hidden[id];
-  save(S);
-  renderAll();
-}
+function hidePlayer(id)   { S.hidden[id] = true;   save(S); renderAll(); }
+function unhidePlayer(id) { delete S.hidden[id];   save(S); renderAll(); }
 
 function undoPick(id, pos) {
   const pick = S.picks?.[id];
@@ -1186,11 +1495,7 @@ function undoPick(id, pos) {
   renderAll();
 }
 
-function undoLost(id) {
-  delete S.lost[id];
-  save(S);
-  renderAll();
-}
+function undoLost(id) { delete S.lost[id]; save(S); renderAll(); }
 
 function resetState() {
   if (!confirm('Reset all picks? This cannot be undone.')) return;
@@ -1200,7 +1505,6 @@ function resetState() {
 }
 
 // ── Tabs ─────────────────────────────────────────────────────────────────────
-
 document.querySelectorAll('.tab').forEach(tab => {
   tab.addEventListener('click', () => {
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -1210,8 +1514,7 @@ document.querySelectorAll('.tab').forEach(tab => {
   });
 });
 
-// ── Init ─────────────────────────────────────────────────────────────────────
-
+// ── Roster page ──────────────────────────────────────────────────────────────
 function posBudgetSpent(tabKey) {
   return Object.values(S.picks)
     .filter(p => p.tab === tabKey)
@@ -1251,19 +1554,20 @@ function renderRosterPage() {
   const sb = S.slotBudgets || DEFAULT_SLOT_BUDGETS;
 
   let html = `<div class="roster-columns">`;
-  ROSTER_SLOTS_CONFIG.forEach(({ pos, key, label, color, total }) => {
+  ROSTER_SLOTS_CONFIG.forEach(({ pos, key, label, total }) => {
     const wonPicks = getPicksByPos(pos);
     const filled   = wonPicks.length;
     const posSpent = wonPicks.reduce((s, p) => s + p.price, 0);
     const openBudget = Array.from({ length: total - filled }, (_, i) => sb[`${key}${filled + 1 + i}`] ?? 1)
                            .reduce((s, n) => s + n, 0);
+    const color = POS_COLOR[pos];
 
     html += `
-      <div class="roster-section">
-        <div class="roster-section-header" style="border-left-color:${color}">
+      <div class="roster-section is-${key}">
+        <div class="roster-section-header">
           <span class="roster-section-pos" style="color:${color}">${label}</span>
-          <span class="roster-section-count">${filled}/${total} filled</span>
-          <span class="roster-section-budget">$${posSpent} spent · $${openBudget} planned</span>
+          <span class="roster-section-count">${filled}/${total}</span>
+          <span class="roster-section-budget"><span class="num">$${posSpent}</span> spent · <span class="num">$${openBudget}</span> planned</span>
         </div>`;
 
     for (let i = 1; i <= total; i++) {
@@ -1291,14 +1595,11 @@ function renderRosterPage() {
         </div>`;
       }
     }
-
     html += `</div>`;
   });
-  html += `</div>`; // close .roster-columns
-
+  html += `</div>`;
   el.innerHTML = html;
 
-  // Update section-meta for each position tab
   const metas = [
     { key: 'te', budget: 450, suffix: '· targeting McBride + Bowers' },
     { key: 'qb', budget:  65, suffix: '· Maye is QB1' },
@@ -1312,17 +1613,16 @@ function renderRosterPage() {
     const rem     = m.budget - spent;
     const over    = rem < 0;
     const warn    = !over && rem < m.budget * 0.25;
-    const color   = over ? 'var(--red)' : warn ? 'var(--yellow)' : '';
+    const color   = over ? 'var(--bad)' : warn ? 'var(--warn)' : '';
     const style   = color ? ` style="color:${color}"` : '';
     const players = TARGETS[m.key] || [];
     const avail   = players.filter(p => !S.picks[p.id] && !S.lost?.[p.id]).length;
-    const aColor  = avail === 0 ? 'var(--red)' : 'var(--muted)';
-    metaEl.innerHTML = `Budget: <span${style}>$${rem}</span> / $${m.budget} ${m.suffix} &nbsp;·&nbsp; <span style="color:${aColor}">${avail}/${players.length} available</span>`;
+    const aColor  = avail === 0 ? 'var(--bad)' : 'var(--text-3)';
+    metaEl.innerHTML = `Budget <span class="hi"${style}>$${rem}</span> / $${m.budget} ${m.suffix} &nbsp;·&nbsp; <span style="color:${aColor}">${avail}/${players.length} avail</span>`;
   });
 }
 
 // ── League tab ───────────────────────────────────────────────────────────────
-
 function findPlayerById(id) {
   for (const [posKey, players] of Object.entries(TARGETS)) {
     const p = players.find(pl => pl.id === id);
@@ -1363,7 +1663,6 @@ function getUnattributed() {
 
 const TC_STARTERS  = { QB: 2, WR: 4, TE: 2, RB: 3 };
 const TC_POS_ORDER = ['QB', 'WR', 'TE', 'RB'];
-const TC_COLORS    = { QB: '#0a84ff', WR: '#30d158', TE: '#bf5af2', RB: '#ff9f0a' };
 
 function renderTeamCard(team) {
   const byPos = { QB: [], WR: [], TE: [], RB: [] };
@@ -1382,26 +1681,26 @@ function renderTeamCard(team) {
 
   const spent = team.totalSpent;
   const left  = 1000 - spent;
-  const leftColor = left < 200 ? 'var(--red)' : left < 400 ? 'var(--yellow)' : 'var(--green)';
+  const leftColor = left < 200 ? 'var(--bad)' : left < 400 ? 'var(--warn)' : 'var(--good)';
 
   let html = `<div class="team-card ${team.isMe ? 'is-me' : ''}">
     <div class="team-card-header">
-      <div class="team-card-name">${team.name}${team.isMe ? ' <span style="font-size:10px;font-weight:500;color:var(--muted)">(you)</span>' : ''}</div>
+      <div class="team-card-name">${team.name}</div>
       <div class="team-card-stats">
         ${spent > 0 ? `$${spent} spent<br>` : ''}
-        <span style="color:${leftColor};font-weight:700">~$${left} left</span>
+        <span style="color:${leftColor};font-weight:600">~$${left} left</span>
       </div>
     </div>`;
 
   TC_POS_ORDER.forEach(pos => {
-    const color = TC_COLORS[pos];
+    const color = POS_COLOR[pos];
     html += `<div class="team-pos-block">`;
     for (let i = 0; i < TC_STARTERS[pos]; i++) {
       const p = byPos[pos][i];
       html += `<div class="team-slot-row">
         <span class="team-slot-id" style="color:${color}">${pos}${i + 1}</span>
         ${p ? `<span class="team-slot-player">${p.name}</span><span class="team-slot-price">$${p.price || '?'}</span>`
-            : `<span class="team-slot-empty">—</span>`}
+            : `<span class="team-slot-empty">—</span><span></span>`}
       </div>`;
     }
     html += `</div>`;
@@ -1410,7 +1709,7 @@ function renderTeamCard(team) {
   if (bench.length > 0) {
     html += `<div class="team-pos-block"><div class="team-pos-label">Bench</div>`;
     bench.forEach((p, i) => {
-      const color = TC_COLORS[p.pos.toUpperCase()] || 'var(--muted)';
+      const color = POS_COLOR[p.pos.toUpperCase()] || 'var(--text-3)';
       html += `<div class="team-slot-row">
         <span class="team-slot-id" style="color:${color}">BN${i + 1}</span>
         <span class="team-slot-player">${p.name}</span>
@@ -1421,7 +1720,7 @@ function renderTeamCard(team) {
   }
 
   if (!team.picks.length) {
-    html += `<div style="padding:12px 14px;font-size:12px;color:var(--muted);font-style:italic">No picks tracked yet</div>`;
+    html += `<div style="padding:14px;font-size:12px;color:var(--text-3);font-style:italic">No picks tracked yet</div>`;
   }
 
   html += `</div>`;
@@ -1436,19 +1735,21 @@ function renderLeague() {
   let html = '';
 
   if (unattr.length > 0) {
-    html += `<div style="margin-bottom:24px">
-      <div class="unattr-header">Unattributed (${unattr.length})</div>`;
+    html += `<div class="unattr-block">
+      <div class="unattr-header">Unattributed · ${unattr.length}</div>`;
     unattr.forEach(p => {
       html += `<div class="unattr-row">
         <span class="unattr-pos pos-${p.posLabel}">${p.posLabel}</span>
         <span class="unattr-name">${p.name}</span>
         <datalist id="udl-${p.id}">${teamOpts}</datalist>
         <input id="ut-${p.id}" class="attr-input" type="text" placeholder="Team" list="udl-${p.id}">
-        <span class="price-prefix">$</span>
-        <input id="up-${p.id}" class="price-input" type="number" min="1" placeholder="—"
-          value="${p.existingPrice || ''}"
-          onkeydown="if(event.key==='Enter')attributeFromLeague('${p.id}')">
-        <button class="btn btn-win" onclick="attributeFromLeague('${p.id}')" style="padding:5px 12px">→</button>
+        <div class="price-wrap">
+          <span class="price-prefix">$</span>
+          <input id="up-${p.id}" class="price-input" type="number" min="1" placeholder="—"
+            value="${p.existingPrice || ''}"
+            onkeydown="if(event.key==='Enter')attributeFromLeague('${p.id}')">
+        </div>
+        <button class="btn btn-win" onclick="attributeFromLeague('${p.id}')">Save</button>
       </div>`;
     });
     html += `</div>`;
@@ -1473,7 +1774,7 @@ function renderLeague() {
 
   const otherCount = Object.values(allTeams).filter(t => !t.isMe).length;
   document.getElementById('meta-league').innerHTML =
-    `<span>${otherCount}</span> other teams &nbsp;·&nbsp; <span>${unattr.length}</span> unattributed`;
+    `<span class="hi">${otherCount}</span> other teams &nbsp;·&nbsp; <span class="hi">${unattr.length}</span> unattributed`;
 }
 
 function renderAll() {
