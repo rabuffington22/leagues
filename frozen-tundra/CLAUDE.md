@@ -13,17 +13,20 @@
 - Reception: **1.0 PPR** (full)
 - SuperFlex — QBs valuable, ranked higher than non-SF consensus
 
-## Ryan's 2026 Draft Picks
+## Ryan's 2026 Draft Picks (post-trade)
 | Pick | Overall | Player | Status |
 |------|---------|--------|--------|
 | 1.02 | 2  | Fernando Mendoza (QB, LVR) | ✓ Drafted |
-| 1.12 | 12 | — | Pending |
+| 1.10 | 10 | Omar Cooper Jr. (WR, NYJ)  | ✓ Drafted |
+| 1.12 | 12 | Ty Simpson (QB, LAR)       | ✓ Drafted |
 | 2.02 | 14 | — | Pending |
 | 2.11 | 23 | — | Pending |
+| 2.12 | 24 | — | Pending |
 | 3.02 | 26 | — | Pending |
-| 3.06 | 30 | — | Pending |
 | 3.09 | 33 | — | Pending |
 | 4.02 | 38 | — | Pending |
+
+Note: Draft is live as of 2026-04-28 — 13 picks made total.
 
 ## Draft slot order (linear, repeats each round)
 | Slot | Team | Roster |
@@ -51,8 +54,12 @@ Single-file tool: `frozen-tundra/draft-tracker.html`
 - `S.cur` = current overall pick number (1–48)
 - `S.picks[id] = { name, pos, nfl, pickNum }` — Ryan's drafted players
 - `S.gone[id] = { name, pickNum }` — players taken by other teams
-- RYAN_PICKS = Set([2, 12, 14, 23, 26, 30, 33, 38])
+- Ryan's 9 picks (overall): 2, 10, 12, 14, 23, 24, 26, 33, 38 (derived from TRADE_MAP)
 - Rankings are SuperFlex-adjusted (Mendoza #3, Ty Simpson #9, Nussmeier #23)
+- `COLLEGE[id] = { s, y, st }` — school, academic year, 2025 season stats
+- `NFL_PICKS[id] = [round, overall]` — 2026 NFL Draft position (null = UDFA)
+- `FTZ_ALIASES` — maps Sleeper name variants (e.g. "omar cooper") to player IDs for poll matching
+- Player cards: name + pos tag | line 1 (metaLine1): college/year/stats | line 2 (metaLine2): NFL team/draft slot/FP/PFF/combine/RAS
 
 ## Consensus Rankings (SuperFlex-adjusted, as of 2026-04-27)
 Sources: FantasyPros post-NFL-draft + KTC blended
