@@ -942,22 +942,22 @@ const PLAYERS = [
   { id:'jtyson',     name:'Jordyn Tyson',        pos:'WR', nfl:'NOR', rnk:[5,  4,  4], ht:'6-2',  wt:203, forty:null },
   { id:'mlemon',     name:'Makai Lemon',         pos:'WR', nfl:'PHI', rnk:[4,  5,  3], ht:'5-11', wt:192, forty:null },
   { id:'kconc',      name:'KC Concepcion',       pos:'WR', nfl:'CLE', rnk:[7,  8,  8], ht:'5-11', wt:196, forty:null },
-  { id:'jprice',     name:'Jadarian Price',      pos:'RB', nfl:'SEA', rnk:[6,  6, 10], ht:'5-10', wt:203, forty:4.49 },
-  { id:'ksadiq',     name:'Kenyon Sadiq',        pos:'TE', nfl:'NYJ', rnk:[8, 12,  9], ht:'6-3',  wt:241, forty:4.39 },
+  { id:'jprice',     name:'Jadarian Price',      pos:'RB', nfl:'SEA', rnk:[6,  6, 10], ht:'5-10', wt:203, forty:4.49, ras:83 },
+  { id:'ksadiq',     name:'Kenyon Sadiq',        pos:'TE', nfl:'NYJ', rnk:[8, 12,  9], ht:'6-3',  wt:241, forty:4.39, ras:96 },
   { id:'tsimpson',   name:'Ty Simpson',          pos:'QB', nfl:'LAR', rnk:[10, 10, 15], ht:'6-1', wt:211, forty:null },
-  { id:'ocooper',    name:'Omar Cooper Jr.',     pos:'WR', nfl:'NYJ', rnk:[9,  9,  6], ht:'6-0',  wt:196, forty:4.42 },
+  { id:'ocooper',    name:'Omar Cooper Jr.',     pos:'WR', nfl:'NYJ', rnk:[9,  9,  6], ht:'6-0',  wt:196, forty:4.42, ras:92 },
   { id:'dboston',    name:'Denzel Boston',       pos:'WR', nfl:'CLE', rnk:[null, 11,  7], ht:'6-3', wt:212, forty:null },
-  { id:'estowers',   name:'Eli Stowers',         pos:'TE', nfl:'PHI', rnk:[null, 16, 17], ht:'6-4', wt:239, forty:4.51 },
+  { id:'estowers',   name:'Eli Stowers',         pos:'TE', nfl:'PHI', rnk:[null, 16, 17], ht:'6-4', wt:239, forty:4.51, ras:94 },
   { id:'jcoleman',   name:'Jonah Coleman',       pos:'RB', nfl:'DEN', rnk:[null, 19, 12], ht:'5-8', wt:220, forty:null },
   { id:'nsingleton', name:'Nicholas Singleton',  pos:'RB', nfl:'TEN', rnk:[null, 22, 22], ht:'6-0', wt:219, forty:null },
   { id:'cbell',      name:'Chris Bell',          pos:'WR', nfl:'MIA', rnk:[null, 14, 14], ht:'6-2', wt:222, forty:null },
-  { id:'gbernard',   name:'Germie Bernard',      pos:'WR', nfl:'PIT', rnk:[null, 13, 13], ht:'6-0', wt:206, forty:4.45 },
+  { id:'gbernard',   name:'Germie Bernard',      pos:'WR', nfl:'PIT', rnk:[null, 13, 13], ht:'6-0', wt:206, forty:4.45, ras:91 },
   { id:'cbrazzell',  name:'Chris Brazzell II',   pos:'WR', nfl:'CAR', rnk:[null, 17, 17], ht:'6-4', wt:198, forty:4.37 },
-  { id:'esarratt',   name:'Elijah Sarratt',      pos:'WR', nfl:'BAL', rnk:[null, 27, 27], ht:'6-2', wt:215, forty:null },
-  { id:'mwashjr',    name:'Mike Washington Jr.', pos:'RB', nfl:'LVR', rnk:[null, 20, 11], ht:'6-1', wt:223, forty:4.33 },
+  { id:'esarratt',   name:'Elijah Sarratt',      pos:'WR', nfl:'BAL', rnk:[null, 27, 27], ht:'6-2', wt:215, forty:null, ras:63 },
+  { id:'mwashjr',    name:'Mike Washington Jr.', pos:'RB', nfl:'LVR', rnk:[null, 20, 11], ht:'6-1', wt:223, forty:4.33, ras:99 },
   { id:'ejohnson',   name:'Emmett Johnson',      pos:'RB', nfl:'KCC', rnk:[null, 23, 13], ht:'5-10',wt:202, forty:4.56 },
-  { id:'mfields',    name:'Malachi Fields',      pos:'WR', nfl:'NYG', rnk:[null, 15, 15], ht:'6-4', wt:218, forty:4.61 },
-  { id:'zbranch',    name:'Zachariah Branch',    pos:'WR', nfl:'ATL', rnk:[null, 18, 18], ht:'5-9', wt:177, forty:4.35 },
+  { id:'mfields',    name:'Malachi Fields',      pos:'WR', nfl:'NYG', rnk:[null, 15, 15], ht:'6-4', wt:218, forty:4.61, ras:75 },
+  { id:'zbranch',    name:'Zachariah Branch',    pos:'WR', nfl:'ATL', rnk:[null, 18, 18], ht:'5-9', wt:177, forty:4.35, ras:91 },
   { id:'gnuss',      name:'Garrett Nussmeier',   pos:'QB', nfl:'KCC', rnk:[null, 40, 40], ht:'6-2', wt:203, forty:null },
   { id:'kallen',     name:'Kaytron Allen',       pos:'RB', nfl:'WAS', rnk:[null, 39, 24], ht:'5-11',wt:216, forty:null },
   { id:'jklane',     name:"Ja'Kobi Lane",        pos:'WR', nfl:'BAL', rnk:[null, null, null], ht:'6-4', wt:208, forty:4.47 },
@@ -1139,6 +1139,7 @@ function combineNote(p) {
   if (p.ht) parts.push(p.ht);
   if (p.wt) parts.push(`${p.wt}`);
   if (p.forty) parts.push(`${p.forty}`);
+  if (p.ras != null) parts.push(`RAS ${p.ras}%`);
   return parts.join(' · ');
 }
 
