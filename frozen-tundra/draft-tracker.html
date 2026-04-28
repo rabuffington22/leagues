@@ -1046,16 +1046,23 @@ function picksLeft(from) {
 // ── State ─────────────────────────────────────────────────────────────────
 
 const SEED = {
-  cur: 7,
+  cur: 14,
   picks: {
-    fmendoza: { name: 'Fernando Mendoza', pos: 'QB', nfl: 'LVR', pickNum: 2 }
+    fmendoza: { name: 'Fernando Mendoza', pos: 'QB', nfl: 'LVR', pickNum: 2  },
+    ocooper:  { name: 'Omar Cooper Jr.',  pos: 'WR', nfl: 'NYJ', pickNum: 10 },
+    tsimpson:  { name: 'Ty Simpson',      pos: 'QB', nfl: 'LAR', pickNum: 12 },
   },
   gone: {
-    jlove:  { name: 'Jeremiyah Love',  pickNum: 1 },
-    jtyson: { name: 'Jordyn Tyson',    pickNum: 3 },
-    ctate:  { name: 'Carnell Tate',    pickNum: 4 },
-    cbeck:  { name: 'Carson Beck',     pickNum: 5 },
-    mlemon: { name: 'Makai Lemon',     pickNum: 6 },
+    jlove:    { name: 'Jeremiyah Love',  pickNum: 1  },
+    jtyson:   { name: 'Jordyn Tyson',    pickNum: 3  },
+    ctate:    { name: 'Carnell Tate',    pickNum: 4  },
+    cbeck:    { name: 'Carson Beck',     pickNum: 5  },
+    mlemon:   { name: 'Makai Lemon',     pickNum: 6  },
+    jprice:   { name: 'Jadarian Price',  pickNum: 7  },
+    kconc:    { name: 'KC Concepcion',   pickNum: 8  },
+    ksadiq:   { name: 'Kenyon Sadiq',    pickNum: 9  },
+    dboston:  { name: 'Denzel Boston',   pickNum: 11 },
+    estowers: { name: 'Eli Stowers',     pickNum: 13 },
   }
 };
 
@@ -1452,6 +1459,13 @@ render();
 const FTZ_DRAFT_ID = '1312105540708474880';
 const FTZ_RYAN_UID = '160225092348297216';
 const FTZ_NAME_MAP = new Map(PLAYERS.map(p => [p.name.toLowerCase(), p]));
+// Sleeper sometimes omits suffixes (Jr., II) — map their names to our player IDs
+const FTZ_ALIASES = {
+  'omar cooper':        'ocooper',
+  'mike washington':    'mwashjr',
+  'kevin coleman':      'kcoleman',
+  'chris brazzell':     'cbrazzell',
+};
 
 async function pollDraft() {
   try {
@@ -1461,7 +1475,9 @@ async function pollDraft() {
     let changed = false;
     for (const pick of apiPicks) {
       const fullName = `${pick.metadata.first_name} ${pick.metadata.last_name}`;
-      const player = FTZ_NAME_MAP.get(fullName.toLowerCase());
+      const key = fullName.toLowerCase();
+      const player = FTZ_NAME_MAP.get(key)
+        || PLAYERS.find(p => p.id === FTZ_ALIASES[key]);
       const n = pick.pick_no;
       if (n >= S.cur) { S.cur = n + 1; changed = true; }
       if (!player) continue;
