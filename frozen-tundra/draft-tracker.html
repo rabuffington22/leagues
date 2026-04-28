@@ -978,6 +978,51 @@ const PLAYERS = [
   { id:'arandall',   name:'Adam Randall',        pos:'RB', nfl:'BAL', rnk:[null, 40, 40], ht:'6-3', wt:232, forty:4.50 },
 ];
 
+// ── College data (2025 season) ───────────────────────────────────────────
+// s=school, y=academic year, st=stats { QB:cmp/att/yds/td/int | RB:car/yds/td/rec | WR/TE:rec/yds/td }
+const COLLEGE = {
+  jlove:      { s:'Notre Dame',  y:'Jr',    st:{ car:199, yds:1372, td:18, rec:27 } },
+  ctate:      { s:'Ohio St',     y:'Jr',    st:{ rec:51, yds:875, td:9 } },
+  fmendoza:   { s:'Indiana',     y:'RS Jr', st:null },
+  jtyson:     { s:'Arizona St',  y:'RS Jr', st:{ rec:61, yds:711, td:8 } },
+  mlemon:     { s:'USC',         y:'Jr',    st:{ rec:79, yds:1156, td:11 } },
+  kconc:      { s:'Texas A&M',   y:'Jr',    st:{ rec:61, yds:919, td:9 } },
+  jprice:     { s:'Notre Dame',  y:'RS Jr', st:{ car:113, yds:674, td:11, rec:6 } },
+  ksadiq:     { s:'Oregon',      y:'Jr',    st:{ rec:51, yds:560, td:8 } },
+  tsimpson:   { s:'Alabama',     y:'RS Jr', st:{ cmp:305, att:473, yds:3567, td:28, int:5 } },
+  ocooper:    { s:'Indiana',     y:'RS Jr', st:{ rec:69, yds:937, td:13 } },
+  dboston:    { s:'Washington',  y:'RS Jr', st:{ rec:62, yds:881, td:11 } },
+  estowers:   { s:'Vanderbilt',  y:'Grad',  st:{ rec:62, yds:769, td:4 } },
+  jcoleman:   { s:'Washington',  y:'Sr',    st:{ car:156, yds:758, td:15, rec:31 } },
+  nsingleton: { s:'Penn St',     y:'Sr',    st:{ car:124, yds:547, td:13, rec:22 } },
+  cbell:      { s:'Louisville',  y:'Sr',    st:{ rec:72, yds:917, td:6 } },
+  gbernard:   { s:'Alabama',     y:'Sr',    st:{ rec:64, yds:862, td:7 } },
+  cbrazzell:  { s:'Tennessee',   y:'Sr',    st:{ rec:62, yds:1017, td:9 } },
+  esarratt:   { s:'Indiana',     y:'Sr',    st:{ rec:65, yds:830, td:15 } },
+  mwashjr:    { s:'Arkansas',    y:'Sr',    st:{ car:167, yds:1070, td:8, rec:28 } },
+  ejohnson:   { s:'Nebraska',    y:'Jr',    st:{ car:251, yds:1450, td:12, rec:46 } },
+  mfields:    { s:'Notre Dame',  y:'RS Sr', st:{ rec:36, yds:630, td:5 } },
+  zbranch:    { s:'Georgia',     y:'Jr',    st:{ rec:81, yds:811, td:6 } },
+  gnuss:      { s:'LSU',         y:'RS Sr', st:{ cmp:194, att:288, yds:1927, td:12, int:5 } },
+  kallen:     { s:'Penn St',     y:'Sr',    st:{ car:210, yds:1303, td:15 } },
+  jklane:     { s:'USC',         y:'Jr',    st:{ rec:49, yds:745, td:4 } },
+  awilliams:  { s:'Clemson',     y:'RS Sr', st:{ rec:55, yds:604, td:4 } },
+  dstrib:     { s:'Ole Miss',    y:'RS Sr', st:{ rec:55, yds:811, td:6 } },
+  sbell:      { s:'UConn',       y:'RS Sr', st:{ rec:101, yds:1278, td:13 } },
+  thurst:     { s:'Georgia St',  y:'Sr',    st:{ rec:71, yds:1004, td:6 } },
+  mklare:     { s:'Ohio St',     y:'RS So', st:{ rec:43, yds:448, td:2 } },
+  odelp:      { s:'Georgia',     y:'Sr',    st:{ rec:20, yds:261, td:1 } },
+  cklubnik:   { s:'Clemson',     y:'Sr',    st:{ cmp:257, att:392, yds:2943, td:16, int:6 } },
+  kcoleman:   { s:'Missouri',    y:'RS Sr', st:{ rec:66, yds:732, td:1 } },
+  cbeck:      { s:'Miami',       y:'RS Sr', st:{ cmp:346, att:494, yds:3995, td:28, int:10 } },
+  dclaiborne: { s:'Wake Forest', y:'Sr',    st:{ car:179, yds:907, td:10 } },
+  mtrigg:     { s:'Baylor',      y:'RS Sr', st:{ rec:50, yds:694, td:6 } },
+  dallar:     { s:'Penn St',     y:'Sr',    st:{ cmp:103, att:159, yds:1100, td:8, int:3 } },
+  dburks:     { s:'Oklahoma',    y:'Sr',    st:{ rec:57, yds:620, td:4 } },
+  jmiller:    { s:'Alabama',     y:'Sr',    st:{ car:123, yds:493, td:4, rec:18 } },
+  arandall:   { s:'Clemson',     y:'RS Sr', st:{ car:168, yds:814, td:10, rec:36 } },
+};
+
 // ── Helpers ──────────────────────────────────────────────────────────────
 
 function pickLabel(n) {
@@ -1143,6 +1188,28 @@ function combineNote(p) {
   return parts.join(' · ');
 }
 
+function collegeLine(p) {
+  const c = COLLEGE[p.id];
+  if (!c) return '';
+  return `${p.pos} · ${c.s}`;
+}
+
+function collegeStatsLine(p) {
+  const c = COLLEGE[p.id];
+  if (!c || !c.st) return '';
+  const { y, st: s } = c;
+  let stats;
+  if (p.pos === 'QB') {
+    stats = `${s.cmp}/${s.att} · ${s.yds.toLocaleString()} yds · ${s.td} TD · ${s.int} INT`;
+  } else if (p.pos === 'RB') {
+    stats = `${s.car} car · ${s.yds.toLocaleString()} yds · ${s.td} TD`;
+    if (s.rec) stats += ` · ${s.rec} rec`;
+  } else {
+    stats = `${s.rec} rec · ${s.yds.toLocaleString()} yds · ${s.td} TD`;
+  }
+  return `${y} · ${stats}`;
+}
+
 function rnkNote(p) {
   if (!p.rnk) return p.nfl;
   const [, fp, pff] = p.rnk;
@@ -1175,6 +1242,8 @@ function renderPool() {
           <div class="player-name">${p.name}</div>
           <div class="player-note">${rnkNote(p)}</div>
           ${combineNote(p) ? `<div class="player-note">${combineNote(p)}</div>` : ''}
+          ${collegeLine(p) ? `<div class="player-note">${collegeLine(p)}</div>` : ''}
+          ${collegeStatsLine(p) ? `<div class="player-note">${collegeStatsLine(p)}</div>` : ''}
         </div>
         <div class="player-pos">${p.pos}</div>
         <div class="player-actions">
@@ -1196,6 +1265,8 @@ function renderPool() {
           <div class="player-name">${p.name}</div>
           <div class="player-note">${rnkNote(p)}</div>
           ${combineNote(p) ? `<div class="player-note">${combineNote(p)}</div>` : ''}
+          ${collegeLine(p) ? `<div class="player-note">${collegeLine(p)}</div>` : ''}
+          ${collegeStatsLine(p) ? `<div class="player-note">${collegeStatsLine(p)}</div>` : ''}
         </div>
         <div class="player-pos">${p.pos}</div>
         <div class="player-actions">
@@ -1217,6 +1288,8 @@ function renderPool() {
           <div class="player-name">${p.name}</div>
           <div class="player-note">${rnkNote(p)}</div>
           ${combineNote(p) ? `<div class="player-note">${combineNote(p)}</div>` : ''}
+          ${collegeLine(p) ? `<div class="player-note">${collegeLine(p)}</div>` : ''}
+          ${collegeStatsLine(p) ? `<div class="player-note">${collegeStatsLine(p)}</div>` : ''}
         </div>
         <div class="player-pos">${p.pos}</div>
         <div class="player-actions">
