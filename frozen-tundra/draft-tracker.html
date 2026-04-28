@@ -77,9 +77,6 @@
         radial-gradient(900px 400px at 88% -20%, rgba(201,161,75,0.04), transparent 70%),
         linear-gradient(180deg, #07070a 0%, #020203 100%);
       border-bottom: 1px solid var(--line);
-      position: sticky;
-      top: 0;
-      z-index: 100;
       box-shadow: 0 2px 24px rgba(0,0,0,0.5);
     }
     .header::before {
@@ -95,48 +92,36 @@
       display: flex;
       align-items: flex-end;
       justify-content: space-between;
-      padding: 26px 32px 22px;
+      padding: 13px 32px 11px;
       gap: 32px;
     }
 
     .brand {
       display: flex;
       align-items: flex-end;
-      gap: 18px;
+      gap: 10px;
       min-width: 0;
     }
 
     .brand-mark {
       flex-shrink: 0;
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      background: radial-gradient(circle at 35% 30%, #4a1a18, #2a0c0b 65%, #160605 100%);
-      box-shadow:
-        inset 0 0 0 2px var(--accent-deep),
-        inset 0 0 0 3px var(--accent),
-        inset 0 0 0 4px var(--accent-2),
-        inset 0 0 0 5px var(--accent),
-        inset 0 0 0 6px var(--accent-deep),
-        inset 0 -8px 14px rgba(0,0,0,0.4),
-        0 2px 16px rgba(0,0,0,0.6);
-      display: grid;
-      place-items: center;
-      position: relative;
-      transform: translateY(2px);
+      padding: 0 14px;
+      border: 1px solid var(--bad-line);
+      background: var(--bad-soft);
+      align-self: stretch;
+      display: flex;
+      align-items: center;
     }
-    .brand-mark .glyph {
+    .brand-mark-text {
       font-family: var(--serif);
-      font-style: italic;
-      font-weight: 700;
-      font-size: 30px;
-      line-height: 1;
-      transform: translate(-1px, -2px);
-      background: linear-gradient(180deg, var(--accent-2), var(--accent) 55%, var(--accent-deep));
+      font-variation-settings: 'opsz' 144;
+      font-weight: 600;
+      font-size: 22px;
+      letter-spacing: 0.04em;
+      background: linear-gradient(180deg, var(--accent-2), var(--accent) 60%, var(--accent-deep));
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
-      filter: drop-shadow(0 1px 0 rgba(0,0,0,0.5));
     }
 
     .brand-text { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
@@ -154,7 +139,7 @@
     .brand-title {
       font-family: var(--serif);
       font-variation-settings: 'opsz' 144;
-      font-size: 42px;
+      font-size: 21px;
       font-weight: 600;
       letter-spacing: -0.025em;
       line-height: 0.95;
@@ -162,7 +147,6 @@
       text-shadow: 0 1px 0 rgba(0,0,0,0.5), 0 0 30px rgba(244,234,210,0.06);
     }
     .brand-title .ital {
-      font-style: italic;
       font-weight: 500;
       background: linear-gradient(180deg, var(--accent-2), var(--accent) 60%, var(--accent-deep));
       -webkit-background-clip: text;
@@ -243,7 +227,7 @@
       background: linear-gradient(90deg, transparent, rgba(201,161,75,0.45) 50%, transparent);
     }
     .budget-stat {
-      padding: 18px 32px 22px;
+      padding: 11px 19px 13px;
       border-right: 1px solid var(--line);
       position: relative;
     }
@@ -259,7 +243,7 @@
       text-transform: uppercase;
       letter-spacing: 0.18em;
       font-weight: 500;
-      margin-bottom: 10px;
+      margin-bottom: 6px;
     }
     .budget-stat label::before {
       content: '♦';
@@ -270,7 +254,7 @@
     .budget-stat .val {
       font-family: var(--mono);
       font-variant-numeric: tabular-nums;
-      font-size: 36px;
+      font-size: 22px;
       font-weight: 600;
       letter-spacing: -0.02em;
       line-height: 1;
@@ -286,9 +270,9 @@
     }
     .stat-sub {
       font-family: var(--mono);
-      font-size: 11px;
+      font-size: 10px;
       color: var(--text-3);
-      margin-top: 10px;
+      margin-top: 6px;
       letter-spacing: 0.02em;
     }
     .val-good   { color: var(--good) !important; }
@@ -382,9 +366,9 @@
       font-size: 22px;
       font-weight: 500;
       letter-spacing: -0.02em;
-      color: var(--text);
+      color: var(--bad-2);
     }
-    .section-title .ital { font-style: italic; color: var(--bad-2); font-weight: 400; }
+    .section-title .ital { font-style: normal; color: inherit; font-weight: 400; }
     .section-meta {
       font-family: var(--mono);
       font-size: 11px;
@@ -722,7 +706,6 @@
     .roster-section-pos {
       font-family: var(--serif);
       font-variation-settings: 'opsz' 144;
-      font-style: italic;
       font-size: 26px;
       font-weight: 600;
       letter-spacing: -0.02em;
@@ -776,7 +759,6 @@
 
     .empty-state {
       color: var(--text-3);
-      font-style: italic;
       padding: 24px 0;
       font-size: 13px;
     }
@@ -791,10 +773,9 @@
 <div class="header">
   <div class="header-top">
     <div class="brand">
-      <div class="brand-mark"><span class="glyph">F</span></div>
+      <div class="brand-mark"><span class="brand-mark-text">FTZ</span></div>
       <div class="brand-text">
-        <div class="brand-eyebrow">Dynasty Rookie <span class="sep">/</span> Season 26</div>
-        <div class="brand-title">The Frozen Tundra <span class="ital">Draft</span></div>
+<div class="brand-title">The Frozen Tundra <span class="ital">Draft</span></div>
         <div class="brand-sub">est. 2026 · 12-team · 4 rounds · superflex ppr</div>
       </div>
     </div>
@@ -830,7 +811,7 @@
   <div class="tabs">
     <div class="tab active" data-tab="pool">Pool</div>
     <div class="tab" data-tab="board">Board</div>
-    <div class="tab" data-tab="team">My Team</div>
+    <div class="tab" data-tab="roster">Roster</div>
   </div>
 </div>
 
@@ -865,12 +846,12 @@
     <div class="draft-grid" id="board-grid"></div>
   </div>
 
-  <div class="tab-panel" id="tab-team">
+  <div class="tab-panel" id="tab-roster">
     <div class="section-header">
-      <div class="section-title">My <span class="ital">Team</span></div>
-      <div class="section-meta" id="meta-team"></div>
+      <div class="section-title">Current <span class="ital">Roster</span></div>
+      <div class="section-meta" id="meta-roster"></div>
     </div>
-    <div class="roster-columns" id="roster-cols"></div>
+    <div id="roster-content"></div>
   </div>
 
 </div>
@@ -964,7 +945,15 @@ function picksLeft(from) {
 
 // ── State ─────────────────────────────────────────────────────────────────
 
-const SEED = { cur: 1, picks: {}, gone: {} };
+const SEED = {
+  cur: 3,
+  picks: {
+    fmendoza: { name: 'Fernando Mendoza', pos: 'QB', nfl: 'LVR', pickNum: 2 }
+  },
+  gone: {
+    jlove: { name: 'Jeremiyah Love', pickNum: 1 }
+  }
+};
 
 function loadState() {
   try {
@@ -1194,44 +1183,101 @@ function renderBoard() {
 
 // ── Render: My Team ───────────────────────────────────────────────────────
 
-function renderTeam() {
-  const myPicks = Object.entries(S.picks)
-    .map(([id, d]) => ({ id, ...d }))
-    .sort((a, b) => a.pickNum - b.pickNum);
 
-  const total = Object.keys(S.picks).length;
-  document.getElementById('meta-team').innerHTML =
-    `<span class="hi">${total}</span> of 8 picks used`;
+// ── Dynasty roster (pulled from Sleeper 2026-04-27) ─────────────────────
+const DYNASTY_ROSTER = [
+  { name: 'Jayden Daniels',    pos: 'QB', team: 'WAS', age: 25, starter: true  },
+  { name: 'Dak Prescott',      pos: 'QB', team: 'DAL', age: 32, starter: true  },
+  { name: 'Kirk Cousins',      pos: 'QB', team: 'LV',  age: 37, starter: false },
+  { name: 'Tyson Bagent',      pos: 'QB', team: 'CHI', age: 25, starter: false },
+  { name: 'Tyler Shough',      pos: 'QB', team: 'NO',  age: 26, starter: false },
+  { name: 'Daniel Jones',      pos: 'QB', team: 'IND', age: 28, starter: false },
+  { name: 'Kenny Pickett',     pos: 'QB', team: 'CAR', age: 27, starter: false },
+  { name: 'Tanner McKee',      pos: 'QB', team: 'PHI', age: 26, starter: false },
+  { name: 'Will Levis',        pos: 'QB', team: 'TEN', age: 26, starter: false },
+  { name: 'Rome Odunze',       pos: 'WR', team: 'CHI', age: 23, starter: true  },
+  { name: 'Calvin Austin',     pos: 'WR', team: 'NYG', age: 27, starter: true  },
+  { name: 'Kayshon Boutte',    pos: 'WR', team: 'NE',  age: 23, starter: true  },
+  { name: "Wan'Dale Robinson", pos: 'WR', team: 'TEN', age: 25, starter: true  },
+  { name: 'DeMario Douglas',   pos: 'WR', team: 'NE',  age: 25, starter: true  },
+  { name: 'Brandon Aiyuk',     pos: 'WR', team: 'SF',  age: 28, starter: false },
+  { name: 'Brycen Tremayne',   pos: 'WR', team: 'CAR', age: 26, starter: false },
+  { name: 'Kameron Johnson',   pos: 'WR', team: 'TB',  age: 24, starter: false },
+  { name: 'Savion Williams',   pos: 'WR', team: 'GB',  age: 24, starter: false },
+  { name: 'Devin Singletary',  pos: 'RB', team: 'NYG', age: 28, starter: true  },
+  { name: 'Kenneth Gainwell',  pos: 'RB', team: 'TB',  age: 27, starter: true  },
+  { name: 'Kenny McIntosh',    pos: 'RB', team: 'SEA', age: 26, starter: false },
+  { name: 'Jordan James',      pos: 'RB', team: 'SF',  age: 22, starter: false },
+  { name: 'Hassan Haskins',    pos: 'RB', team: 'FA',  age: 26, starter: false },
+  { name: 'Dallas Goedert',    pos: 'TE', team: 'PHI', age: 31, starter: true  },
+  { name: 'Josh Whyle',        pos: 'TE', team: 'GB',  age: 26, starter: true  },
+  { name: 'Tucker Kraft',      pos: 'TE', team: 'GB',  age: 25, starter: false },
+  { name: 'Luke Schoonmaker',  pos: 'TE', team: 'DAL', age: 27, starter: false },
+];
 
-  if (!myPicks.length) {
-    document.getElementById('roster-cols').innerHTML =
-      `<div class="empty-state">No picks yet — go get your guys.</div>`;
-    return;
+function renderRoster() {
+  const posOrder = ['QB', 'WR', 'RB', 'TE'];
+  const byPos = {};
+  for (const pos of posOrder) byPos[pos] = [];
+  for (const p of DYNASTY_ROSTER) byPos[p.pos].push(p);
+
+  const rookiesByPos = { QB: [], WR: [], RB: [], TE: [] };
+  for (const d of Object.values(S.picks || {})) {
+    (rookiesByPos[d.pos] || rookiesByPos.WR).push(d);
   }
+  const totalRookies = Object.values(rookiesByPos).flat().length;
 
-  const byPos = { QB: [], RB: [], WR: [], TE: [] };
-  for (const p of myPicks) {
-    (byPos[p.pos] || byPos.WR).push(p);
-  }
+  const starters = DYNASTY_ROSTER.filter(p => p.starter).length;
+  document.getElementById('meta-roster').innerHTML =
+    `<span class="hi">${DYNASTY_ROSTER.length + totalRookies}</span> players · <span class="hi">${starters}</span> starters` +
+    (totalRookies ? ` · <span style="color:var(--accent)"><span class="hi">${totalRookies}</span> rookie${totalRookies > 1 ? 's' : ''}</span>` : '');
 
-  let h = '';
-  for (const [pos, players] of Object.entries(byPos)) {
-    if (!players.length) continue;
+  let h = '<div class="roster-columns">';
+  for (const pos of posOrder) {
+    const starts  = byPos[pos].filter(p => p.starter);
+    const bench   = byPos[pos].filter(p => !p.starter);
+    const rookies = rookiesByPos[pos] || [];
+    const countParts = [`${starts.length}S`, `${bench.length}B`];
+    if (rookies.length) countParts.push(`${rookies.length}R`);
     h += `<div class="roster-section">
       <div class="roster-section-header">
         <div class="roster-section-pos">${pos}</div>
-        <div class="roster-section-count">${players.length} picked</div>
+        <div class="roster-section-count">${countParts.join(' · ')}</div>
       </div>`;
-    for (const p of players) {
-      h += `<div class="roster-slot">
-        <div class="slot-label">${pickLabel(p.pickNum)}</div>
-        <div class="slot-player">${p.name}</div>
-        <div class="slot-pick">${p.nfl}</div>
-      </div>`;
+    if (rookies.length) {
+      h += `<div class="starter-divider">2026 Rookies</div>`;
+      for (const p of rookies) {
+        h += `<div class="roster-slot">
+          <div class="slot-label">${p.nfl}</div>
+          <div class="slot-player" style="color:var(--accent)">${p.name}</div>
+          <div class="slot-pick">${pickLabel(p.pickNum)}</div>
+        </div>`;
+      }
+    }
+    if (starts.length || bench.length) {
+      if (rookies.length) h += `<div class="starter-divider">Dynasty</div>`;
+      for (const p of starts) {
+        h += `<div class="roster-slot">
+          <div class="slot-label">${p.team}</div>
+          <div class="slot-player">${p.name}</div>
+          <div class="slot-pick">age ${p.age}</div>
+        </div>`;
+      }
+      if (bench.length) {
+        h += `<div class="starter-divider">Bench</div>`;
+        for (const p of bench) {
+          h += `<div class="roster-slot">
+            <div class="slot-label">${p.team}</div>
+            <div class="slot-player" style="color:var(--text-2)">${p.name}</div>
+            <div style="font-family:var(--mono);font-size:11px;color:var(--text-3)">age ${p.age}</div>
+          </div>`;
+        }
+      }
     }
     h += `</div>`;
   }
-  document.getElementById('roster-cols').innerHTML = h;
+  h += '</div>';
+  document.getElementById('roster-content').innerHTML = h;
 }
 
 // ── Render ────────────────────────────────────────────────────────────────
@@ -1239,9 +1285,9 @@ function renderTeam() {
 function render() {
   renderStats();
   const active = document.querySelector('.tab.active')?.dataset.tab;
-  if (active === 'pool')  renderPool();
-  if (active === 'board') renderBoard();
-  if (active === 'team')  renderTeam();
+  if (active === 'pool')   renderPool();
+  if (active === 'board')  renderBoard();
+  if (active === 'roster') renderRoster();
 }
 
 render();

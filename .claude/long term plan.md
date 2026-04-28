@@ -6,7 +6,7 @@
 - [x] Build auction tracker (localStorage, won/lost/hidden, budget tracking)
 - [x] Sync live draft picks from Sleeper API
 - [x] Rebuild Roster tab with slot-based budget planning and pool mechanic
-- [ ] Complete the auction — execute TE-first strategy (McBride + Bowers) — auction live, 9 picks made
+- [ ] Complete the auction — Ryan has Maye/McBride/Bowers; 14 picks made, auction ongoing; need QB2 + 4 WR + 3 RB + bench ($304 left)
 - [ ] Post-draft: update CLAUDE.md with final roster and spend
 - [ ] Post-draft: evaluate whether slot budget planning was accurate
 

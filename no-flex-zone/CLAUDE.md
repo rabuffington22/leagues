@@ -19,13 +19,15 @@
 - Big play bonuses: 20-29yd rec +0.5, 30-39yd +0.5, 40+yd +1.0
 - 20+ carry bonus: +1 pt flat for RBs with 20+ rush attempts in a week
 
-## Draft status (as of 2026-04-26)
-Auction is live. 9 picks made so far — market running hot.
+## Draft status (as of 2026-04-28)
+Auction is live. 14 picks made so far — market running very hot.
 
 ### Off the board
 | Player | Pos | $ | Winner |
 |---|---|---|---|
 | Drake Maye | QB | $220 | **RYAN** |
+| Trey McBride | TE | $225 | **RYAN** |
+| Brock Bowers | TE | $251 | **RYAN** |
 | Josh Allen | QB | $251 | AmadorFSU |
 | Jayden Daniels | QB | $220 | coleh44 |
 | Bijan Robinson | RB | $223 | AmadorFSU |
@@ -34,9 +36,12 @@ Auction is live. 9 picks made so far — market running hot.
 | Jordan Mason | RB | $25 | AmadorFSU |
 | Ja'Marr Chase | WR | $238 | kolt78 |
 | Malik Nabers | WR | $190 | Chauncey |
+| Jaxon Smith-Njigba | WR | $231 | SunnyBrown |
+| Jahmyr Gibbs | RB | $241 | kolt78 |
+| Puka Nacua | WR | $225 | TimboDAsavage |
 
 ### Market calibration
-RB and WR market is running 2–4× above pre-draft ceilings. TE market not yet tested — McBride and Bowers still available.
+WR and RB market running 2–4× above pre-draft ceilings. TE market was fair (McBride $225, Bowers $251). New teams: SunnyBrown, TimboDAsavage confirmed active.
 
 ## Auction tracker
 Single-file tool: `no-flex-zone/auction-tracker.html`
@@ -51,38 +56,46 @@ Single-file tool: `no-flex-zone/auction-tracker.html`
 - Pool = remaining budget minus sum of open slot budgets; displayed in section-meta header
 - SEED includes all known off-the-board players as `lost`; `loadState()` merges new lost players on every load without wiping existing state
 - Lost picks stored as `S.lost[id] = { team, price }` (attributed) or `true` (unattributed); merge logic upgrades unattributed entries when SEED has team info
-- `S.teams` = array of known team names, seeded from Sleeper API data, used for autocomplete when attributing picks
+- `S.teams` = array of known team names, used for autocomplete when attributing picks
 - League tab shows all team cards (Ryan first, others by spend); Unattributed section for picks with no team assigned yet
-- Sleeper usernames for known teams: AmadorFSU, coleh44, revskip, kolt78, Chauncey — others still TBD as draft continues
+- Sleeper usernames for known teams: AmadorFSU, coleh44, revskip, kolt78, Chauncey, SunnyBrown, TimboDAsavage
+- Each player in TARGETS has `y25: { pts, g }` for 2025 season totals (derived from trend data in notes; estimated where not available). Player tabs sort by `y25.pts` descending. Stats columns show 2025 data; 3yr context shown as note line under player name.
 
-### Tracker design system (as of 2026-04-27)
+### Tracker design system (as of 2026-04-28)
 - Aesthetic: "dimly-lit auction room" — true black, no rounded cards, sharp architectural feel
 - Colors: oxblood (`#b3463f`) is dominant accent; brass (`#c9a14b`) for luxury moments (title, Won buttons); sage green (`#7fbf6e`) for won state only. All positions share oxblood — no QB-blue/WR-green color coding.
 - Fonts: Fraunces (serif, headings + brand title), JetBrains Mono (labels, stat numbers, buttons), Inter (body) — all from Google Fonts
+- **No italics anywhere** — `font-style: normal` on all elements including `.ital` spans and `.roster-section-pos`
+- **Section titles all oxblood** — `.section-title { color: var(--bad-2) }`, `.ital` spans inherit; no white/oxblood split
 - Do not use `border-radius > 6px`, drop shadows larger than 1–2px, or position-specific colors when modifying this file
 
 ## Confirmed spend
 | Player | Pos | Price |
 |---|---|---|
 | Drake Maye | QB | $220 |
+| Trey McBride | TE | $225 |
+| Brock Bowers | TE | $251 |
 
-Remaining: $780
+Remaining: $304
+
+**Note:** Bowers came in $51 over the $200 ceiling. WR/RB/bench budgets need to compress — see breakdown below.
 
 ## Budget (remaining)
 | Position | Budget | Notes |
 |---|---|---|
-| TE | $450 | Targeting **both** McBride ($250 ceil) + Bowers ($200 ceil) |
-| QB2 | $65 | Bo Nix preferred |
-| WR | $155 | 4 starters, stars-and-scrubs |
-| RB | $80 | 3 starters minimum |
-| Bench | $30 | Mostly $1 bids |
+| QB2 | $65 | Bo Nix preferred — non-negotiable need |
+| WR | $169 | 4 starters — more room to get real pieces |
+| RB | $30 | 3 × $10 minimum bids — plan to trade for RBs in-season |
+| Bench | $40 | Mostly $1 bids |
+| **Total** | **$304** | |
 
 ## Priority order
-TE first — go for **both** McBride AND Bowers → QB2 → WR → RB last
+QB2 → WR → RB ($10 bids, don't overpay)
+
+## Strategy note
+Punting RB in the draft intentionally. If team is competitive, trade WR depth or picks for RB upgrade mid-season. Maye + McBride + Bowers core is strong enough to be a seller at RB.
 
 ## Target ceilings
-- **Trey McBride** (TE, ARI): $250 — best PPG player in dataset (22.4 avg, 50/51 games)
-- **Brock Bowers** (TE, LV): $200 — elite PPG but injury risk (29 games in 2 years)
 - **QB2**: $65 max — Bo Nix preferred (22.6 PPG, 34/34 games)
 
 ## Players removed from target list

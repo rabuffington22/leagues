@@ -87,9 +87,6 @@
         radial-gradient(900px 400px at 88% -20%, rgba(201,161,75,0.04), transparent 70%),
         linear-gradient(180deg, #07070a 0%, #020203 100%);
       border-bottom: 1px solid var(--line);
-      position: sticky;
-      top: 0;
-      z-index: 100;
       box-shadow: 0 2px 24px rgba(0,0,0,0.5);
     }
     .header::before {
@@ -105,52 +102,36 @@
       display: flex;
       align-items: flex-end;
       justify-content: space-between;
-      padding: 26px 32px 22px;
+      padding: 13px 32px 11px;
       gap: 32px;
     }
 
     .brand {
       display: flex;
       align-items: flex-end;
-      gap: 18px;
+      gap: 10px;
       min-width: 0;
     }
 
-    /* Casino chip mark — oxblood with concentric brass rings */
     .brand-mark {
       flex-shrink: 0;
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      background: radial-gradient(circle at 35% 30%, #4a1a18, #2a0c0b 65%, #160605 100%);
-      box-shadow:
-        inset 0 0 0 2px var(--accent-deep),
-        inset 0 0 0 3px var(--accent),
-        inset 0 0 0 4px var(--accent-2),
-        inset 0 0 0 5px var(--accent),
-        inset 0 0 0 6px var(--accent-deep),
-        inset 0 -8px 14px rgba(0,0,0,0.4),
-        0 2px 16px rgba(0,0,0,0.6);
-      display: grid;
-      place-items: center;
-      position: relative;
-      transform: translateY(2px);
-      background-clip: padding-box;
+      padding: 0 14px;
+      border: 1px solid var(--bad-line);
+      background: var(--bad-soft);
+      align-self: stretch;
+      display: flex;
+      align-items: center;
     }
-    .brand-mark .glyph {
+    .brand-mark-text {
       font-family: var(--serif);
-      font-style: italic;
-      font-weight: 700;
-      font-size: 30px;
-      line-height: 1;
-      letter-spacing: 0;
-      /* optical centering for italic N: it leans right + has heavier bottom-left */
-      transform: translate(-2px, -2px);
-      background: linear-gradient(180deg, var(--accent-2), var(--accent) 55%, var(--accent-deep));
+      font-variation-settings: 'opsz' 144;
+      font-weight: 600;
+      font-size: 22px;
+      letter-spacing: 0.04em;
+      background: linear-gradient(180deg, var(--accent-2), var(--accent) 60%, var(--accent-deep));
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
-      filter: drop-shadow(0 1px 0 rgba(0,0,0,0.5));
     }
 
     .brand-text { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
@@ -169,7 +150,7 @@
     .brand-title {
       font-family: var(--serif);
       font-variation-settings: 'opsz' 144;
-      font-size: 42px;
+      font-size: 21px;
       font-weight: 600;
       letter-spacing: -0.025em;
       line-height: 0.95;
@@ -177,7 +158,6 @@
       text-shadow: 0 1px 0 rgba(0,0,0,0.5), 0 0 30px rgba(244,234,210,0.06);
     }
     .brand-title .ital {
-      font-style: italic;
       font-weight: 500;
       background: linear-gradient(180deg, var(--accent-2), var(--accent) 60%, var(--accent-deep));
       -webkit-background-clip: text;
@@ -257,7 +237,7 @@
       background: linear-gradient(90deg, transparent, rgba(201,161,75,0.45) 50%, transparent);
     }
     .budget-stat {
-      padding: 18px 32px 22px;
+      padding: 11px 19px 13px;
       border-right: 1px solid var(--line);
       position: relative;
     }
@@ -273,7 +253,7 @@
       text-transform: uppercase;
       letter-spacing: 0.18em;
       font-weight: 500;
-      margin-bottom: 10px;
+      margin-bottom: 6px;
     }
     .budget-stat label::before {
       content: '♦';
@@ -284,7 +264,7 @@
     .budget-stat .val {
       font-family: var(--mono);
       font-variant-numeric: tabular-nums;
-      font-size: 36px;
+      font-size: 22px;
       font-weight: 600;
       letter-spacing: -0.02em;
       line-height: 1;
@@ -301,9 +281,9 @@
 
     .stat-sub {
       font-family: var(--mono);
-      font-size: 11px;
+      font-size: 10px;
       color: var(--text-3);
-      margin-top: 10px;
+      margin-top: 6px;
       letter-spacing: 0.02em;
     }
 
@@ -408,10 +388,10 @@
       font-size: 22px;
       font-weight: 500;
       letter-spacing: -0.02em;
-      color: var(--text);
+      color: var(--bad-2);
       text-transform: none;
     }
-    .section-title .ital { font-style: italic; color: var(--bad-2); font-weight: 400; }
+    .section-title .ital { font-style: normal; color: inherit; font-weight: 400; }
     .section-meta {
       font-family: var(--mono);
       font-size: 11px;
@@ -453,7 +433,7 @@
 
     .player-row {
       display: grid;
-      grid-template-columns: 1fr 70px 60px 70px auto;
+      grid-template-columns: 1fr 52px 64px 70px 60px 70px auto;
       align-items: center;
       gap: 14px;
       padding: 11px 14px;
@@ -489,6 +469,18 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
+
+    .player-rank {
+      font-family: var(--mono);
+      font-variant-numeric: tabular-nums;
+      font-size: 11px;
+      color: var(--text-3);
+      text-align: right;
+      letter-spacing: 0.01em;
+      white-space: nowrap;
+    }
+    .player-rank .rank-pos { color: var(--text-4); font-size: 9px; }
+    .player-rank .rank-num { color: var(--text-2); font-weight: 500; }
 
     .player-stat {
       font-family: var(--mono);
@@ -694,7 +686,6 @@
     .roster-section-pos {
       font-family: var(--serif);
       font-variation-settings: 'opsz' 144;
-      font-style: italic;
       font-size: 26px;
       font-weight: 600;
       letter-spacing: -0.02em;
@@ -968,7 +959,6 @@
     /* Empty state */
     .empty-state {
       color: var(--text-3);
-      font-style: italic;
       padding: 24px 0;
       font-size: 13px;
     }
@@ -988,11 +978,10 @@
 <div class="header">
   <div class="header-top">
     <div class="brand">
-      <div class="brand-mark"><span class="glyph">N</span></div>
+      <div class="brand-mark"><span class="brand-mark-text">NFZ</span></div>
       <div class="brand-text">
-        <div class="brand-eyebrow">Dynasty Startup <span class="sep">/</span> Season 26</div>
-        <div class="brand-title">No Flex Zone <span class="ital">Auction</span></div>
-        <div class="brand-sub">est. 2026 · 12-team · 30-man rosters · $1,000 cap</div>
+<div class="brand-title">No Flex Zone <span class="ital">Auction</span> <span style="font-family:var(--mono);font-size:12px;font-weight:400;color:var(--text-3);letter-spacing:0.06em;vertical-align:middle">· 14-team</span></div>
+        <div class="brand-sub">Passing: +6/−3 · −2.5 sack · TE 1.9 PPR · WR 1.25 PPR · 1st down: pass .5, rec .5, rush .4</div>
       </div>
     </div>
     <div class="header-actions">
@@ -1107,125 +1096,131 @@ const ROSTER_SLOTS_CONFIG = [
 
 const DEFAULT_SLOT_BUDGETS = {
   qb1: 220, qb2: 65, qb3: 1,  qb4: 1,
-  wr1: 60,  wr2: 40, wr3: 25, wr4: 20, wr5: 5, wr6: 1, wr7: 1, wr8: 1, wr9: 1, wr10: 1, wr11: 1, wr12: 1, wr13: 1,
-  te1: 250, te2: 196, te3: 1,  te4: 1,  te5: 1, te6: 1, te7: 1,
-  rb1: 35,  rb2: 25, rb3: 15, rb4: 3,  rb5: 1, rb6: 1,
+  wr1: 75,  wr2: 55, wr3: 25, wr4: 14, wr5: 5, wr6: 1, wr7: 1, wr8: 1, wr9: 1, wr10: 1, wr11: 1, wr12: 1, wr13: 1,
+  te1: 250, te2: 251, te3: 1,  te4: 1,  te5: 1, te6: 1, te7: 1,
+  rb1: 10,  rb2: 10, rb3: 10, rb4: 1,  rb5: 1, rb6: 1,
 };
 
 // ── Target players ───────────────────────────────────────────────────────────
+// ppg/games = 3-year average/total. y25 = 2025 season only (pts derived from trend data in notes; est. where not available)
 const TARGETS = {
   te: [
-    { id: 'mcbride',   name: 'Trey McBride',     age: 26, ppg: 22.4, games: 50, ceil: 250, note: '#1 dynasty TE · 50/51 games · ascending (278→378→461)' },
-    { id: 'bowers',    name: 'Brock Bowers',     age: 23, ppg: 22.5, games: 29, ceil: 200, note: 'Elite PPG · only 29 games in 2 seasons — walk above $200' },
-    { id: 'kittle',    name: 'George Kittle',    age: 32, ppg: 20.5, games: 42, ceil:  60, note: 'Elite PPG · age 32 · no dynasty premium' },
-    { id: 'kelce',     name: 'Travis Kelce',     age: 36, ppg: 19.4, games: 48, ceil:  20, note: 'Age 36 · zero dynasty value · win-now only' },
-    { id: 'laporta',   name: 'Sam LaPorta',      age: 25, ppg: 17.8, games: 42, ceil:  45, note: 'Declining (341→251→156) · caution' },
-    { id: 'fannin',    name: 'Harold Fannin',    age: 21, ppg: 16.7, games: 16, ceil:  40, note: 'CLE rookie · 2025 only · youngest TE · high upside' },
-    { id: 'warren',    name: 'Tyler Warren',     age: 23, ppg: 16.5, games: 17, ceil:  40, note: 'IND · 2025 only · strong rookie season' },
-    { id: 'njoku',     name: 'David Njoku',      age: 29, ppg: 16.2, games: 39, ceil:  20, note: 'Declining (296→217→120) · depth only' },
-    { id: 'goedert',   name: 'Dallas Goedert',   age: 31, ppg: 15.8, games: 39, ceil:  25, note: 'Age 31 · missed games each year · PHI depth concern' },
-    { id: 'loveland',  name: 'Colston Loveland', age: 22, ppg: 14.9, games: 16, ceil:  35, note: 'CHI rookie · 2025 only · young upside' },
-    { id: 'tkraft',    name: 'Tucker Kraft',     age: 24, ppg: 14.5, games: 17, ceil:  30, note: 'GB · 2025 emerging · strong trajectory est.' },
-    { id: 'pitts',     name: 'Kyle Pitts',       age: 25, ppg: 13.9, games: 51, ceil:  35, note: 'Ascending (204→187→319) · 51/51 games · value play' },
-    { id: 'hhenry',    name: 'Hunter Henry',     age: 31, ppg: 13.9, games: 47, ceil:  15, note: 'Age 31 · consistent but low ceiling · NE depth' },
-    { id: 'schultz',   name: 'Dalton Schultz',   age: 29, ppg: 13.8, games: 49, ceil:  15, note: '49/51 games · safe floor · limited upside' },
-    { id: 'freiermuth',name: 'Pat Freiermuth',   age: 26, ppg: 12.5, games: 38, ceil:  15, note: 'PIT · solid but unexciting · est. PPG' },
-    { id: 'otton',     name: 'Cade Otton',       age: 25, ppg: 11.5, games: 32, ceil:  10, note: 'TB · depth TE · est. PPG' },
+    { id: 'mcbride',    name: 'Trey McBride',      age: 26, ppg: 22.4, games: 50, ceil: 250, y25: { pts: 461, g: 17 } },
+    { id: 'bowers',     name: 'Brock Bowers',      age: 23, ppg: 22.5, games: 29, ceil: 200, y25: { pts: 338, g: 15 } },
+    { id: 'kittle',     name: 'George Kittle',     age: 32, ppg: 20.5, games: 42, ceil:  60, y25: { pts: 287, g: 14 } },
+    { id: 'kelce',      name: 'Travis Kelce',      age: 36, ppg: 19.4, games: 48, ceil:  20, y25: { pts: 310, g: 16 } },
+    { id: 'pitts',      name: 'Kyle Pitts',        age: 25, ppg: 13.9, games: 51, ceil:  35, y25: { pts: 319, g: 17 } },
+    { id: 'laporta',    name: 'Sam LaPorta',       age: 25, ppg: 17.8, games: 42, ceil:  45, y25: { pts: 156, g: 12 } },
+    { id: 'warren',     name: 'Tyler Warren',      age: 23, ppg: 16.5, games: 17, ceil:  40, y25: { pts: 281, g: 17 } },
+    { id: 'fannin',     name: 'Harold Fannin',     age: 21, ppg: 16.7, games: 16, ceil:  40, y25: { pts: 267, g: 16 } },
+    { id: 'loveland',   name: 'Colston Loveland',  age: 22, ppg: 14.9, games: 16, ceil:  35, y25: { pts: 238, g: 16 } },
+    { id: 'tkraft',     name: 'Tucker Kraft',      age: 24, ppg: 14.5, games: 17, ceil:  30, y25: { pts: 247, g: 17 } },
+    { id: 'goedert',    name: 'Dallas Goedert',    age: 31, ppg: 15.8, games: 39, ceil:  25, y25: { pts: 205, g: 13 } },
+    { id: 'njoku',      name: 'David Njoku',       age: 29, ppg: 16.2, games: 39, ceil:  20, y25: { pts: 120, g: 10 } },
+    { id: 'hhenry',     name: 'Hunter Henry',      age: 31, ppg: 13.9, games: 47, ceil:  15, y25: { pts: 222, g: 16 } },
+    { id: 'schultz',    name: 'Dalton Schultz',    age: 29, ppg: 13.8, games: 49, ceil:  15, y25: { pts: 221, g: 16 } },
+    { id: 'freiermuth', name: 'Pat Freiermuth',    age: 26, ppg: 12.5, games: 38, ceil:  15, y25: { pts: 163, g: 13 } },
+    { id: 'otton',      name: 'Cade Otton',        age: 25, ppg: 11.5, games: 32, ceil:  10, y25: { pts: 127, g: 11 } },
   ],
   qb: [
-    { id: 'allen',     name: 'Josh Allen',       age: 29, ppg: 25.9, games: 51, ceil: 300, note: 'Best QB in this format (51/51 games) · going for elite $$$' },
-    { id: 'jackson',   name: 'Lamar Jackson',    age: 29, ppg: 24.2, games: 46, ceil: 220, note: '#2 overall PPG · runner injury risk · 2025 missed 4g' },
-    { id: 'jdaniels',  name: 'Jayden Daniels',   age: 24, ppg: 23.5, games: 17, ceil: 120, note: 'WAS · elite 2025 rookie · 1 year data · elite trajectory est.' },
-    { id: 'nix',       name: 'Bo Nix',           age: 26, ppg: 22.6, games: 34, ceil:  80, note: 'PREFERRED QB2 · 34/34 games · most durable mid-tier QB' },
-    { id: 'goff',      name: 'Jared Goff',       age: 31, ppg: 22.1, games: 51, ceil:  35, note: 'Most consistent (51/51) · age 31 · win-now only' },
-    { id: 'prescott',  name: 'Dak Prescott',     age: 32, ppg: 21.8, games: 42, ceil:  20, note: 'Age 32 · missed 9g in 2024 · depth only' },
-    { id: 'purdy',     name: 'Brock Purdy',      age: 26, ppg: 21.9, games: 41, ceil:  70, note: '9g in 2025 injury concern · elite when healthy · age 26' },
-    { id: 'burrow',    name: 'Joe Burrow',        age: 29, ppg: 21.6, games: 35, ceil:  40, note: 'REMOVED — only 35 games in 3 years · extreme injury risk' },
-    { id: 'mahomes',   name: 'Patrick Mahomes',  age: 30, ppg: 21.6, games: 46, ceil:  65, note: '46/51 games · declining slightly · KC system floors him' },
-    { id: 'hurts',     name: 'Jalen Hurts',      age: 27, ppg: 21.4, games: 48, ceil:  75, note: '48 games · dual-threat · PHI offense remains elite' },
-    { id: 'stafford',  name: 'Matthew Stafford', age: 38, ppg: 21.1, games: 48, ceil:  10, note: 'Age 38 · ascending in 2025 (465 pts) but zero dynasty value' },
-    { id: 'love',      name: 'Jordan Love',      age: 27, ppg: 21.0, games: 47, ceil:  70, note: '47 games · solid floor · GB offense stays strong' },
-    { id: 'mayfield',  name: 'Baker Mayfield',   age: 31, ppg: 20.5, games: 51, ceil:  25, note: '51/51 games · consistent but ceiling-less · age 31' },
-    { id: 'jdart',     name: 'Jaxson Dart',      age: 23, ppg: 18.0, games: 17, ceil:  40, note: 'NYG · 2025 rookie · big arm · raw · est. PPG' },
-    { id: 'maye',      name: 'Drake Maye',        age: 23, ppg: 18.5, games: 30, ceil:   0, note: 'YOUR QB1 · $220 spent' },
-    { id: 'herbert',   name: 'Justin Herbert',   age: 28, ppg: 18.5, games: 46, ceil:   0, note: 'REMOVED — sack penalty (-2.5) kills value in this format' },
-    { id: 'cwill',     name: 'Caleb Williams',   age: 24, ppg: 17.8, games: 34, ceil:  60, note: '12.3→23.2 PPG leap (2024→2025) · trajectory is elite' },
-    { id: 'darnold',   name: 'Sam Darnold',      age: 28, ppg: 17.0, games: 17, ceil:  20, note: 'MIN · solid 2025 · est. PPG · suspect dynasty value' },
-    { id: 'kmurray',   name: 'Kyler Murray',     age: 28, ppg: 16.0, games: 34, ceil:  25, note: 'Injury history · dual-threat upside · est. PPG' },
-    { id: 'stroud',    name: 'C.J. Stroud',      age: 24, ppg: 16.6, games: 46, ceil:  50, note: 'Fell off in 2025 (246 pts, 14g) · situation watch' },
-    { id: 'tlawrence', name: 'Trevor Lawrence',  age: 26, ppg: 15.5, games: 44, ceil:  25, note: 'JAX · inconsistent · new staff in 2026 · est. PPG' },
-    { id: 'arichardson',name:'Anthony Richardson',age:23, ppg: 14.0, games: 22, ceil:  20, note: 'IND · injury risk · huge rushing upside · est. PPG' },
+    { id: 'stafford',   name: 'Matthew Stafford',  age: 38, ppg: 21.1, games: 48, ceil:  10, y25: { pts: 465, g: 17 } },
+    { id: 'allen',      name: 'Josh Allen',        age: 29, ppg: 25.9, games: 51, ceil: 300, y25: { pts: 440, g: 17 } },
+    { id: 'cwill',      name: 'Caleb Williams',    age: 24, ppg: 17.8, games: 34, ceil:  60, y25: { pts: 394, g: 17 } },
+    { id: 'jdaniels',   name: 'Jayden Daniels',    age: 24, ppg: 23.5, games: 17, ceil: 120, y25: { pts: 400, g: 17 } },
+    { id: 'nix',        name: 'Bo Nix',            age: 26, ppg: 22.6, games: 34, ceil:  80, y25: { pts: 384, g: 17 } },
+    { id: 'goff',       name: 'Jared Goff',        age: 31, ppg: 22.1, games: 51, ceil:  35, y25: { pts: 376, g: 17 } },
+    { id: 'prescott',   name: 'Dak Prescott',      age: 32, ppg: 21.8, games: 42, ceil:  20, y25: { pts: 371, g: 17 } },
+    { id: 'mayfield',   name: 'Baker Mayfield',    age: 31, ppg: 20.5, games: 51, ceil:  25, y25: { pts: 349, g: 17 } },
+    { id: 'hurts',      name: 'Jalen Hurts',       age: 27, ppg: 21.4, games: 48, ceil:  75, y25: { pts: 342, g: 16 } },
+    { id: 'jackson',    name: 'Lamar Jackson',     age: 29, ppg: 24.2, games: 46, ceil: 220, y25: { pts: 338, g: 13 } },
+    { id: 'maye',       name: 'Drake Maye',        age: 23, ppg: 18.5, games: 30, ceil:   0, y25: { pts: 315, g: 17 } },
+    { id: 'love',       name: 'Jordan Love',       age: 27, ppg: 21.0, games: 47, ceil:  70, y25: { pts: 315, g: 15 } },
+    { id: 'mahomes',    name: 'Patrick Mahomes',   age: 30, ppg: 21.6, games: 46, ceil:  65, y25: { pts: 324, g: 15 } },
+    { id: 'dart',       name: 'Jaxson Dart',       age: 23, ppg: 18.0, games: 17, ceil:  40, y25: { pts: 306, g: 17 } },
+    { id: 'darnold',    name: 'Sam Darnold',       age: 28, ppg: 17.0, games: 17, ceil:  20, y25: { pts: 289, g: 17 } },
+    { id: 'burrow',     name: 'Joe Burrow',        age: 29, ppg: 21.6, games: 35, ceil:  40, y25: { pts: 259, g: 12 } },
+    { id: 'kmurray',    name: 'Kyler Murray',      age: 28, ppg: 16.0, games: 34, ceil:  25, y25: { pts: 272, g: 17 } },
+    { id: 'stroud',     name: 'C.J. Stroud',       age: 24, ppg: 16.6, games: 46, ceil:  50, y25: { pts: 246, g: 14 } },
+    { id: 'herbert',    name: 'Justin Herbert',    age: 28, ppg: 18.5, games: 46, ceil:   0, y25: { pts: 278, g: 15 } },
+    { id: 'purdy',      name: 'Brock Purdy',       age: 26, ppg: 21.9, games: 41, ceil:  70, y25: { pts: 197, g:  9 } },
+    { id: 'tlawrence',  name: 'Trevor Lawrence',   age: 26, ppg: 15.5, games: 44, ceil:  25, y25: { pts: 233, g: 15 } },
+    { id: 'arichardson',name: 'Anthony Richardson',age: 23, ppg: 14.0, games: 22, ceil:  20, y25: { pts: 140, g: 10 } },
   ],
   wr: [
-    { id: 'nacua',     name: 'Puka Nacua',       age: 24, ppg: 24.6, games: 44, ceil:  70, note: 'Highest WR PPG · missed all 2024 · age 24 · LAR target' },
-    { id: 'chase',     name: "Ja'Marr Chase",    age: 26, ppg: 24.3, games: 49, ceil:  90, note: 'Elite PPG · 49/51 games · age 26 prime · top WR target' },
-    { id: 'arsb',      name: 'Amon-Ra St. Brown',age: 26, ppg: 23.7, games: 50, ceil:  85, note: 'Most consistent WR (50/51 games) · underrated in auctions' },
-    { id: 'lamb',      name: 'CeeDee Lamb',      age: 27, ppg: 23.0, games: 46, ceil:  75, note: 'Declining (487→324→249) · elite PPG but wrong direction' },
-    { id: 'hill',      name: 'Tyreek Hill',      age: 31, ppg: 21.6, games: 37, ceil:  15, note: 'Age 31 · only 4g in 2025 · dynasty liability · depth only' },
-    { id: 'nabers',    name: 'Malik Nabers',     age: 22, ppg: 21.2, games: 19, ceil:  60, note: 'Elite PPG in 2024 (15g) · only 4g in 2025 · small sample' },
-    { id: 'jefferson', name: 'Justin Jefferson', age: 26, ppg: 20.3, games: 44, ceil:  65, note: 'Consistent elite · missed 2023 · full seasons since' },
-    { id: 'collins',   name: 'Nico Collins',     age: 27, ppg: 20.2, games: 42, ceil:  50, note: 'Consistent when healthy · injury concern (12g in 2024)' },
-    { id: 'ajbrown',   name: 'A.J. Brown',       age: 28, ppg: 19.9, games: 45, ceil:  45, note: 'Solid but aging · missed games each year · PHI WR room' },
-    { id: 'jsn',       name: 'Jaxon Smith-Njigba',age:24, ppg: 18.4, games: 51, ceil:  75, note: 'Best trajectory (182→312→442) · 51/51 games · SEA WR1' },
-    { id: 'london',    name: 'Drake London',     age: 24, ppg: 18.0, games: 45, ceil:  35, note: 'Solid · 12g in 2025 · ATL offense situational' },
-    { id: 'higgins',   name: 'Tee Higgins',      age: 26, ppg: 17.5, games: 38, ceil:  45, note: 'CIN · injury/suspension limited · strong when healthy · est.' },
-    { id: 'pickens',   name: 'George Pickens',   age: 25, ppg: 17.2, games: 48, ceil:  40, note: 'Ascending (258→207→360) · age 25 · new team DAL' },
-    { id: 'gwilson',   name: 'Garrett Wilson',   age: 24, ppg: 16.5, games: 48, ceil:  40, note: 'NYJ · consistent · needs a real QB · age 24 · est. PPG' },
-    { id: 'rice',      name: 'Rashee Rice',      age: 24, ppg: 16.0, games: 25, ceil:  35, note: 'KC · elite target share · limited by suspension/injury · age 24' },
-    { id: 'mcconkey',  name: 'Ladd McConkey',    age: 24, ppg: 15.5, games: 17, ceil:  35, note: 'LAC · 2025 breakout · 1 year data · est. PPG' },
-    { id: 'olave',     name: 'Chris Olave',      age: 25, ppg: 15.0, games: 36, ceil:  25, note: 'NO · injury concern · young · est. PPG' },
-    { id: 'egbuka',    name: 'Emeka Egbuka',     age: 23, ppg: 14.5, games: 16, ceil:  25, note: 'TB · 2025 debut · Chase connection · rookie est. PPG' },
-    { id: 'marvin',    name: 'Marvin Harrison',  age: 23, ppg: 14.0, games: 17, ceil:  25, note: 'ARI · 2025 debut · elite pedigree · est. PPG' },
-    { id: 'odunze',    name: 'Rome Odunze',      age: 23, ppg: 14.0, games: 16, ceil:  20, note: 'CHI · year 2 · Williams connection · est. PPG' },
-    { id: 'tmcmillan', name: 'Tetairoa McMillan',age: 22, ppg: 13.5, games: 17, ceil:  20, note: 'CAR · 2025 rookie · est. PPG · developing situation' },
-    { id: 'lburden',   name: 'Luther Burden',    age: 22, ppg: 13.0, games: 16, ceil:  15, note: 'CHI · 2025 debut · est. PPG' },
-    { id: 'ctate',     name: 'Carnell Tate',     age: 21, ppg: 12.5, games: 16, ceil:  15, note: 'TEN · 2025 debut · est. PPG' },
+    { id: 'jsn',        name: 'Jaxon Smith-Njigba', age: 24, ppg: 18.4, games: 51, ceil:  75, y25: { pts: 442, g: 17 } },
+    { id: 'nacua',      name: 'Puka Nacua',          age: 24, ppg: 24.6, games: 44, ceil:  70, y25: { pts: 418, g: 17 } },
+    { id: 'arsb',       name: 'Amon-Ra St. Brown',   age: 26, ppg: 23.7, games: 50, ceil:  85, y25: { pts: 403, g: 17 } },
+    { id: 'chase',      name: "Ja'Marr Chase",       age: 26, ppg: 24.3, games: 49, ceil:  90, y25: { pts: 389, g: 16 } },
+    { id: 'pickens',    name: 'George Pickens',      age: 25, ppg: 17.2, games: 48, ceil:  40, y25: { pts: 360, g: 17 } },
+    { id: 'collins',    name: 'Nico Collins',        age: 27, ppg: 20.2, games: 42, ceil:  50, y25: { pts: 343, g: 17 } },
+    { id: 'jefferson',  name: 'Justin Jefferson',    age: 26, ppg: 20.3, games: 44, ceil:  65, y25: { pts: 305, g: 15 } },
+    { id: 'ajbrown',    name: 'A.J. Brown',          age: 28, ppg: 19.9, games: 45, ceil:  45, y25: { pts: 299, g: 15 } },
+    { id: 'gwilson',    name: 'Garrett Wilson',      age: 24, ppg: 16.5, games: 48, ceil:  40, y25: { pts: 264, g: 16 } },
+    { id: 'mcconkey',   name: 'Ladd McConkey',       age: 24, ppg: 15.5, games: 17, ceil:  35, y25: { pts: 264, g: 17 } },
+    { id: 'lamb',       name: 'CeeDee Lamb',         age: 27, ppg: 23.0, games: 46, ceil:  75, y25: { pts: 249, g: 14 } },
+    { id: 'marvin',     name: 'Marvin Harrison',     age: 23, ppg: 14.0, games: 17, ceil:  25, y25: { pts: 238, g: 17 } },
+    { id: 'egbuka',     name: 'Emeka Egbuka',        age: 23, ppg: 14.5, games: 16, ceil:  25, y25: { pts: 232, g: 16 } },
+    { id: 'tmcmillan',  name: 'Tetairoa McMillan',   age: 22, ppg: 13.5, games: 17, ceil:  20, y25: { pts: 230, g: 17 } },
+    { id: 'odunze',     name: 'Rome Odunze',         age: 23, ppg: 14.0, games: 16, ceil:  20, y25: { pts: 224, g: 16 } },
+    { id: 'london',     name: 'Drake London',        age: 24, ppg: 18.0, games: 45, ceil:  35, y25: { pts: 216, g: 12 } },
+    { id: 'higgins',    name: 'Tee Higgins',         age: 26, ppg: 17.5, games: 38, ceil:  45, y25: { pts: 210, g: 12 } },
+    { id: 'lburden',    name: 'Luther Burden',       age: 22, ppg: 13.0, games: 16, ceil:  15, y25: { pts: 208, g: 16 } },
+    { id: 'ctate',      name: 'Carnell Tate',        age: 21, ppg: 12.5, games: 16, ceil:  15, y25: { pts: 200, g: 16 } },
+    { id: 'olave',      name: 'Chris Olave',         age: 25, ppg: 15.0, games: 36, ceil:  25, y25: { pts: 180, g: 12 } },
+    { id: 'rice',       name: 'Rashee Rice',         age: 24, ppg: 16.0, games: 25, ceil:  35, y25: { pts: 160, g: 10 } },
+    { id: 'nabers',     name: 'Malik Nabers',        age: 22, ppg: 21.2, games: 19, ceil:  60, y25: { pts:  85, g:  4 } },
+    { id: 'hill',       name: 'Tyreek Hill',         age: 31, ppg: 21.6, games: 37, ceil:  15, y25: { pts:  86, g:  4 } },
   ],
   rb: [
-    { id: 'cmc',       name: 'Christian McCaffrey',age:29,ppg: 25.2, games: 37, ceil:  55, note: 'Highest RB PPG · only 37 games in 3 years · age 29 · risk' },
-    { id: 'gibbs',     name: 'Jahmyr Gibbs',     age: 24, ppg: 21.0, games: 49, ceil:  65, note: 'Ascending (256→383→388) · age 24 · top dynasty RB' },
-    { id: 'bijan',     name: 'Bijan Robinson',   age: 24, ppg: 20.6, games: 51, ceil:  60, note: 'Most durable elite RB (51/51 games) · improving each year' },
-    { id: 'jtaylor',   name: 'Jonathan Taylor',  age: 27, ppg: 19.8, games: 41, ceil:  45, note: 'Ascending (168→262→381) · health concerns 2023/24' },
-    { id: 'achane',    name: "De'Von Achane",    age: 24, ppg: 19.6, games: 44, ceil:  50, note: 'High ceiling · missed 3g in 2025 · age 24' },
-    { id: 'barkley',   name: 'Saquon Barkley',   age: 29, ppg: 19.0, games: 46, ceil:  30, note: 'Declining (379→250 in 2025) · age 29 · win-now only' },
-    { id: 'kwill',     name: 'Kyren Williams',   age: 25, ppg: 18.8, games: 45, ceil:  40, note: 'Consistent workhorse · volume-based value in this format' },
-    { id: 'henry',     name: 'Derrick Henry',    age: 32, ppg: 18.0, games: 51, ceil:  20, note: 'Age 32 · 51/51 games · zero dynasty value beyond 1-2 yrs' },
-    { id: 'cook',      name: 'James Cook',       age: 26, ppg: 17.1, games: 50, ceil:  30, note: 'Consistent 50/51 games · ascending (262→272→321) · KC' },
-    { id: 'hall',      name: 'Breece Hall',      age: 24, ppg: 16.7, games: 49, ceil:  20, note: 'Declining (318→262→237) · still young but wrong direction' },
-    { id: 'jeanty',    name: 'Ashton Jeanty',    age: 22, ppg: 15.5, games: 17, ceil:  30, note: 'LV · 2025 only · youngest RB · high upside' },
-    { id: 'kwalker',   name: 'Kenneth Walker',   age: 25, ppg: 15.5, games: 38, ceil:  25, note: 'KC · change of scenery · solid workhorse · est. PPG' },
-    { id: 'omarion',   name: 'Omarion Hampton',  age: 22, ppg: 15.0, games: 17, ceil:  25, note: 'LAC · 2025 rookie · big back · est. PPG' },
-    { id: 'jlove',     name: 'Jeremiyah Love',   age: 22, ppg: 14.5, games: 17, ceil:  20, note: 'ARI · 2025 rookie · promising · est. PPG' },
-    { id: 'cbrown',    name: 'Chase Brown',      age: 26, ppg: 14.2, games: 45, ceil:  15, note: 'Ascending (60→277→304) · volume back in Cincinnati' },
-    { id: 'birving',   name: 'Bucky Irving',     age: 23, ppg: 13.5, games: 21, ceil:  20, note: 'TB · 2025 breakout · age 23 · est. PPG' },
-    { id: 'tjhenderson',name:'TreVeyon Henderson',age:24, ppg: 12.0, games: 18, ceil:  15, note: 'NE · Maye connection · limited data · est. PPG' },
-    { id: 'judkins',   name: 'Quinshon Judkins', age: 22, ppg: 12.0, games: 17, ceil:  15, note: 'CLE · 2025 rookie · est. PPG' },
-    { id: 'chubbard',  name: 'Chuba Hubbard',    age: 26, ppg: 11.5, games: 44, ceil:  10, note: 'CAR · consistent depth · est. PPG' },
-    { id: 'rdowdle',   name: 'Rico Dowdle',      age: 26, ppg: 11.0, games: 32, ceil:  10, note: 'DAL · 2025 starter · est. PPG' },
-    { id: 'jmason',    name: 'Jordan Mason',     age: 26, ppg:  9.5, games: 34, ceil:   5, note: 'SF · depth back · est. PPG' },
+    { id: 'gibbs',      name: 'Jahmyr Gibbs',       age: 24, ppg: 21.0, games: 49, ceil:  65, y25: { pts: 388, g: 16 } },
+    { id: 'jtaylor',    name: 'Jonathan Taylor',    age: 27, ppg: 19.8, games: 41, ceil:  45, y25: { pts: 381, g: 17 } },
+    { id: 'cook',       name: 'James Cook',         age: 26, ppg: 17.1, games: 50, ceil:  30, y25: { pts: 321, g: 17 } },
+    { id: 'bijan',      name: 'Bijan Robinson',     age: 24, ppg: 20.6, games: 51, ceil:  60, y25: { pts: 350, g: 17 } },
+    { id: 'henry',      name: 'Derrick Henry',      age: 32, ppg: 18.0, games: 51, ceil:  20, y25: { pts: 306, g: 17 } },
+    { id: 'cbrown',     name: 'Chase Brown',        age: 26, ppg: 14.2, games: 45, ceil:  15, y25: { pts: 304, g: 17 } },
+    { id: 'achane',     name: "De'Von Achane",      age: 24, ppg: 19.6, games: 44, ceil:  50, y25: { pts: 294, g: 14 } },
+    { id: 'kwill',      name: 'Kyren Williams',     age: 25, ppg: 18.8, games: 45, ceil:  40, y25: { pts: 282, g: 15 } },
+    { id: 'barkley',    name: 'Saquon Barkley',     age: 29, ppg: 19.0, games: 46, ceil:  30, y25: { pts: 250, g: 17 } },
+    { id: 'hall',       name: 'Breece Hall',        age: 24, ppg: 16.7, games: 49, ceil:  20, y25: { pts: 237, g: 16 } },
+    { id: 'jeanty',     name: 'Ashton Jeanty',      age: 22, ppg: 15.5, games: 17, ceil:  30, y25: { pts: 264, g: 17 } },
+    { id: 'omarion',    name: 'Omarion Hampton',    age: 22, ppg: 15.0, games: 17, ceil:  25, y25: { pts: 255, g: 17 } },
+    { id: 'jlove',      name: 'Jeremiyah Love',     age: 22, ppg: 14.5, games: 17, ceil:  20, y25: { pts: 247, g: 17 } },
+    { id: 'judkins',    name: 'Quinshon Judkins',   age: 22, ppg: 12.0, games: 17, ceil:  15, y25: { pts: 204, g: 17 } },
+    { id: 'kwalker',    name: 'Kenneth Walker',     age: 25, ppg: 15.5, games: 38, ceil:  25, y25: { pts: 202, g: 13 } },
+    { id: 'chubbard',   name: 'Chuba Hubbard',      age: 26, ppg: 11.5, games: 44, ceil:  10, y25: { pts: 196, g: 17 } },
+    { id: 'rdowdle',    name: 'Rico Dowdle',        age: 26, ppg: 11.0, games: 32, ceil:  10, y25: { pts: 187, g: 17 } },
+    { id: 'birving',    name: 'Bucky Irving',       age: 23, ppg: 13.5, games: 21, ceil:  20, y25: { pts: 135, g: 10 } },
+    { id: 'cmc',        name: 'Christian McCaffrey',age: 29, ppg: 25.2, games: 37, ceil:  55, y25: { pts: 303, g: 12 } },
+    { id: 'tjhenderson',name: 'TreVeyon Henderson', age: 24, ppg: 12.0, games: 18, ceil:  15, y25: { pts: 108, g:  9 } },
+    { id: 'jmason',     name: 'Jordan Mason',       age: 26, ppg:  9.5, games: 34, ceil:   5, y25: { pts: 162, g: 17 } },
   ]
 };
 
 // ── State ────────────────────────────────────────────────────────────────────
 const SEED = {
-  spent: 220,
-  won: 1,
+  spent: 696,
+  won: 3,
   picks: {
-    maye: { name: 'Drake Maye', pos: 'QB', tab: 'qb1', price: 220 }
+    maye:    { name: 'Drake Maye',   pos: 'QB', tab: 'qb1', price: 220 },
+    mcbride: { name: 'Trey McBride', pos: 'TE', tab: 'te',  price: 225 },
+    bowers:  { name: 'Brock Bowers', pos: 'TE', tab: 'te',  price: 251 }
   },
   lost: {
-    allen:    { price: 251, team: 'AmadorFSU' },
-    bijan:    { price: 223, team: 'AmadorFSU' },
-    nabers:   { price: 190, team: 'Chauncey'  },
-    jlove:    { price: 175, team: 'revskip'   },
-    jdaniels: { price: 220, team: 'coleh44'   },
-    achane:   { price: 165, team: 'AmadorFSU' },
-    chase:    { price: 238, team: 'kolt78'    },
-    jmason:   { price:  25, team: 'AmadorFSU' },
+    allen:    { price: 251, team: 'AmadorFSU'  },
+    bijan:    { price: 223, team: 'AmadorFSU'  },
+    nabers:   { price: 190, team: 'Chauncey'   },
+    jlove:    { price: 175, team: 'revskip'    },
+    jdaniels: { price: 220, team: 'coleh44'    },
+    achane:   { price: 165, team: 'AmadorFSU'  },
+    chase:    { price: 238, team: 'kolt78'     },
+    jmason:   { price:  25, team: 'AmadorFSU'  },
+    jsn:      { price: 231, team: 'SunnyBrown'     },
+    gibbs:    { price: 241, team: 'kolt78'         },
+    nacua:    { price: 225, team: 'TimboDAsavage'  },
   },
   hidden: {},
   slotBudgets: { ...DEFAULT_SLOT_BUDGETS },
-  teams: ['AmadorFSU', 'Chauncey', 'revskip', 'coleh44', 'kolt78']
+  teams: ['AmadorFSU', 'Chauncey', 'revskip', 'coleh44', 'kolt78', 'SunnyBrown', 'TimboDAsavage']
 };
 
 function loadState() {
@@ -1302,7 +1297,7 @@ function ceilClass(c) {
   return 'ceil-lo';
 }
 
-function playerRow(p, pos) {
+function playerRow(p, pos, rank, rank3) {
   const pick = S.picks[p.id];
   const lost = S.lost?.[p.id];
 
@@ -1351,14 +1346,26 @@ function playerRow(p, pos) {
       </div>`;
   }
 
+  const y25g   = p.y25?.g   ?? p.games;
+  const y25pts = p.y25?.pts ?? Math.round(p.ppg * p.games);
+  const y25ppg = (y25pts / y25g).toFixed(1);
+  const threeYrPts = Math.round(p.ppg * p.games);
+  const r3tag = rank3 != null ? `<span style="color:var(--text-2);font-weight:500">#${rank3}</span><span style="color:var(--text-4)"> · </span>` : '';
+  const threeYrNote = `<span style="color:var(--text-4);font-size:10px;letter-spacing:0.1em">3YR</span> ${r3tag}<span style="color:var(--text-2)">${p.ppg}</span><span style="color:var(--text-4)"> avg · </span><span style="color:var(--text-2)">${threeYrPts}</span><span style="color:var(--text-4)"> pts · </span><span style="color:var(--text-2)">${p.games}</span><span style="color:var(--text-4)">G</span>`;
+  const rankHtml = rank != null
+    ? `<div class="player-rank"><span class="rank-pos">${pos.toUpperCase()}</span> <span class="rank-num">${rank}</span></div>`
+    : `<div class="player-rank">—</div>`;
+
   return `
     <div class="player-row ${statusClass}" id="row-${p.id}">
       <div class="player-info">
         <div class="player-name">${p.name}</div>
-        <div class="player-note">${p.note}</div>
+        <div class="player-note">${threeYrNote}</div>
       </div>
-      <div class="player-stat"><span class="hi">${p.ppg}</span><span class="unit">PPG</span></div>
-      <div class="player-stat"><span class="hi">${p.games}</span><span class="unit">G</span></div>
+      ${rankHtml}
+      <div class="player-stat"><span class="hi">${y25pts}</span><span class="unit">pts</span></div>
+      <div class="player-stat"><span class="hi">${y25ppg}</span><span class="unit">PPG</span></div>
+      <div class="player-stat"><span class="hi">${y25g}</span><span class="unit">G</span></div>
       <div class="player-ceil ${ceilClass(p.ceil)}">≤ $${p.ceil}</div>
       ${actionsHtml}
     </div>`;
@@ -1367,42 +1374,57 @@ function playerRow(p, pos) {
 function renderPos(pos) {
   const el = document.getElementById(`list-${pos}`);
 
-  const all       = TARGETS[pos].slice().sort((a, b) => b.ppg - a.ppg);
+  const all       = TARGETS[pos].slice().sort((a, b) => (b.y25?.pts ?? 0) - (a.y25?.pts ?? 0));
+  const rankMap   = {};
+  all.forEach((p, i) => rankMap[p.id] = i + 1);
+  const all3      = TARGETS[pos].slice().sort((a, b) => b.ppg - a.ppg);
+  const rankMap3  = {};
+  all3.forEach((p, i) => rankMap3[p.id] = i + 1);
+
   const available = all.filter(p => !S.picks[p.id] && !S.lost?.[p.id] && !S.hidden[p.id]);
   const gone      = all.filter(p =>  S.picks[p.id] ||  S.lost?.[p.id]);
   const hidden    = all.filter(p => !S.picks[p.id] && !S.lost?.[p.id] &&  S.hidden[p.id]);
 
   const starterCount = STARTER_SLOTS[pos] ?? available.length;
   let html = '';
-  available.forEach((p, i) => {
-    if (i === starterCount && i < available.length) {
-      html += `<div class="starter-divider">Bench</div>`;
-    }
-    html += playerRow(p, pos);
+  available.forEach(p => {
+    html += playerRow(p, pos, rankMap[p.id], rankMap3[p.id]);
   });
 
   if (gone.length > 0) {
     html += `<div class="gone-divider">Off the board</div>`;
-    html += gone.map(p => playerRow(p, pos)).join('');
+    html += gone.map(p => playerRow(p, pos, rankMap[p.id], rankMap3[p.id])).join('');
   }
 
   if (hidden.length > 0) {
     const hid = `hid-${pos}`;
     html += `<div class="hidden-toggle" onclick="document.getElementById('${hid}').classList.toggle('open')">Hidden (${hidden.length})  ▸</div>`;
     html += `<div class="hidden-list" id="${hid}">`;
-    html += hidden.map(p => `
+    html += hidden.map(p => {
+      const hy25g   = p.y25?.g   ?? p.games;
+      const hy25pts = p.y25?.pts ?? Math.round(p.ppg * p.games);
+      const hy25ppg = (hy25pts / hy25g).toFixed(1);
+      const h3yrPts = Math.round(p.ppg * p.games);
+      const hr3 = rankMap3[p.id];
+      const hr3tag = hr3 != null ? `<span style="color:var(--text-2);font-weight:500">#${hr3}</span><span style="color:var(--text-4)"> · </span>` : '';
+      const h3yrNote = `<span style="color:var(--text-4);font-size:10px;letter-spacing:0.1em">3YR</span> ${hr3tag}<span style="color:var(--text-2)">${p.ppg}</span><span style="color:var(--text-4)"> avg · </span><span style="color:var(--text-2)">${h3yrPts}</span><span style="color:var(--text-4)"> pts · </span><span style="color:var(--text-2)">${p.games}</span><span style="color:var(--text-4)">G</span>`;
+      const r = rankMap[p.id];
+      return `
       <div class="player-row lost" id="row-${p.id}">
         <div class="player-info">
           <div class="player-name">${p.name}</div>
-          <div class="player-note">${p.note}</div>
+          <div class="player-note">${h3yrNote}</div>
         </div>
-        <div class="player-stat"><span class="hi">${p.ppg}</span><span class="unit">PPG</span></div>
-        <div class="player-stat"><span class="hi">${p.games}</span><span class="unit">G</span></div>
+        <div class="player-rank"><span class="rank-pos">${pos.toUpperCase()}</span> <span class="rank-num">${r}</span></div>
+        <div class="player-stat"><span class="hi">${hy25pts}</span><span class="unit">pts</span></div>
+        <div class="player-stat"><span class="hi">${hy25ppg}</span><span class="unit">PPG</span></div>
+        <div class="player-stat"><span class="hi">${hy25g}</span><span class="unit">G</span></div>
         <div class="player-ceil ${ceilClass(p.ceil)}">≤ $${p.ceil}</div>
         <div class="player-actions">
           <button class="btn btn-undo" onclick="unhidePlayer('${p.id}')">Unhide</button>
         </div>
-      </div>`).join('');
+      </div>`;
+    }).join('');
     html += `</div>`;
   }
 
@@ -1601,10 +1623,10 @@ function renderRosterPage() {
   el.innerHTML = html;
 
   const metas = [
-    { key: 'te', budget: 450, suffix: '· targeting McBride + Bowers' },
-    { key: 'qb', budget:  65, suffix: '· Maye is QB1' },
-    { key: 'wr', budget: 155, suffix: '· stars-and-scrubs' },
-    { key: 'rb', budget:  80, suffix: '· need 3' },
+    { key: 'te', budget: 450 },
+    { key: 'qb', budget:  65 },
+    { key: 'wr', budget: 155 },
+    { key: 'rb', budget:  80 },
   ];
   metas.forEach(m => {
     const metaEl = document.getElementById(`meta-${m.key}`);
@@ -1618,7 +1640,7 @@ function renderRosterPage() {
     const players = TARGETS[m.key] || [];
     const avail   = players.filter(p => !S.picks[p.id] && !S.lost?.[p.id]).length;
     const aColor  = avail === 0 ? 'var(--bad)' : 'var(--text-3)';
-    metaEl.innerHTML = `Budget <span class="hi"${style}>$${rem}</span> / $${m.budget} ${m.suffix} &nbsp;·&nbsp; <span style="color:${aColor}">${avail}/${players.length} avail</span>`;
+    metaEl.innerHTML = `Budget <span class="hi"${style}>$${rem}</span> / $${m.budget} &nbsp;·&nbsp; <span style="color:${aColor}">${avail}/${players.length} avail</span>`;
   });
 }
 

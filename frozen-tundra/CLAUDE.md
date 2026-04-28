@@ -14,16 +14,16 @@
 - SuperFlex — QBs valuable, ranked higher than non-SF consensus
 
 ## Ryan's 2026 Draft Picks
-| Pick | Overall | Source |
-|------|---------|--------|
-| 1.02 | 2  | Own (slot 2) |
-| 1.12 | 12 | From prestond (roster 3, traded via fe_b) |
-| 2.02 | 14 | Own (returned from fe_b) |
-| 2.11 | 23 | From Innis To Win This (roster 4) |
-| 3.02 | 26 | Own |
-| 3.06 | 30 | From lordsimkins (roster 2) |
-| 3.09 | 33 | From Belichick Film School (roster 9) |
-| 4.02 | 38 | Own |
+| Pick | Overall | Player | Status |
+|------|---------|--------|--------|
+| 1.02 | 2  | Fernando Mendoza (QB, LVR) | ✓ Drafted |
+| 1.12 | 12 | — | Pending |
+| 2.02 | 14 | — | Pending |
+| 2.11 | 23 | — | Pending |
+| 3.02 | 26 | — | Pending |
+| 3.06 | 30 | — | Pending |
+| 3.09 | 33 | — | Pending |
+| 4.02 | 38 | — | Pending |
 
 ## Draft slot order (linear, repeats each round)
 | Slot | Team | Roster |
