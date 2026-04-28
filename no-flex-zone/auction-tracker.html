@@ -1016,7 +1016,7 @@
       </div>
     </div>
     <div class="header-actions">
-      <span class="live-badge"><span class="live-dot"></span>Live</span>
+      <span class="live-badge"><span class="live-dot"></span>Live <span id="last-sync" style="font-size:9px;opacity:0.55;margin-left:5px;font-weight:400;letter-spacing:0.04em;"></span></span>
       <button class="reset-btn" onclick="resetState()">Reset</button>
     </div>
   </div>
@@ -1848,6 +1848,63 @@ function renderAll() {
 }
 
 renderAll();
+
+// ── Sleeper live sync ─────────────────────────────────────────────────────
+
+const NFZ_DRAFT_ID = '1312167756782645248';
+const NFZ_RYAN_UID = '160225092348297216';
+const NFZ_UID_TEAM = {
+  '219291458924965888': 'revskip',
+  '386527923840147456': 'kolt78',
+  '474664712403939328': 'TimboDAsavage',
+  '477569235950759936': 'Chauncey',
+  '563746638651215872': 'SunnyBrown',
+  '564663138659733504': 'gpeisert1',
+  '608477616965488640': 'rcasper22',
+  '727414136446734336': 'Huddy20',
+  '731200358931652608': 'mhaas10',
+  '770380185756360704': 'tking1456',
+  '831354934300651520': 'coleh44',
+  '1093257724072280064': 'AmadorFSU',
+  '1108041203519520768': 'yaba1234',
+};
+const NFZ_ALL_PLAYERS = Object.entries(TARGETS).flatMap(([pos, arr]) =>
+  arr.map(p => ({ ...p, posKey: pos }))
+);
+const NFZ_NAME_MAP = new Map(NFZ_ALL_PLAYERS.map(p => [p.name.toLowerCase(), p]));
+
+async function pollAuction() {
+  try {
+    const res = await fetch(`https://api.sleeper.app/v1/draft/${NFZ_DRAFT_ID}/picks`);
+    if (!res.ok) return;
+    const apiPicks = await res.json();
+    let changed = false;
+    for (const pick of apiPicks) {
+      const fullName = `${pick.metadata.first_name} ${pick.metadata.last_name}`;
+      const tgt = NFZ_NAME_MAP.get(fullName.toLowerCase());
+      if (!tgt) continue;
+      const { id, posKey } = tgt;
+      const price = parseInt(pick.metadata.amount || '0', 10);
+      if (pick.picked_by === NFZ_RYAN_UID) {
+        if (!S.picks[id]) {
+          S.picks[id] = { name: tgt.name, pos: posKey.toUpperCase(), tab: posKey, price };
+          delete S.lost[id];
+          changed = true;
+        }
+      } else if (!S.lost[id] && !S.picks[id]) {
+        const team = NFZ_UID_TEAM[pick.picked_by] || null;
+        S.lost[id] = team ? { team, price } : { price };
+        changed = true;
+      }
+    }
+    if (changed) { save(); renderAll(); }
+    const el = document.getElementById('last-sync');
+    if (el) el.textContent = new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+  } catch(e) {}
+}
+
+setInterval(pollAuction, 3 * 60 * 1000);
+pollAuction();
 </script>
 </body>
 </html>

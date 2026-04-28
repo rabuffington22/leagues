@@ -812,7 +812,7 @@
       </div>
     </div>
     <div class="header-actions">
-      <span class="live-badge"><span class="live-dot"></span>Live</span>
+      <span class="live-badge"><span class="live-dot"></span>Live <span id="last-sync" style="font-size:9px;opacity:0.55;margin-left:5px;font-weight:400;letter-spacing:0.04em;"></span></span>
       <button class="reset-btn" onclick="resetDraft()">Reset</button>
     </div>
   </div>
@@ -903,22 +903,36 @@ const TOTAL  = 48;
 const TEAMS  = 12;
 const ROUNDS = 4;
 
-const RYAN_PICKS = new Set([2, 12, 14, 23, 26, 30, 33, 38]);
+// slot (1-12) → original roster_id
+const SLOT_TO_ROSTER = {1:7, 2:10, 3:5, 4:1, 5:11, 6:2, 7:6, 8:8, 9:9, 10:12, 11:4, 12:3};
 
-const SLOT_TEAM = [
-  'fe_b',                     // 1
-  'Old ass Play-Doh',         // 2 — Ryan
-  'The Flock',                // 3
-  'Bump and Run',             // 4
-  'DAKstreet Boys',           // 5
-  'lordsimkins',              // 6
-  'No Really, We Suck',       // 7
-  'Hawk Tua',                 // 8
-  'Belichick Film School',    // 9
-  'Ra Doggin in the LaPorta', // 10
-  'Innis To Win This',        // 11
-  'prestond',                 // 12
-];
+const ROSTER_NAME = {
+  1:  'Bump and Run',
+  2:  'lordsimkins',
+  3:  'prestond',
+  4:  'Innis To Win This',
+  5:  'The Flock',
+  6:  'No Really, We Suck',
+  7:  'fe_b',
+  8:  'Hawk Tua',
+  9:  'Belichick Film School',
+  10: 'Ryan',
+  11: 'DAKstreet Boys',
+  12: 'Ra Doggin',
+};
+
+// key: "round:original_roster_id" → current owner roster_id (traded picks only)
+const TRADE_MAP = {
+  '2:1':6,  '1:2':4,  '2:2':1,  '3:2':6,
+  '1:3':10, '2:3':10, '3:3':11, '4:3':7,
+  '1:4':11, '2:4':10, '3:4':6,
+  '1:5':4,  '2:5':6,  '3:5':1,
+  '2:7':5,  '3:7':7,
+  '1:8':7,
+  '1:9':6,  '2:9':11, '3:9':10, '4:9':5,
+  '2:10':10,
+  '1:12':10,'2:12':1, '3:12':7,
+};
 
 // SuperFlex-adjusted consensus: Mendoza #3, Ty Simpson #9, Nussmeier #23
 const PLAYERS = [
@@ -972,7 +986,8 @@ function pickLabel(n) {
   return `${r}.${String(s).padStart(2,'0')}`;
 }
 function slotOf(n)       { return ((n - 1) % TEAMS) + 1; }
-function isRyan(n)       { return RYAN_PICKS.has(n); }
+function ownerOf(n)      { const r = Math.ceil(n/TEAMS), s = slotOf(n), orig = SLOT_TO_ROSTER[s]; return TRADE_MAP[`${r}:${orig}`] ?? orig; }
+function isRyan(n)       { return ownerOf(n) === 10; }
 function nextRyan(from)  {
   for (let i = from; i <= TOTAL; i++) if (isRyan(i)) return i;
   return null;
@@ -986,12 +1001,16 @@ function picksLeft(from) {
 // ── State ─────────────────────────────────────────────────────────────────
 
 const SEED = {
-  cur: 3,
+  cur: 7,
   picks: {
     fmendoza: { name: 'Fernando Mendoza', pos: 'QB', nfl: 'LVR', pickNum: 2 }
   },
   gone: {
-    jlove: { name: 'Jeremiyah Love', pickNum: 1 }
+    jlove:  { name: 'Jeremiyah Love',  pickNum: 1 },
+    jtyson: { name: 'Jordyn Tyson',    pickNum: 3 },
+    ctate:  { name: 'Carnell Tate',    pickNum: 4 },
+    cbeck:  { name: 'Carson Beck',     pickNum: 5 },
+    mlemon: { name: 'Makai Lemon',     pickNum: 6 },
   }
 };
 
@@ -1079,7 +1098,7 @@ function renderStats() {
 
   document.getElementById('stat-current').textContent = cur;
   document.getElementById('stat-left').textContent    = nLeft;
-  document.getElementById('stat-sub-left').textContent = `of 8 · ${myPicks} drafted`;
+  document.getElementById('stat-sub-left').textContent = `of 9 · ${myPicks} drafted`;
   document.getElementById('pick-inline').textContent  = cur;
 
   if (next) {
@@ -1212,7 +1231,7 @@ function renderBoard() {
       if (cur)  cls += ' current';
       h += `<div class="${cls}">
         <div class="cell-pick-label">${pickLabel(overall)}${cur ? ' ▶' : ''}</div>
-        <div class="cell-team">${ryan ? '★ Ryan' : SLOT_TEAM[slot-1]}</div>
+        <div class="cell-team">${ryan ? '★ Ryan' : ROSTER_NAME[ownerOf(overall)]}</div>
         ${filled[overall] ? `<div class="cell-player">${filled[overall]}</div>` : ''}
       </div>`;
     }
@@ -1331,6 +1350,45 @@ function render() {
 }
 
 render();
+
+// ── Sleeper live sync ─────────────────────────────────────────────────────
+
+const FTZ_DRAFT_ID = '1312105540708474880';
+const FTZ_RYAN_UID = '160225092348297216';
+const FTZ_NAME_MAP = new Map(PLAYERS.map(p => [p.name.toLowerCase(), p]));
+
+async function pollDraft() {
+  try {
+    const res = await fetch(`https://api.sleeper.app/v1/draft/${FTZ_DRAFT_ID}/picks`);
+    if (!res.ok) return;
+    const apiPicks = await res.json();
+    let changed = false;
+    for (const pick of apiPicks) {
+      const fullName = `${pick.metadata.first_name} ${pick.metadata.last_name}`;
+      const player = FTZ_NAME_MAP.get(fullName.toLowerCase());
+      const n = pick.pick_no;
+      if (n >= S.cur) { S.cur = n + 1; changed = true; }
+      if (!player) continue;
+      const { id } = player;
+      if (pick.picked_by === FTZ_RYAN_UID) {
+        if (!S.picks[id]) {
+          S.picks[id] = { name: player.name, pos: player.pos, nfl: player.nfl, pickNum: n };
+          delete S.gone[id];
+          changed = true;
+        }
+      } else if (!S.gone[id] && !S.picks[id]) {
+        S.gone[id] = { name: player.name, pickNum: n };
+        changed = true;
+      }
+    }
+    if (changed) { save(); render(); }
+    const el = document.getElementById('last-sync');
+    if (el) el.textContent = new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+  } catch(e) {}
+}
+
+setInterval(pollDraft, 3 * 60 * 1000);
+pollDraft();
 </script>
 </body>
 </html>
