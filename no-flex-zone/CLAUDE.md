@@ -68,6 +68,8 @@ Single-file tool: `no-flex-zone/auction-tracker.html`
 - **No italics anywhere** — `font-style: normal` on all elements including `.ital` spans and `.roster-section-pos`
 - **Section titles all oxblood** — `.section-title { color: var(--bad-2) }`, `.ital` spans inherit; no white/oxblood split
 - Do not use `border-radius > 6px`, drop shadows larger than 1–2px, or position-specific colors when modifying this file
+- **Hero budget row**: 5 columns (`repeat(5, 1fr)`) — Remaining, Spent, Slots Open, Max Safe Bid, Scoring. The Scoring card uses `.score-lines` / `.score-line` / `.sl-cat` / `.sl-val` layout (no large val number). Negative values use `.sl-val.neg` (oxblood).
+- **Brand subtitle** (`brand-sub`): shows roster format only — `"14-team · 2 QB · 3 RB · 4 WR · 2 TE"`. Scoring info moved to the hero stat card.
 
 ## Confirmed spend
 | Player | Pos | Price |

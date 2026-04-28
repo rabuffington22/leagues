@@ -81,3 +81,16 @@
 
 ### Deferred
 - Auto-sync picks from Sleeper API (would eliminate manual attribution entirely)
+
+## 2026-04-28 — Session 4: Scoring card + hero cleanup
+
+### What we did
+- Added a 5th stat block to the hero budget row: a compact **Scoring** reference card showing Pass TD +6, Sack −2.5, TE PPR 1.9, WR PPR 1.25, 1st Down bonuses
+- Budget row expanded from 4 to 5 columns (`repeat(5, 1fr)`)
+- New CSS classes: `.score-lines`, `.score-line`, `.sl-cat`, `.sl-val`, `.sl-val.neg`
+- Cleaned up brand subtitle: removed scoring text (now in card), changed to roster format "14-team · 2 QB · 3 RB · 4 WR · 2 TE"
+- Moved "14-team" from the title line to the subtitle line
+
+### Key decisions
+- Scoring card uses key/value list layout (no large number) — five differentials that actually affect valuation decisions
+- Negative values (Sack −2.5) rendered in oxblood via `.sl-val.neg` to signal penalty at a glance
