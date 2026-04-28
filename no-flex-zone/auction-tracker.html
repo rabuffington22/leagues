@@ -224,7 +224,7 @@
 
     .budget-row {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(5, 1fr);
       border-top: 1px solid var(--line);
       background: linear-gradient(180deg, rgba(0,0,0,0.45), rgba(0,0,0,0.25) 50%), linear-gradient(180deg, var(--bg-1), var(--bg-0));
       position: relative;
@@ -289,6 +289,36 @@
 
     .val-warn   { color: var(--warn) !important; }
     .val-danger { color: var(--bad)  !important; }
+
+    .score-lines {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      margin-top: 9px;
+    }
+    .score-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 8px;
+    }
+    .sl-cat {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--text-3);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .sl-val {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text);
+      letter-spacing: -0.01em;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+    .sl-val.neg { color: var(--bad-2); }
 
     /* Tabs */
     .tabs {
@@ -980,8 +1010,8 @@
     <div class="brand">
       <div class="brand-mark"><span class="brand-mark-text">NFZ</span></div>
       <div class="brand-text">
-<div class="brand-title">No Flex Zone <span class="ital">Auction</span> <span style="font-family:var(--mono);font-size:12px;font-weight:400;color:var(--text-3);letter-spacing:0.06em;vertical-align:middle">· 14-team</span></div>
-        <div class="brand-sub">Passing: +6/−3 · −2.5 sack · TE 1.9 PPR · WR 1.25 PPR · 1st down: pass .5, rec .5, rush .4</div>
+<div class="brand-title">No Flex Zone <span class="ital">Auction</span></div>
+        <div class="brand-sub">14-team · 2 QB · 3 RB · 4 WR · 2 TE</div>
       </div>
     </div>
     <div class="header-actions">
@@ -1009,6 +1039,16 @@
       <label>Max Safe Bid</label>
       <div class="val" id="stat-maxbid">—</div>
       <div class="stat-sub">leaves $1 for each open slot</div>
+    </div>
+    <div class="budget-stat">
+      <label>Scoring</label>
+      <div class="score-lines">
+        <div class="score-line"><span class="sl-cat">Pass TD</span><span class="sl-val">+6 pts</span></div>
+        <div class="score-line"><span class="sl-cat">Sack</span><span class="sl-val neg">−2.5 pts</span></div>
+        <div class="score-line"><span class="sl-cat">TE PPR</span><span class="sl-val">1.9 / rec</span></div>
+        <div class="score-line"><span class="sl-cat">WR PPR</span><span class="sl-val">1.25 / rec</span></div>
+        <div class="score-line"><span class="sl-cat">1st Down</span><span class="sl-val">+.5 / +.5 / +.4</span></div>
+      </div>
     </div>
   </div>
   <div class="tabs">
