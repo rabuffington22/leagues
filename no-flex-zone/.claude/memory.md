@@ -30,6 +30,17 @@
 - Frozen Tundra is a 12-team linear rookie draft (not auction); built draft-tracker.html adapted for snake/linear format
 - Draft-tracker reuses the exact CSS system from auction-tracker; first version had flat styles and needed a full CSS rewrite to match
 
+## 2026-04-29 — Session 5 (State sync + templates)
+- Built `_templates/` directory with two grab-and-go trackers:
+  - `startup-auction-template.html` — full CONFIGURE block, empty SEED, 2026 player list, several bug fixes over NFZ original (save(S) fix, dynamic STARTER_SLOTS, FILL_IN guard)
+  - `rookie-draft-template.html` — full CONFIGURE block, empty SEED, 2026 rookie class, MY_ROSTER_ID abstraction, dynamic MY_TOTAL_PICKS
+  - `README.md` — setup steps, Sleeper API cheat sheet, missing-template TODOs (startup-linear, rookie-auction)
+- Synced NFZ SEED from pick 14 → pick 29: added Caleb Williams, Burrow, Amon-Ra, Jefferson, Hampton, Garrett Wilson, Lamar, J. Taylor, Lamb, Jeanty, Herbert, Dart, Hurts, Jordyn Tyson, Bo Nix
+- **Bo Nix gone at $200 (revskip)** — 3× the $65 ceiling. QB2 target list pivots to Tua/Dak/Jordan Love/Lawrence/Richardson. $65 ceiling holds.
+- All 14 teams now identified and in SEED.teams: AmadorFSU, Chauncey, revskip, coleh44, kolt78, SunnyBrown, TimboDAsavage, tking1456, mhaas10, yaba1234, rcasper22, gpeisert1, Huddy20
+- Updated CLAUDE.md and long term plan across NFZ and FTZ
+- Synced FTZ picks through pick 26: Mendoza, Cooper Jr., Simpson, Germie Bernard, Zachariah Branch, Chris Brazzell II, Ja'Kobi Lane. Two picks remaining (3.09 at 33, 4.02 at 38).
+
 ## 2026-04-26 — Session 2 (Tracker build + draft start)
 - Auction went live during this session. Josh Allen nominated first — bid up to $251, won by AmadorFSU.
 - Bijan Robinson nominated second by tking.

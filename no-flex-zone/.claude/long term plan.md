@@ -25,7 +25,7 @@ The auction is live. 14 picks made league-wide. $304 remaining.
 ### Remaining budget breakdown
 | Slot | Budget | Notes |
 |---|---|---|
-| QB2 | $65 | Bo Nix preferred — non-negotiable need |
+| QB2 | $65 | Bo Nix gone — pivot to Tua/Dak/Love/Lawrence/Richardson |
 | WR (4 starters) | $169 | Stars-and-scrubs; room for real pieces |
 | RB (3 starters) | $30 | 3 × $10 minimum — punting RB intentionally |
 | Bench | $40 | Mostly $1 bids |
@@ -45,7 +45,7 @@ Bowers came in $51 over original $200 ceiling — WR/RB/bench budgets compressed
 - Run: `python3 -m http.server 8765` from `no-flex-zone/` directory
 - Open: `http://localhost:8765/auction-tracker.html`
 - State saves to localStorage (key: `nfz_v4`) — persists across reloads
-- SEED is current through pick 14; `loadState()` merges new lost picks without wiping existing state
+- SEED is current through pick 29; `loadState()` merges new lost picks without wiping existing state
 - Tracker is reusable template for future leagues
 - [x] Full visual redesign — "dimly-lit auction room" aesthetic (oxblood/brass, Fraunces + JetBrains Mono, chip brand mark)
 
