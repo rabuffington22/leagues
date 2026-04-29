@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Draft Tracker</title><!-- updated by initUI() -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23b3463f'/%3E%3Ctext x='16' y='22' text-anchor='middle' fill='%23f4ead2' font-family='Georgia,serif' font-weight='700' font-size='13'%3EXX%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-0:   #020203;
+      --bg-1:   #07070a;
+      --bg-2:   #0e0e12;
+      --bg-3:   #16161b;
+      --line:   rgba(220,200,160,0.06);
+      --line-2: rgba(220,200,160,0.14);
+
+      --text:   #f4ead2;
+      --text-2: #b3a988;
+      --text-3: #6f6852;
+      --text-4: #3a3829;
+
+      --accent:      #c9a14b;
+      --accent-2:    #e8c876;
+      --accent-deep: #8a6924;
+      --accent-soft: rgba(201,161,75,0.12);
+      --accent-line: rgba(201,161,75,0.36);
+
+      --good:      #7fbf6e;
+      --good-soft: rgba(127,191,110,0.10);
+      --good-line: rgba(127,191,110,0.32);
+
+      --warn:      #d4a259;
+      --bad:       #b3463f;
+      --bad-2:     #d56961;
+      --bad-deep:  #6e1f1b;
+      --bad-soft:  rgba(179,70,63,0.12);
+      --bad-soft-2:rgba(179,70,63,0.20);
+      --bad-line:  rgba(179,70,63,0.40);
+      --bad-line-2:rgba(179,70,63,0.60);
+
+      --serif: 'Fraunces', 'Times New Roman', Georgia, serif;
+      --mono:  'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+      --sans:  'Inter', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      color: var(--text);
+      font-family: var(--sans);
+      font-size: 13px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      font-feature-settings: "ss01", "cv11";
+    }
+
+    button { font-family: inherit; }
+    input  { font-family: inherit; }
+
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(ellipse at 50% -10%, rgba(201,161,75,0.05), transparent 45%),
+        radial-gradient(ellipse at 50% 120%, rgba(0,0,0,0.7), transparent 55%),
+        url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.04  0 0 0 0 0.04  0 0 0 0 0.03  0 0 0 0.16 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>"),
+        linear-gradient(180deg, #020203, #000000);
+      background-attachment: fixed;
+    }
+
+    .num, .mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+
+    .header {
+      position: relative;
+      background:
+        radial-gradient(1400px 500px at 18% -30%, rgba(232,200,118,0.07), transparent 60%),
+        radial-gradient(900px 400px at 88% -20%, rgba(201,161,75,0.04), transparent 70%),
+        linear-gradient(180deg, #07070a 0%, #020203 100%);
+      border-bottom: 1px solid var(--line);
+      box-shadow: 0 2px 24px rgba(0,0,0,0.5);
+    }
+    .header::before {
+      content: '';
+      position: absolute;
+      left: 0; right: 0; top: 0;
+      height: 3px;
+      background: linear-gradient(180deg, var(--accent-deep), var(--accent) 30%, var(--accent-2) 50%, var(--accent) 70%, var(--accent-deep));
+      box-shadow: 0 0 12px rgba(232,200,118,0.35);
+    }
+
+    .header-top {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      padding: 13px 32px 11px;
+      gap: 32px;
+    }
+
+    .brand { display: flex; align-items: flex-end; gap: 10px; min-width: 0; }
+
+    .brand-mark {
+      flex-shrink: 0;
+      padding: 0 14px;
+      border: 1px solid var(--bad-line);
+      background: var(--bad-soft);
+      align-self: stretch;
+      display: flex;
+      align-items: center;
+    }
+    .brand-mark-text {
+      font-family: var(--serif);
+      font-variation-settings: 'opsz' 144;
+      font-weight: 600;
+      font-size: 22px;
+      letter-spacing: 0.04em;
+      background: linear-gradient(180deg, var(--accent-2), var(--accent) 60%, var(--accent-deep));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .brand-text { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+
+    .brand-eyebrow {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.32em;
+      font-weight: 500;
+      color: var(--accent);
+      text-transform: uppercase;
+    }
+    .brand-eyebrow .sep { color: var(--bad); margin: 0 8px; opacity: 0.85; }
+
+    .brand-title {
+      font-family: var(--serif);
+      font-variation-settings: 'opsz' 144;
+      font-size: 21px;
+      font-weight: 600;
+      letter-spacing: -0.025em;
+      line-height: 0.95;
+      color: var(--text);
+      text-shadow: 0 1px 0 rgba(0,0,0,0.5), 0 0 30px rgba(244,234,210,0.06);
+    }
+    .brand-title .ital {
+      font-weight: 500;
+      background: linear-gradient(180deg, var(--accent-2), var(--accent) 60%, var(--accent-deep));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    /* BRAND SUB — update to match your league format */
+    .brand-sub {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text-3);
+      letter-spacing: 0.04em;
+      margin-top: 2px;
+    }
+
+    .header-actions { display: flex; align-items: center; gap: 14px; flex-shrink: 0; }
+
+    .live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--bad);
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      padding: 7px 12px 7px 13px;
+      background: linear-gradient(180deg, rgba(179,70,63,0.10), rgba(179,70,63,0.04));
+      border: 1px solid var(--bad-line);
+      border-radius: 4px;
+      box-shadow: inset 0 1px 0 rgba(255,180,170,0.08), 0 1px 0 rgba(0,0,0,0.4);
+    }
+    .live-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--bad);
+      animation: live-pulse 2s ease-in-out infinite;
+    }
+    @keyframes live-pulse {
+      0%, 100% { box-shadow: 0 0 8px 0 rgba(179,70,63,0.7); }
+      70%       { box-shadow: 0 0 0 6px rgba(179,70,63,0); }
+    }
+
+    .reset-btn {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-3);
+      background: transparent;
+      border: 1px solid var(--line-2);
+      border-radius: 4px;
+      padding: 7px 14px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .reset-btn:hover { color: var(--bad); border-color: var(--bad-line); background: var(--bad-soft); }
+
+    .budget-row {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      border-top: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(0,0,0,0.45), rgba(0,0,0,0.25) 50%), linear-gradient(180deg, var(--bg-1), var(--bg-0));
+      position: relative;
+    }
+    .budget-row::before {
+      content: '';
+      position: absolute;
+      left: 0; right: 0; top: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(201,161,75,0.45) 50%, transparent);
+    }
+    .budget-stat {
+      padding: 11px 19px 13px;
+      border-right: 1px solid var(--line);
+      position: relative;
+    }
+    .budget-stat:last-child { border-right: none; }
+    .budget-stat label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--text-3);
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      font-weight: 500;
+      margin-bottom: 6px;
+    }
+    .budget-stat label::before { content: '♦'; color: var(--accent); font-size: 9px; }
+    .budget-stat .val {
+      font-family: var(--mono);
+      font-variant-numeric: tabular-nums;
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      color: var(--text);
+    }
+    .stat-sub { font-family: var(--mono); font-size: 10px; color: var(--text-3); margin-top: 6px; letter-spacing: 0.02em; }
+    .val-good   { color: var(--good) !important; }
+    .val-warn   { color: var(--warn) !important; }
+    .val-danger { color: var(--bad)  !important; }
+
+    .score-lines { display: flex; flex-direction: column; gap: 5px; margin-top: 9px; }
+    .score-line { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+    .sl-cat { font-family: var(--mono); font-size: 10px; color: var(--text-3); letter-spacing: 0.1em; text-transform: uppercase; }
+    .sl-val { font-family: var(--mono); font-size: 11px; font-weight: 600; color: var(--text); letter-spacing: -0.01em; font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .sl-val.neg { color: var(--bad-2); }
+
+    .tabs {
+      display: flex;
+      padding: 0 32px;
+      background: var(--bg-0);
+      border-top: 1px solid var(--line);
+    }
+    .tab {
+      padding: 14px 0;
+      margin-right: 32px;
+      cursor: pointer;
+      border-bottom: 1px solid transparent;
+      color: var(--text-3);
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      transition: color 0.12s, border-color 0.12s;
+      user-select: none;
+      margin-bottom: -1px;
+      position: relative;
+    }
+    .tab:hover { color: var(--text-2); }
+    .tab.active { color: var(--bad-2); border-bottom-color: var(--bad); text-shadow: 0 0 12px rgba(213,105,97,0.3); }
+    .tab.active::before {
+      content: '';
+      position: absolute;
+      left: 0; right: 0; bottom: -1px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--bad-2), transparent);
+      filter: blur(2px);
+      opacity: 0.7;
+    }
+
+    .content { padding: 24px 32px 64px; max-width: 1600px; }
+
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 18px;
+      padding-bottom: 16px;
+      position: relative;
+      border-bottom: none;
+    }
+    .section-header::after {
+      content: '';
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent 0%, rgba(201,161,75,0.0) 2%, rgba(201,161,75,0.45) 18%, rgba(201,161,75,0.55) 48%, transparent 49%, transparent 51%, rgba(201,161,75,0.55) 52%, rgba(201,161,75,0.45) 82%, rgba(201,161,75,0.0) 98%, transparent 100%);
+    }
+    .section-header::before {
+      content: '';
+      position: absolute;
+      left: 50%; bottom: -4px;
+      width: 9px; height: 9px;
+      transform: translateX(-50%) rotate(45deg);
+      background: linear-gradient(135deg, var(--bad-2), var(--bad) 50%, var(--bad-deep));
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,0.4), 0 0 8px rgba(201,161,75,0.3), 0 0 0 3px var(--bg-0);
+    }
+    .section-title { font-family: var(--serif); font-variation-settings: 'opsz' 144; font-size: 22px; font-weight: 500; letter-spacing: -0.02em; color: var(--bad-2); }
+    .section-title .ital { font-style: normal; color: inherit; font-weight: 400; }
+    .section-meta { font-family: var(--mono); font-size: 11px; color: var(--text-3); letter-spacing: 0.02em; }
+    .section-meta .hi { color: var(--text); font-weight: 500; }
+
+    .pos-filter { display: flex; gap: 6px; margin-bottom: 20px; }
+    .pos-btn { padding: 5px 14px; border-radius: 4px; border: 1px solid var(--line-2); font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; background: transparent; color: var(--text-3); transition: all 0.12s; }
+    .pos-btn:hover { color: var(--text-2); background: var(--bg-2); }
+    .pos-btn.active { color: var(--bad-2); border-color: var(--bad-line); background: var(--bad-soft); }
+
+    .starter-divider { display: flex; align-items: center; gap: 12px; margin: 14px 0 6px; font-family: var(--mono); font-size: 10px; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.18em; font-weight: 500; }
+    .starter-divider::after { content: ''; flex: 1; height: 1px; background: var(--line); }
+    .gone-divider { font-family: var(--mono); font-size: 10px; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.18em; padding: 18px 0 6px; }
+
+    .player-list { display: flex; flex-direction: column; }
+
+    .player-row {
+      display: grid;
+      grid-template-columns: 36px 1fr 50px auto;
+      align-items: center;
+      gap: 14px;
+      padding: 11px 14px;
+      background: transparent;
+      border-bottom: 1px solid var(--line);
+      transition: background 0.12s;
+    }
+    .player-row:hover:not(.won):not(.lost) { background: var(--bg-1); }
+    .player-row.won { background: linear-gradient(90deg, rgba(127,191,110,0.18), rgba(127,191,110,0.05)); border-bottom-color: var(--good-line); box-shadow: inset 3px 0 0 var(--good); }
+    .player-row.lost { opacity: 0.42; }
+
+    .player-rank { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 12px; color: var(--text-3); text-align: right; }
+
+    .player-info { min-width: 0; display: flex; gap: 12px; align-items: center; }
+    .player-name { flex: 0 0 170px; }
+    .name-pos {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--bad-2);
+      letter-spacing: 0.06em;
+      margin-left: 5px;
+      vertical-align: middle;
+    }
+    .player-meta { flex: 1; min-width: 0; }
+    .player-name { font-weight: 600; font-size: 14px; letter-spacing: -0.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text); }
+    .player-note { font-size: 11px; color: var(--text-3); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    .player-pos { font-family: var(--mono); font-size: 11px; font-weight: 600; color: var(--bad-2); text-align: center; letter-spacing: 0.04em; }
+
+    .player-actions { display: flex; gap: 6px; align-items: center; justify-content: flex-end; flex-shrink: 0; }
+
+    .won-label { font-family: var(--mono); color: var(--good); font-weight: 600; font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; }
+    .won-pick  { font-family: var(--mono); font-size: 11px; color: var(--text-3); letter-spacing: 0.02em; }
+    .lost-label { font-family: var(--mono); color: var(--text-3); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; }
+
+    .btn { padding: 6px 12px; border-radius: 4px; border: 1px solid transparent; font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; transition: all 0.12s; white-space: nowrap; background: transparent; color: var(--text-2); }
+    .btn:hover { color: var(--text); border-color: var(--line-2); }
+    .btn-win { background: linear-gradient(180deg, rgba(201,161,75,0.20), rgba(201,161,75,0.08)); border-color: var(--accent-line); color: var(--accent-2); box-shadow: inset 0 1px 0 rgba(232,200,118,0.18), inset 0 -1px 0 rgba(0,0,0,0.25); }
+    .btn-win:hover { background: linear-gradient(180deg, rgba(232,200,118,0.30), rgba(201,161,75,0.14)); border-color: var(--accent); color: var(--accent-2); }
+    .btn-lost { background: transparent; border-color: var(--bad-line); color: var(--bad); }
+    .btn-lost:hover { color: var(--bad-2); border-color: var(--bad); background: var(--bad-soft-2); }
+    .btn-undo { background: transparent; border-color: var(--line); color: var(--text-3); padding: 5px 10px; }
+    .btn-undo:hover { color: var(--text); border-color: var(--line-2); }
+
+    .pick-controls { display: flex; align-items: center; gap: 8px; margin-bottom: 20px; }
+    .btn-pick { padding: 6px 14px; border-radius: 4px; border: 1px solid var(--line-2); font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; background: transparent; color: var(--text-3); transition: all 0.12s; }
+    .btn-pick:hover { color: var(--text-2); background: var(--bg-2); }
+    .btn-skip { background: linear-gradient(180deg, rgba(179,70,63,0.18), rgba(179,70,63,0.07)); border-color: var(--bad-line); color: var(--bad-2); }
+    .btn-skip:hover { background: linear-gradient(180deg, rgba(179,70,63,0.28), rgba(179,70,63,0.14)); border-color: var(--bad); }
+    .pick-label-inline { font-family: var(--mono); font-size: 11px; color: var(--text-3); letter-spacing: 0.06em; }
+    .pick-label-inline .hi { color: var(--text-2); font-weight: 500; }
+
+    .draft-grid { display: grid; gap: 10px; }
+    .round-col { display: flex; flex-direction: column; gap: 3px; }
+    .round-hdr { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.18em; color: var(--text-3); padding: 6px 10px 8px; border-bottom: 1px solid var(--line); margin-bottom: 3px; }
+    .board-cell { background: var(--bg-1); border: 1px solid var(--line); padding: 7px 10px; min-height: 52px; display: flex; flex-direction: column; gap: 2px; }
+    .board-cell.ryan { border-color: var(--bad-line); background: linear-gradient(180deg, rgba(179,70,63,0.08), rgba(179,70,63,0.03)); }
+    .board-cell.current { border-color: var(--accent-line) !important; background: var(--accent-soft) !important; box-shadow: 0 0 0 1px var(--accent-line), inset 0 1px 0 rgba(232,200,118,0.1); }
+    .cell-pick-label { font-family: var(--mono); font-size: 10px; color: var(--text-3); letter-spacing: 0.04em; }
+    .board-cell.ryan .cell-pick-label { color: var(--bad-2); }
+    .board-cell.current .cell-pick-label { color: var(--accent-2); }
+    .cell-team { font-family: var(--mono); font-size: 9px; color: var(--text-4); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .board-cell.ryan .cell-team { color: rgba(213,105,97,0.5); }
+    .cell-player { font-size: 11px; font-weight: 500; color: var(--text-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-top: 1px; }
+    .board-cell.ryan .cell-player { color: var(--good); }
+
+    .roster-columns { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 16px; }
+    .roster-section { background: linear-gradient(180deg, var(--bg-1), #020203); border: 1px solid var(--line); border-radius: 6px; overflow: hidden; display: flex; flex-direction: column; position: relative; box-shadow: inset 0 1px 0 rgba(220,200,160,0.04), 0 1px 2px rgba(0,0,0,0.5); }
+    .roster-section::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--bad-line), transparent); opacity: 0.75; }
+    .roster-section-header { display: flex; align-items: baseline; gap: 10px; padding: 14px 16px 12px; border-bottom: 1px solid var(--line); background: var(--bg-1); }
+    .roster-section-pos { font-family: var(--serif); font-variation-settings: 'opsz' 144; font-size: 26px; font-weight: 600; letter-spacing: -0.02em; line-height: 1; color: var(--bad-2); }
+    .roster-section-count { font-family: var(--mono); font-size: 11px; color: var(--text-3); letter-spacing: 0.02em; }
+    .roster-slot { display: grid; grid-template-columns: 44px 1fr auto; align-items: center; gap: 10px; padding: 9px 16px; border-top: 1px solid var(--line); }
+    .roster-slot:first-of-type { border-top: none; }
+    .slot-label { font-family: var(--mono); font-size: 10px; font-weight: 500; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.08em; }
+    .slot-player { font-weight: 500; font-size: 12px; letter-spacing: -0.005em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .slot-pick { font-family: var(--mono); font-size: 11px; color: var(--good); white-space: nowrap; }
+
+    .empty-state { color: var(--text-3); padding: 24px 0; font-size: 13px; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+  </style>
+</head>
+<body>
+
+<!-- ── Header ── -->
+<div class="header">
+  <div class="header-top">
+    <div class="brand">
+      <!-- initUI() sets brand-mark-text and brand-title from CONFIGURE constants -->
+      <div class="brand-mark"><span class="brand-mark-text">XX</span></div>
+      <div class="brand-text">
+        <div class="brand-eyebrow">Fantasy Football<span class="sep">·</span>2026 Rookie Draft</div>
+        <div class="brand-title">League Name <span class="ital">Draft</span></div>
+        <!-- BRAND SUB: update to match your league, e.g. "est. 2024 · 12-team · 4 rounds · superflex ppr" -->
+        <div class="brand-sub">N-team · ? rounds · ?</div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <span class="live-badge"><span class="live-dot"></span>Live <span id="last-sync" style="font-size:9px;opacity:0.55;margin-left:5px;font-weight:400;letter-spacing:0.04em;"></span></span>
+      <button class="reset-btn" onclick="resetDraft()">Reset</button>
+    </div>
+  </div>
+
+  <div class="budget-row">
+    <div class="budget-stat">
+      <label>Current Pick</label>
+      <div class="val" id="stat-current">1</div>
+      <div class="stat-sub" id="stat-sub-total">of ? total picks</div>
+    </div>
+    <div class="budget-stat">
+      <label>Picks Left</label>
+      <div class="val" id="stat-left">—</div>
+      <div class="stat-sub" id="stat-sub-left">of ? Ryan picks</div>
+    </div>
+    <div class="budget-stat">
+      <label>Next Pick</label>
+      <div class="val" id="stat-next">—</div>
+      <div class="stat-sub" id="stat-sub-next">—</div>
+    </div>
+    <div class="budget-stat">
+      <label>Status</label>
+      <div class="val" id="stat-status" style="font-size:22px;padding-top:6px;">—</div>
+      <div class="stat-sub" id="stat-sub-status">—</div>
+    </div>
+    <div class="budget-stat">
+      <!-- SCORING CARD: update to match your league's scoring -->
+      <label>Scoring</label>
+      <div class="score-lines">
+        <div class="score-line"><span class="sl-cat">Pass TD</span><span class="sl-val">+4 pts</span></div>
+        <div class="score-line"><span class="sl-cat">PPR</span><span class="sl-val">1.0 / rec</span></div>
+        <div class="score-line"><span class="sl-cat">SuperFlex</span><span class="sl-val">QB in flex</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" data-tab="pool">Pool</div>
+    <div class="tab" data-tab="board">Board</div>
+    <div class="tab" data-tab="roster">Roster</div>
+  </div>
+</div>
+
+<!-- ── Content ── -->
+<div class="content">
+
+  <div class="tab-panel active" id="tab-pool">
+    <div class="section-header">
+      <div class="section-title">Draft <span class="ital">Pool</span></div>
+      <div class="section-meta" id="meta-pool"></div>
+    </div>
+    <div class="pos-filter">
+      <button class="pos-btn active" onclick="setPos('ALL',this)">All</button>
+      <button class="pos-btn" onclick="setPos('QB',this)">QB</button>
+      <button class="pos-btn" onclick="setPos('RB',this)">RB</button>
+      <button class="pos-btn" onclick="setPos('WR',this)">WR</button>
+      <button class="pos-btn" onclick="setPos('TE',this)">TE</button>
+    </div>
+    <div class="pick-controls">
+      <button class="btn-pick" onclick="adjustPick(-1)">← Back</button>
+      <button class="btn-pick btn-skip" onclick="adjustPick(1)">Skip Pick +1 →</button>
+      <span class="pick-label-inline">pick <span class="hi" id="pick-inline">1</span> <span id="pick-of-total">of ?</span></span>
+    </div>
+    <div class="player-list" id="list-pool"></div>
+  </div>
+
+  <div class="tab-panel" id="tab-board">
+    <div class="section-header">
+      <div class="section-title">Draft <span class="ital">Board</span></div>
+      <div class="section-meta" id="meta-board"></div>
+    </div>
+    <div class="draft-grid" id="board-grid"></div>
+  </div>
+
+  <div class="tab-panel" id="tab-roster">
+    <div class="section-header">
+      <div class="section-title">Current <span class="ital">Roster</span></div>
+      <div class="section-meta" id="meta-roster"></div>
+    </div>
+    <div id="roster-content"></div>
+  </div>
+
+</div>
+
+<script>
+// ╔══════════════════════════════════════════════════════════════════════════╗
+// ║  STEP 1 — CONFIGURE THIS SECTION BEFORE DRAFT DAY                       ║
+// ╚══════════════════════════════════════════════════════════════════════════╝
+
+const LEAGUE_ABBR = 'XX';           // 2–3 chars for brand mark
+const LEAGUE_NAME = 'League Name';  // full name, shown in header and title bar
+const STORAGE_KEY = 'CHANGEME_v1';  // unique per league — bump _v1→_v2 to wipe state
+
+const TOTAL  = 48;   // total picks = TEAMS × ROUNDS
+const TEAMS  = 12;   // number of teams
+const ROUNDS = 4;    // number of rounds
+
+// Ryan's Sleeper roster_id in this league.
+// GET https://api.sleeper.app/v1/league/{league_id}/rosters → find your entry
+const MY_ROSTER_ID = 1;
+
+// Draft slot → original Sleeper roster_id (before any trades)
+// GET https://api.sleeper.app/v1/draft/{draft_id} → slot_to_roster_id field
+const SLOT_TO_ROSTER = {
+  1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6,
+  7: 7, 8: 8, 9: 9, 10: 10, 11: 11, 12: 12,
+};
+
+// roster_id → display name
+// GET https://api.sleeper.app/v1/league/{league_id}/users for names
+const ROSTER_NAME = {
+  1: 'Team 1', 2: 'Team 2', 3: 'Team 3',  4: 'Team 4',
+  5: 'Team 5', 6: 'Team 6', 7: 'Team 7',  8: 'Team 8',
+  9: 'Team 9', 10: 'Team 10', 11: 'Team 11', 12: 'Team 12',
+};
+
+// Traded picks — add as trades are announced.
+// Key format: "round:original_roster_id" → current owner roster_id
+// Example: '1:3': 7  means team 7 now owns team 3's 1st round pick
+const TRADE_MAP = {
+  // '1:3': 7,
+};
+
+// Sleeper live sync
+// DRAFT_ID: grab from the draft URL on sleeper.com
+// RYAN_UID: 160225092348297216 (alpacalypse) — don't change
+const DRAFT_ID = 'FILL_IN';
+const RYAN_UID = '160225092348297216';
+
+// Name aliases for Sleeper mismatches (Jr., II, etc. sometimes omitted in API)
+const ALIASES = {
+  // 'sleeper full name lowercase': 'player_id',
+  // 'omar cooper':     'ocooper',
+};
+
+// ╔══════════════════════════════════════════════════════════════════════════╗
+// ║  STEP 2 — EXISTING DYNASTY ROSTER                                        ║
+// ║  Leave as [] if this is a startup draft (no existing roster).            ║
+// ║  For add-on rookie drafts, pull from Sleeper and fill in below.          ║
+// ╚══════════════════════════════════════════════════════════════════════════╝
+
+const DYNASTY_ROSTER = [];
+// Example entry: { name: 'Justin Jefferson', pos: 'WR', team: 'MIN', age: 26, starter: true }
+
+// ╔══════════════════════════════════════════════════════════════════════════╗
+// ║  STEP 3 — PLAYER LIST                                                    ║
+// ║  Current list is the 2026 NFL Draft class. For future classes:           ║
+// ║  replace PLAYERS, COLLEGE, and NFL_PICKS entirely.                       ║
+// ╚══════════════════════════════════════════════════════════════════════════╝
+
+// rnk: [_, FantasyPros SF, PFF SF] — null = unranked
+// combine: ht, wt, forty (null = didn't run/not available), ras = RAS score (optional)
+const PLAYERS = [
+  { id:'jlove',      name:'Jeremiyah Love',     pos:'RB', nfl:'ARI', rnk:[1,  1,  1], ht:'6-0',  wt:212, forty:4.36 },
+  { id:'ctate',      name:'Carnell Tate',        pos:'WR', nfl:'TEN', rnk:[2,  3,  2], ht:'6-2',  wt:192, forty:4.53 },
+  { id:'fmendoza',   name:'Fernando Mendoza',    pos:'QB', nfl:'LVR', rnk:[3,  2,  5], ht:'6-4',  wt:236, forty:null },
+  { id:'jtyson',     name:'Jordyn Tyson',        pos:'WR', nfl:'NOR', rnk:[5,  4,  4], ht:'6-2',  wt:203, forty:null },
+  { id:'mlemon',     name:'Makai Lemon',         pos:'WR', nfl:'PHI', rnk:[4,  5,  3], ht:'5-11', wt:192, forty:null },
+  { id:'kconc',      name:'KC Concepcion',       pos:'WR', nfl:'CLE', rnk:[7,  8,  8], ht:'5-11', wt:196, forty:null },
+  { id:'jprice',     name:'Jadarian Price',      pos:'RB', nfl:'SEA', rnk:[6,  6, 10], ht:'5-10', wt:203, forty:4.49, ras:83 },
+  { id:'ksadiq',     name:'Kenyon Sadiq',        pos:'TE', nfl:'NYJ', rnk:[8, 12,  9], ht:'6-3',  wt:241, forty:4.39, ras:96 },
+  { id:'tsimpson',   name:'Ty Simpson',          pos:'QB', nfl:'LAR', rnk:[10, 10, 15], ht:'6-1', wt:211, forty:null },
+  { id:'ocooper',    name:'Omar Cooper Jr.',     pos:'WR', nfl:'NYJ', rnk:[9,  9,  6], ht:'6-0',  wt:196, forty:4.42, ras:92 },
+  { id:'dboston',    name:'Denzel Boston',       pos:'WR', nfl:'CLE', rnk:[null, 11,  7], ht:'6-3', wt:212, forty:null },
+  { id:'estowers',   name:'Eli Stowers',         pos:'TE', nfl:'PHI', rnk:[null, 16, 17], ht:'6-4', wt:239, forty:4.51, ras:94 },
+  { id:'jcoleman',   name:'Jonah Coleman',       pos:'RB', nfl:'DEN', rnk:[null, 19, 12], ht:'5-8', wt:220, forty:null },
+  { id:'nsingleton', name:'Nicholas Singleton',  pos:'RB', nfl:'TEN', rnk:[null, 22, 22], ht:'6-0', wt:219, forty:null },
+  { id:'cbell',      name:'Chris Bell',          pos:'WR', nfl:'MIA', rnk:[null, 14, 14], ht:'6-2', wt:222, forty:null },
+  { id:'gbernard',   name:'Germie Bernard',      pos:'WR', nfl:'PIT', rnk:[null, 13, 13], ht:'6-0', wt:206, forty:4.45, ras:91 },
+  { id:'cbrazzell',  name:'Chris Brazzell II',   pos:'WR', nfl:'CAR', rnk:[null, 17, 17], ht:'6-4', wt:198, forty:4.37 },
+  { id:'esarratt',   name:'Elijah Sarratt',      pos:'WR', nfl:'BAL', rnk:[null, 27, 27], ht:'6-2', wt:215, forty:null, ras:63 },
+  { id:'mwashjr',    name:'Mike Washington Jr.', pos:'RB', nfl:'LVR', rnk:[null, 20, 11], ht:'6-1', wt:223, forty:4.33, ras:99 },
+  { id:'ejohnson',   name:'Emmett Johnson',      pos:'RB', nfl:'KCC', rnk:[null, 23, 13], ht:'5-10',wt:202, forty:4.56 },
+  { id:'mfields',    name:'Malachi Fields',      pos:'WR', nfl:'NYG', rnk:[null, 15, 15], ht:'6-4', wt:218, forty:4.61, ras:75 },
+  { id:'zbranch',    name:'Zachariah Branch',    pos:'WR', nfl:'ATL', rnk:[null, 18, 18], ht:'5-9', wt:177, forty:4.35, ras:91 },
+  { id:'gnuss',      name:'Garrett Nussmeier',   pos:'QB', nfl:'KCC', rnk:[null, 40, 40], ht:'6-2', wt:203, forty:null },
+  { id:'kallen',     name:'Kaytron Allen',       pos:'RB', nfl:'WAS', rnk:[null, 39, 24], ht:'5-11',wt:216, forty:null },
+  { id:'jklane',     name:"Ja'Kobi Lane",        pos:'WR', nfl:'BAL', rnk:[null, null, null], ht:'6-4', wt:208, forty:4.47 },
+  { id:'awilliams',  name:'Antonio Williams',    pos:'WR', nfl:'WAS', rnk:[null, 11, 11], ht:'6-0', wt:187, forty:4.41 },
+  { id:'dstrib',     name:"De'Zhaun Stribling",  pos:'WR', nfl:'SF',  rnk:[null, 24, 24], ht:'6-2', wt:207, forty:4.36 },
+  { id:'sbell',      name:'Skyler Bell',         pos:'WR', nfl:'BUF', rnk:[null, 34, null], ht:'6-0', wt:192, forty:4.40 },
+  { id:'thurst',     name:'Ted Hurst',           pos:'WR', nfl:'TBB', rnk:[null, 21, 21], ht:'6-4', wt:210, forty:4.42 },
+  { id:'mklare',     name:'Max Klare',           pos:'TE', nfl:'LAR', rnk:[null, 28, 28], ht:'6-4', wt:246, forty:null },
+  { id:'odelp',      name:'Oscar Delp',          pos:'TE', nfl:'NOR', rnk:[null, 29, 29], ht:null,  wt:null, forty:null },
+  { id:'cklubnik',   name:'Cade Klubnik',        pos:'QB', nfl:'NYJ', rnk:[null, 38, 32], ht:'6-2', wt:207, forty:4.69 },
+  { id:'kcoleman',   name:'Kevin Coleman Jr.',   pos:'WR', nfl:'MIA', rnk:[null, null, null], ht:'5-10', wt:179, forty:4.49 },
+  { id:'cbeck',      name:'Carson Beck',         pos:'QB', nfl:'ARI', rnk:[null, 33, 49], ht:'6-5', wt:233, forty:null },
+  { id:'dclaiborne', name:'Demond Claiborne',    pos:'RB', nfl:'MIN', rnk:[null, 30, 30], ht:'5-10',wt:188, forty:4.37 },
+  { id:'mtrigg',     name:'Michael Trigg',       pos:'TE', nfl:'UFA', rnk:[null, 34, 34], ht:'6-4', wt:240, forty:4.70 },
+  { id:'dallar',     name:'Drew Allar',          pos:'QB', nfl:'PIT', rnk:[null, 26, 46], ht:'6-5', wt:235, forty:null },
+  { id:'dburks',     name:'Deion Burks',         pos:'WR', nfl:'WAS', rnk:[null, null, null], ht:'5-9', wt:180, forty:4.30 },
+  { id:'jmiller',    name:'Jam Miller',          pos:'RB', nfl:'NEP', rnk:[null, null, null], ht:null, wt:null, forty:null },
+  { id:'arandall',   name:'Adam Randall',        pos:'RB', nfl:'BAL', rnk:[null, 40, 40], ht:'6-3', wt:232, forty:4.50 },
+];
+
+// College stats — s=school, y=academic year, st=stats
+// QB: cmp/att/yds/td/int | RB: car/yds/td/rec | WR/TE: rec/yds/td
+const COLLEGE = {
+  jlove:      { s:'Notre Dame',  y:'Jr',    st:{ car:199, yds:1372, td:18, rec:27 } },
+  ctate:      { s:'Ohio St',     y:'Jr',    st:{ rec:51, yds:875, td:9 } },
+  fmendoza:   { s:'Indiana',     y:'Jr',    st:{ cmp:273, att:379, yds:3535, td:41, int:6 } },
+  jtyson:     { s:'Arizona St',  y:'RS Jr', st:{ rec:61, yds:711, td:8 } },
+  mlemon:     { s:'USC',         y:'Jr',    st:{ rec:79, yds:1156, td:11 } },
+  kconc:      { s:'Texas A&M',   y:'Jr',    st:{ rec:61, yds:919, td:9 } },
+  jprice:     { s:'Notre Dame',  y:'RS Jr', st:{ car:113, yds:674, td:11, rec:6 } },
+  ksadiq:     { s:'Oregon',      y:'Jr',    st:{ rec:51, yds:560, td:8 } },
+  tsimpson:   { s:'Alabama',     y:'RS Jr', st:{ cmp:305, att:473, yds:3567, td:28, int:5 } },
+  ocooper:    { s:'Indiana',     y:'RS Jr', st:{ rec:69, yds:937, td:13 } },
+  dboston:    { s:'Washington',  y:'RS Jr', st:{ rec:62, yds:881, td:11 } },
+  estowers:   { s:'Vanderbilt',  y:'Grad',  st:{ rec:62, yds:769, td:4 } },
+  jcoleman:   { s:'Washington',  y:'Sr',    st:{ car:156, yds:758, td:15, rec:31 } },
+  nsingleton: { s:'Penn St',     y:'Sr',    st:{ car:124, yds:547, td:13, rec:22 } },
+  cbell:      { s:'Louisville',  y:'Sr',    st:{ rec:72, yds:917, td:6 } },
+  gbernard:   { s:'Alabama',     y:'Sr',    st:{ rec:64, yds:862, td:7 } },
+  cbrazzell:  { s:'Tennessee',   y:'Sr',    st:{ rec:62, yds:1017, td:9 } },
+  esarratt:   { s:'Indiana',     y:'Sr',    st:{ rec:65, yds:830, td:15 } },
+  mwashjr:    { s:'Arkansas',    y:'Sr',    st:{ car:167, yds:1070, td:8, rec:28 } },
+  ejohnson:   { s:'Nebraska',    y:'Jr',    st:{ car:251, yds:1450, td:12, rec:46 } },
+  mfields:    { s:'Notre Dame',  y:'RS Sr', st:{ rec:36, yds:630, td:5 } },
+  zbranch:    { s:'Georgia',     y:'Jr',    st:{ rec:81, yds:811, td:6 } },
+  gnuss:      { s:'LSU',         y:'RS Sr', st:{ cmp:194, att:288, yds:1927, td:12, int:5 } },
+  kallen:     { s:'Penn St',     y:'Sr',    st:{ car:210, yds:1303, td:15 } },
+  jklane:     { s:'USC',         y:'Jr',    st:{ rec:49, yds:745, td:4 } },
+  awilliams:  { s:'Clemson',     y:'RS Sr', st:{ rec:55, yds:604, td:4 } },
+  dstrib:     { s:'Ole Miss',    y:'RS Sr', st:{ rec:55, yds:811, td:6 } },
+  sbell:      { s:'UConn',       y:'RS Sr', st:{ rec:101, yds:1278, td:13 } },
+  thurst:     { s:'Georgia St',  y:'Sr',    st:{ rec:71, yds:1004, td:6 } },
+  mklare:     { s:'Ohio St',     y:'RS So', st:{ rec:43, yds:448, td:2 } },
+  odelp:      { s:'Georgia',     y:'Sr',    st:{ rec:20, yds:261, td:1 } },
+  cklubnik:   { s:'Clemson',     y:'Sr',    st:{ cmp:257, att:392, yds:2943, td:16, int:6 } },
+  kcoleman:   { s:'Missouri',    y:'RS Sr', st:{ rec:66, yds:732, td:1 } },
+  cbeck:      { s:'Miami',       y:'RS Sr', st:{ cmp:346, att:494, yds:3995, td:28, int:10 } },
+  dclaiborne: { s:'Wake Forest', y:'Sr',    st:{ car:179, yds:907, td:10 } },
+  mtrigg:     { s:'Baylor',      y:'RS Sr', st:{ rec:50, yds:694, td:6 } },
+  dallar:     { s:'Penn St',     y:'Sr',    st:{ cmp:103, att:159, yds:1100, td:8, int:3 } },
+  dburks:     { s:'Oklahoma',    y:'Sr',    st:{ rec:57, yds:620, td:4 } },
+  jmiller:    { s:'Alabama',     y:'Sr',    st:{ car:123, yds:493, td:4, rec:18 } },
+  arandall:   { s:'Clemson',     y:'RS Sr', st:{ car:168, yds:814, td:10, rec:36 } },
+};
+
+// NFL Draft positions (2026) — [round, overall] — null = UDFA
+const NFL_PICKS = {
+  fmendoza:   [1,  1],  jlove:      [1,  3],  ctate:      [1,  4],
+  jtyson:     [1,  8],  tsimpson:   [1, 13],  ksadiq:     [1, 16],
+  mlemon:     [1, 20],  kconc:      [1, 24],  ocooper:    [1, 30],
+  jprice:     [1, 32],  dstrib:     [2, 33],  dboston:    [2, 39],
+  gbernard:   [2, 47],  estowers:   [2, 54],  mklare:     [2, 61],
+  cbeck:      [3, 65],  awilliams:  [3, 71],  odelp:      [3, 73],
+  mfields:    [3, 74],  dallar:     [3, 76],  zbranch:    [3, 79],
+  jklane:     [3, 80],  cbrazzell:  [3, 83],  thurst:     [3, 84],
+  cbell:      [3, 94],  jcoleman:   [4, 108], cklubnik:   [4, 110],
+  esarratt:   [4, 115], mwashjr:    [4, 122], sbell:      [4, 125],
+  ejohnson:   [5, 161], nsingleton: [5, 165], arandall:   [5, 174],
+  kcoleman:   [5, 177], kallen:     [6, 187], dclaiborne: [6, 198],
+  jmiller:    [7, 245], gnuss:      [7, 249], dburks:     [7, 254],
+  mtrigg:     null,
+};
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+
+function pickLabel(n) {
+  const r = Math.ceil(n / TEAMS);
+  const s = ((n - 1) % TEAMS) + 1;
+  return `${r}.${String(s).padStart(2, '0')}`;
+}
+function slotOf(n)  { return ((n - 1) % TEAMS) + 1; }
+function ownerOf(n) { const r = Math.ceil(n / TEAMS), s = slotOf(n), orig = SLOT_TO_ROSTER[s]; return TRADE_MAP[`${r}:${orig}`] ?? orig; }
+function isRyan(n)  { return ownerOf(n) === MY_ROSTER_ID; }
+function nextRyan(from) { for (let i = from; i <= TOTAL; i++) if (isRyan(i)) return i; return null; }
+function picksLeft(from) { let c = 0; for (let i = from; i <= TOTAL; i++) if (isRyan(i)) c++; return c; }
+
+// Total picks Ryan has across all rounds (computed once)
+const MY_TOTAL_PICKS = Array.from({ length: TOTAL }, (_, i) => i + 1).filter(n => isRyan(n)).length;
+
+// ── State ─────────────────────────────────────────────────────────────────────
+
+const SEED = {
+  cur:   1,
+  picks: {},
+  gone:  {},
+};
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return JSON.parse(JSON.stringify(SEED));
+    const s = JSON.parse(raw);
+    if (!s.picks) s.picks = {};
+    if (!s.gone)  s.gone  = {};
+    if (!s.cur)   s.cur   = 1;
+    return s;
+  } catch { return JSON.parse(JSON.stringify(SEED)); }
+}
+function save() { localStorage.setItem(STORAGE_KEY, JSON.stringify(S)); }
+
+let S = loadState();
+
+// ── Actions ───────────────────────────────────────────────────────────────────
+
+function markMine(id) {
+  const p = PLAYERS.find(x => x.id === id);
+  if (!p) return;
+  S.picks[id] = { name: p.name, pos: p.pos, nfl: p.nfl, pickNum: S.cur };
+  delete S.gone[id];
+  S.cur = Math.min(S.cur + 1, TOTAL + 1);
+  save(); render();
+}
+
+function markGone(id) {
+  const p = PLAYERS.find(x => x.id === id);
+  if (!p) return;
+  S.gone[id] = { name: p.name, pickNum: S.cur };
+  delete S.picks[id];
+  S.cur = Math.min(S.cur + 1, TOTAL + 1);
+  save(); render();
+}
+
+function undoPick(id) {
+  delete S.picks[id];
+  delete S.gone[id];
+  save(); render();
+}
+
+function adjustPick(d) {
+  S.cur = Math.max(1, Math.min(TOTAL + 1, S.cur + d));
+  save(); render();
+}
+
+function resetDraft() {
+  if (!confirm('Reset all draft data?')) return;
+  localStorage.removeItem(STORAGE_KEY);
+  S = JSON.parse(JSON.stringify(SEED));
+  save(); render();
+}
+
+// ── Tab switching ─────────────────────────────────────────────────────────────
+
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+    render();
+  });
+});
+
+let activePos = 'ALL';
+
+function setPos(pos, btn) {
+  activePos = pos;
+  document.querySelectorAll('.pos-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderPool();
+}
+
+// ── Init UI ───────────────────────────────────────────────────────────────────
+
+function initUI() {
+  document.title = `${LEAGUE_NAME} Draft Tracker`;
+  const markEl = document.querySelector('.brand-mark-text');
+  if (markEl) markEl.textContent = LEAGUE_ABBR;
+  const titleEl = document.querySelector('.brand-title');
+  if (titleEl) titleEl.innerHTML = `${LEAGUE_NAME} <span class="ital">Draft</span>`;
+  const totalEl = document.getElementById('stat-sub-total');
+  if (totalEl) totalEl.textContent = `of ${TOTAL} total picks`;
+  const pickOfEl = document.getElementById('pick-of-total');
+  if (pickOfEl) pickOfEl.textContent = `of ${TOTAL}`;
+  const boardMetaEl = document.getElementById('meta-board');
+  if (boardMetaEl) boardMetaEl.textContent = `${TEAMS} teams · linear · ${ROUNDS} rounds`;
+}
+
+// ── Render: Header Stats ──────────────────────────────────────────────────────
+
+function renderStats() {
+  const cur    = Math.min(S.cur, TOTAL);
+  const nLeft  = picksLeft(S.cur);
+  const next   = nextRyan(S.cur);
+  const myPicks = Object.keys(S.picks).length;
+
+  document.getElementById('stat-current').textContent  = cur;
+  document.getElementById('stat-left').textContent     = nLeft;
+  document.getElementById('stat-sub-left').textContent = `of ${MY_TOTAL_PICKS} · ${myPicks} drafted`;
+  document.getElementById('pick-inline').textContent   = cur;
+
+  if (next) {
+    document.getElementById('stat-next').textContent     = pickLabel(next);
+    const away = next - S.cur;
+    document.getElementById('stat-sub-next').textContent =
+      away === 0 ? 'up now' : `${away} pick${away !== 1 ? 's' : ''} away`;
+  } else {
+    document.getElementById('stat-next').textContent     = '—';
+    document.getElementById('stat-sub-next').textContent = 'all picks used';
+  }
+
+  const statusEl    = document.getElementById('stat-status');
+  const statusSubEl = document.getElementById('stat-sub-status');
+  if (S.cur > TOTAL) {
+    statusEl.textContent  = 'Done';
+    statusEl.className    = 'val val-warn';
+    statusSubEl.textContent = 'draft complete';
+  } else if (isRyan(S.cur)) {
+    statusEl.textContent  = 'On Clock';
+    statusEl.className    = 'val val-danger';
+    statusSubEl.textContent = `pick ${pickLabel(S.cur)} — make your selection`;
+  } else if (next && next - S.cur <= 3) {
+    statusEl.textContent  = 'On Deck';
+    statusEl.className    = 'val val-warn';
+    statusSubEl.textContent = `${next - S.cur} pick${next - S.cur !== 1 ? 's' : ''} until ${pickLabel(next)}`;
+  } else {
+    statusEl.textContent  = 'Watching';
+    statusEl.className    = 'val';
+    statusSubEl.textContent = next ? `next pick: ${pickLabel(next)}` : '—';
+  }
+}
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+
+function metaLine1(p) {
+  const c = COLLEGE[p.id];
+  if (!c) return '';
+  const parts = [];
+  if (c.s) parts.push(c.s);
+  if (c.y) parts.push(c.y);
+  if (c.st) {
+    const s = c.st;
+    if (p.pos === 'QB') {
+      parts.push(`${s.cmp}/${s.att} · ${s.yds.toLocaleString()} yds · ${s.td} TD · ${s.int} INT`);
+    } else if (p.pos === 'RB') {
+      let st = `${s.car} car · ${s.yds.toLocaleString()} yds · ${s.td} TD`;
+      if (s.rec) st += ` · ${s.rec} rec`;
+      parts.push(st);
+    } else {
+      parts.push(`${s.rec} rec · ${s.yds.toLocaleString()} yds · ${s.td} TD`);
+    }
+  }
+  return parts.join(' · ');
+}
+
+function metaLine2(p) {
+  const np = NFL_PICKS[p.id];
+  const parts = [p.nfl];
+  if (np) parts.push(`Rd ${np[0]} #${np[1]}`);
+  else if (p.id in NFL_PICKS) parts.push('UDFA');
+  if (p.rnk) {
+    const [, fp, pff] = p.rnk;
+    if (fp)  parts.push(`FP ${fp}`);
+    if (pff) parts.push(`PFF ${pff}`);
+  }
+  const combine = [];
+  if (p.ht)          combine.push(p.ht);
+  if (p.wt)          combine.push(`${p.wt}`);
+  if (p.forty)       combine.push(`${p.forty}`);
+  if (p.ras != null) combine.push(`RAS ${p.ras}%`);
+  if (combine.length) parts.push(combine.join(' · '));
+  return parts.join(' · ');
+}
+
+// ── Render: Pool ──────────────────────────────────────────────────────────────
+
+function renderPool() {
+  const all       = activePos === 'ALL' ? PLAYERS : PLAYERS.filter(p => p.pos === activePos);
+  const available = all.filter(p => !S.picks[p.id] && !S.gone[p.id]);
+  const mine      = all.filter(p =>  S.picks[p.id]);
+  const gone      = all.filter(p =>  S.gone[p.id]);
+
+  document.getElementById('meta-pool').innerHTML =
+    `<span class="hi">${available.length}</span> available · ${mine.length} picked · ${gone.length} gone`;
+
+  let h = '';
+
+  if (available.length) {
+    h += `<div class="starter-divider">Available — ${available.length}</div>`;
+    for (const p of available) {
+      const rank = PLAYERS.indexOf(p) + 1;
+      h += `<div class="player-row">
+        <div class="player-rank">${rank}</div>
+        <div class="player-info">
+          <div class="player-name">${p.name}<span class="name-pos">${p.pos}</span></div>
+          <div class="player-meta">
+            ${metaLine1(p) ? `<div class="player-note">${metaLine1(p)}</div>` : ''}
+            <div class="player-note">${metaLine2(p)}</div>
+          </div>
+        </div>
+        <div class="player-pos">${p.pos}</div>
+        <div class="player-actions">
+          <button class="btn btn-win"  onclick="markMine('${p.id}')">Mine</button>
+          <button class="btn btn-lost" onclick="markGone('${p.id}')">Gone</button>
+        </div>
+      </div>`;
+    }
+  }
+
+  if (mine.length) {
+    h += `<div class="gone-divider">My Picks — ${mine.length}</div>`;
+    for (const p of mine) {
+      const rank = PLAYERS.indexOf(p) + 1;
+      const d    = S.picks[p.id];
+      h += `<div class="player-row won">
+        <div class="player-rank">${rank}</div>
+        <div class="player-info">
+          <div class="player-name">${p.name}<span class="name-pos">${p.pos}</span></div>
+          <div class="player-meta">
+            ${metaLine1(p) ? `<div class="player-note">${metaLine1(p)}</div>` : ''}
+            <div class="player-note">${metaLine2(p)}</div>
+          </div>
+        </div>
+        <div class="player-pos">${p.pos}</div>
+        <div class="player-actions">
+          <span class="won-label">Picked</span>
+          <span class="won-pick">${d ? pickLabel(d.pickNum) : ''}</span>
+          <button class="btn btn-undo" onclick="undoPick('${p.id}')">Undo</button>
+        </div>
+      </div>`;
+    }
+  }
+
+  if (gone.length) {
+    h += `<div class="gone-divider">Gone — ${gone.length}</div>`;
+    for (const p of gone) {
+      const rank = PLAYERS.indexOf(p) + 1;
+      h += `<div class="player-row lost">
+        <div class="player-rank">${rank}</div>
+        <div class="player-info">
+          <div class="player-name">${p.name}<span class="name-pos">${p.pos}</span></div>
+          <div class="player-meta">
+            ${metaLine1(p) ? `<div class="player-note">${metaLine1(p)}</div>` : ''}
+            <div class="player-note">${metaLine2(p)}</div>
+          </div>
+        </div>
+        <div class="player-pos">${p.pos}</div>
+        <div class="player-actions">
+          <span class="lost-label">Taken</span>
+          <button class="btn btn-undo" onclick="undoPick('${p.id}')">Undo</button>
+        </div>
+      </div>`;
+    }
+  }
+
+  document.getElementById('list-pool').innerHTML = h;
+}
+
+// ── Render: Board ─────────────────────────────────────────────────────────────
+
+function renderBoard() {
+  const filled = {};
+  for (const [id, d] of Object.entries(S.picks)) { if (d.pickNum) filled[d.pickNum] = d.name; }
+  for (const [id, d] of Object.entries(S.gone))  { if (d.pickNum) filled[d.pickNum] = d.name; }
+
+  // Set grid columns based on ROUNDS
+  document.getElementById('board-grid').style.gridTemplateColumns = `repeat(${ROUNDS}, 1fr)`;
+
+  let h = '';
+  for (let r = 1; r <= ROUNDS; r++) {
+    h += `<div class="round-col"><div class="round-hdr">Round ${r}</div>`;
+    for (let slot = 1; slot <= TEAMS; slot++) {
+      const overall = (r - 1) * TEAMS + slot;
+      const ryan    = isRyan(overall);
+      const cur     = overall === S.cur;
+      let cls = 'board-cell';
+      if (ryan) cls += ' ryan';
+      if (cur)  cls += ' current';
+      h += `<div class="${cls}">
+        <div class="cell-pick-label">${pickLabel(overall)}${cur ? ' ▶' : ''}</div>
+        <div class="cell-team">${ryan ? '★ Ryan' : (ROSTER_NAME[ownerOf(overall)] || '?')}</div>
+        ${filled[overall] ? `<div class="cell-player">${filled[overall]}</div>` : ''}
+      </div>`;
+    }
+    h += `</div>`;
+  }
+  document.getElementById('board-grid').innerHTML = h;
+}
+
+// ── Render: Roster ────────────────────────────────────────────────────────────
+
+function renderRoster() {
+  const posOrder = ['QB', 'WR', 'RB', 'TE'];
+  const byPos = {};
+  for (const pos of posOrder) byPos[pos] = [];
+  for (const p of DYNASTY_ROSTER) (byPos[p.pos] || []).push(p);
+
+  const rookiesByPos = { QB: [], WR: [], RB: [], TE: [] };
+  for (const d of Object.values(S.picks || {})) {
+    (rookiesByPos[d.pos] || rookiesByPos.WR).push(d);
+  }
+  const totalRookies = Object.values(rookiesByPos).flat().length;
+
+  const starters = DYNASTY_ROSTER.filter(p => p.starter).length;
+  document.getElementById('meta-roster').innerHTML =
+    `<span class="hi">${DYNASTY_ROSTER.length + totalRookies}</span> players · <span class="hi">${starters}</span> starters` +
+    (totalRookies ? ` · <span style="color:var(--accent)"><span class="hi">${totalRookies}</span> rookie${totalRookies > 1 ? 's' : ''}</span>` : '');
+
+  let h = '<div class="roster-columns">';
+  for (const pos of posOrder) {
+    const starts  = byPos[pos].filter(p => p.starter);
+    const bench   = byPos[pos].filter(p => !p.starter);
+    const rookies = rookiesByPos[pos] || [];
+    const countParts = [`${starts.length}S`, `${bench.length}B`];
+    if (rookies.length) countParts.push(`${rookies.length}R`);
+    h += `<div class="roster-section">
+      <div class="roster-section-header">
+        <div class="roster-section-pos">${pos}</div>
+        <div class="roster-section-count">${countParts.join(' · ')}</div>
+      </div>`;
+    if (rookies.length) {
+      h += `<div class="starter-divider">2026 Rookies</div>`;
+      for (const p of rookies) {
+        h += `<div class="roster-slot">
+          <div class="slot-label">${p.nfl}</div>
+          <div class="slot-player" style="color:var(--accent)">${p.name}</div>
+          <div class="slot-pick">${pickLabel(p.pickNum)}</div>
+        </div>`;
+      }
+    }
+    if (starts.length || bench.length) {
+      if (rookies.length) h += `<div class="starter-divider">Dynasty</div>`;
+      for (const p of starts) {
+        h += `<div class="roster-slot">
+          <div class="slot-label">${p.team}</div>
+          <div class="slot-player">${p.name}</div>
+          <div class="slot-pick">age ${p.age}</div>
+        </div>`;
+      }
+      if (bench.length) {
+        h += `<div class="starter-divider">Bench</div>`;
+        for (const p of bench) {
+          h += `<div class="roster-slot">
+            <div class="slot-label">${p.team}</div>
+            <div class="slot-player" style="color:var(--text-2)">${p.name}</div>
+            <div style="font-family:var(--mono);font-size:11px;color:var(--text-3)">age ${p.age}</div>
+          </div>`;
+        }
+      }
+    }
+    if (!rookies.length && !starts.length && !bench.length) {
+      h += `<div style="padding:14px;font-size:12px;color:var(--text-3)">Empty</div>`;
+    }
+    h += `</div>`;
+  }
+  h += '</div>';
+  document.getElementById('roster-content').innerHTML = h;
+}
+
+// ── Render ────────────────────────────────────────────────────────────────────
+
+function render() {
+  renderStats();
+  const active = document.querySelector('.tab.active')?.dataset.tab;
+  if (active === 'pool')   renderPool();
+  if (active === 'board')  renderBoard();
+  if (active === 'roster') renderRoster();
+}
+
+initUI();
+render();
+
+// ── Sleeper live sync (polls every 3 minutes) ─────────────────────────────────
+
+const SLEEPER_NAME_MAP = new Map(PLAYERS.map(p => [p.name.toLowerCase(), p]));
+
+async function pollDraft() {
+  if (DRAFT_ID === 'FILL_IN') return;
+  try {
+    const res = await fetch(`https://api.sleeper.app/v1/draft/${DRAFT_ID}/picks`);
+    if (!res.ok) return;
+    const apiPicks = await res.json();
+    let changed = false;
+    for (const pick of apiPicks) {
+      const fullName = `${pick.metadata.first_name} ${pick.metadata.last_name}`;
+      const key      = fullName.toLowerCase();
+      const player   = SLEEPER_NAME_MAP.get(key)
+        || PLAYERS.find(p => p.id === ALIASES[key]);
+      const n = pick.pick_no;
+      if (n >= S.cur) { S.cur = n + 1; changed = true; }
+      if (!player) continue;
+      const { id } = player;
+      if (pick.picked_by === RYAN_UID) {
+        if (!S.picks[id]) {
+          S.picks[id] = { name: player.name, pos: player.pos, nfl: player.nfl, pickNum: n };
+          delete S.gone[id];
+          changed = true;
+        }
+      } else if (!S.gone[id] && !S.picks[id]) {
+        S.gone[id] = { name: player.name, pickNum: n };
+        changed = true;
+      }
+    }
+    if (changed) { save(); render(); }
+    const el = document.getElementById('last-sync');
+    if (el) el.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  } catch(e) {}
+}
+
+setInterval(pollDraft, 3 * 60 * 1000);
+pollDraft();
+</script>
+</body>
+</html>
