@@ -1,24 +1,25 @@
 # The Frozen Tundra — Long-Term Plan
 
-## Phase 1: 2026 Rookie Draft (ACTIVE — 2026-04-27)
-Draft is live. 12-team, 4-round, linear format, SuperFlex PPR.
+## Phase 1: 2026 Rookie Draft (ACTIVE — 2026-04-29)
+Draft is live. 12-team, 4-round, linear format, SuperFlex PPR. Through pick 26 (round 3.02).
 
 ### Ryan's picks
-| Pick | Overall | Status |
-|------|---------|--------|
-| 1.02 | 2  | — |
-| 1.12 | 12 | — |
-| 2.02 | 14 | — |
-| 2.11 | 23 | — |
-| 3.02 | 26 | — |
-| 3.06 | 30 | — |
-| 3.09 | 33 | — |
-| 4.02 | 38 | — |
+| Pick | Overall | Player | Status |
+|------|---------|--------|--------|
+| 1.02 | 2  | Fernando Mendoza (QB, LVR) | ✓ |
+| 1.10 | 10 | Omar Cooper Jr. (WR, NYJ)  | ✓ |
+| 1.12 | 12 | Ty Simpson (QB, LAR)       | ✓ |
+| 2.02 | 14 | Germie Bernard (WR, PIT)   | ✓ |
+| 2.11 | 23 | Zachariah Branch (WR, ATL) | ✓ |
+| 2.12 | 24 | Chris Brazzell II (WR, CAR)| ✓ |
+| 3.02 | 26 | Ja'Kobi Lane (WR, BAL)     | ✓ |
+| 3.09 | 33 | — | Pending |
+| 4.02 | 38 | — | Pending |
 
 ### Immediate priorities
 - [x] Build draft-tracker.html with SF-adjusted consensus rankings baked in
-- [ ] Use draft-tracker.html during live draft — server ready on port 8766
-- [ ] Record all picks (Mine / Gone) in real time
+- [x] Use draft-tracker.html during live draft — server ready on port 8766
+- [x] Record all picks (Mine / Gone) in real time — 7 of 9 picks made
 - [ ] Update this file with final roster after draft completes
 
 ### Draft tracker

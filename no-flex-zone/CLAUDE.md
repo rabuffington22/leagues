@@ -19,29 +19,46 @@
 - Big play bonuses: 20-29yd rec +0.5, 30-39yd +0.5, 40+yd +1.0
 - 20+ carry bonus: +1 pt flat for RBs with 20+ rush attempts in a week
 
-## Draft status (as of 2026-04-28)
-Auction is live. 14 picks made so far — market running very hot.
+## Draft status (as of 2026-04-29)
+Auction is live. 29 picks made so far — market running extremely hot across all positions.
 
 ### Off the board
-| Player | Pos | $ | Winner |
-|---|---|---|---|
-| Drake Maye | QB | $220 | **RYAN** |
-| Trey McBride | TE | $225 | **RYAN** |
-| Brock Bowers | TE | $251 | **RYAN** |
-| Josh Allen | QB | $251 | AmadorFSU |
-| Jayden Daniels | QB | $220 | coleh44 |
-| Bijan Robinson | RB | $223 | AmadorFSU |
-| De'Von Achane | RB | $165 | AmadorFSU |
-| Jeremiyah Love | RB | $175 | revskip |
-| Jordan Mason | RB | $25 | AmadorFSU |
-| Ja'Marr Chase | WR | $238 | kolt78 |
-| Malik Nabers | WR | $190 | Chauncey |
-| Jaxon Smith-Njigba | WR | $231 | SunnyBrown |
-| Jahmyr Gibbs | RB | $241 | kolt78 |
-| Puka Nacua | WR | $225 | TimboDAsavage |
+| Pick | Player | Pos | $ | Winner |
+|---|---|---|---|---|
+| 1 | Drake Maye | QB | $220 | **RYAN** |
+| 2 | Josh Allen | QB | $251 | AmadorFSU |
+| 3 | Bijan Robinson | RB | $223 | AmadorFSU |
+| 4 | Malik Nabers | WR | $190 | Chauncey |
+| 5 | Jordan Mason | RB | $25 | AmadorFSU |
+| 6 | Jeremiyah Love | RB | $175 | revskip |
+| 7 | Jayden Daniels | QB | $220 | coleh44 |
+| 8 | De'Von Achane | RB | $165 | AmadorFSU |
+| 9 | Ja'Marr Chase | WR | $238 | kolt78 |
+| 10 | Jaxon Smith-Njigba | WR | $231 | SunnyBrown |
+| 11 | Jahmyr Gibbs | RB | $241 | kolt78 |
+| 12 | Trey McBride | TE | $225 | **RYAN** |
+| 13 | Puka Nacua | WR | $225 | TimboDAsavage |
+| 14 | Brock Bowers | TE | $251 | **RYAN** |
+| 15 | Caleb Williams | QB | $214 | tking1456 |
+| 16 | Joe Burrow | QB | $212 | SunnyBrown |
+| 17 | Amon-Ra St. Brown | WR | $210 | mhaas10 |
+| 18 | Justin Jefferson | WR | $204 | yaba1234 |
+| 19 | Omarion Hampton | RB | $193 | rcasper22 |
+| 20 | Garrett Wilson | WR | $136 | yaba1234 |
+| 21 | Lamar Jackson | QB | $206 | tking1456 |
+| 22 | Jonathan Taylor | RB | $134 | rcasper22 |
+| 23 | CeeDee Lamb | WR | $191 | gpeisert1 |
+| 24 | Ashton Jeanty | RB | $201 | Chauncey |
+| 25 | Justin Herbert | QB | $203 | gpeisert1 |
+| 26 | Jaxson Dart | QB | $215 | coleh44 |
+| 27 | Jalen Hurts | QB | $193 | Chauncey |
+| 28 | Jordyn Tyson | WR | $103 | Huddy20 |
+| 29 | Bo Nix | QB | $200 | revskip |
 
 ### Market calibration
-WR and RB market running 2–4× above pre-draft ceilings. TE market was fair (McBride $225, Bowers $251). New teams: SunnyBrown, TimboDAsavage confirmed active.
+Every elite QB is gone at $193–$251. WR and RB market running 2–4× above pre-draft ceilings. TE market was fair (McBride $225, Bowers $251). **Bo Nix went at $200** — 3× Ryan's $65 ceiling. QB2 plan needs to pivot to second-tier QBs (Tua, Dak, Jordan Love, Lawrence, Richardson, etc.) at $65 max.
+
+All 14 teams now identified: AmadorFSU, Chauncey, revskip, coleh44, kolt78, SunnyBrown, TimboDAsavage, tking1456, mhaas10, yaba1234, rcasper22, gpeisert1, Huddy20, **RYAN**.
 
 ## Auction tracker
 Single-file tool: `no-flex-zone/auction-tracker.html`
@@ -58,7 +75,7 @@ Single-file tool: `no-flex-zone/auction-tracker.html`
 - Lost picks stored as `S.lost[id] = { team, price }` (attributed) or `true` (unattributed); merge logic upgrades unattributed entries when SEED has team info
 - `S.teams` = array of known team names, used for autocomplete when attributing picks
 - League tab shows all team cards (Ryan first, others by spend); Unattributed section for picks with no team assigned yet
-- Sleeper usernames for known teams: AmadorFSU, coleh44, revskip, kolt78, Chauncey, SunnyBrown, TimboDAsavage
+- Sleeper usernames for all 14 teams: AmadorFSU, coleh44, revskip, kolt78, Chauncey, SunnyBrown, TimboDAsavage, tking1456, mhaas10, yaba1234, rcasper22, gpeisert1, Huddy20
 - Each player in TARGETS has `y25: { pts, g }` for 2025 season totals (derived from trend data in notes; estimated where not available). Player tabs sort by `y25.pts` descending. Stats columns show 2025 data; 3yr context shown as note line under player name.
 
 ### Tracker design system (as of 2026-04-28)
@@ -85,8 +102,8 @@ Remaining: $304
 ## Budget (remaining)
 | Position | Budget | Notes |
 |---|---|---|
-| QB2 | $65 | Bo Nix preferred — non-negotiable need |
-| WR | $169 | 4 starters — more room to get real pieces |
+| QB2 | $65 | Bo Nix gone at $200 — pivoting to Tua/Dak/Love/Lawrence/Richardson |
+| WR | $169 | 4 starters — stars-and-scrubs approach |
 | RB | $30 | 3 × $10 minimum bids — plan to trade for RBs in-season |
 | Bench | $40 | Mostly $1 bids |
 | **Total** | **$304** | |
@@ -98,8 +115,9 @@ QB2 → WR → RB ($10 bids, don't overpay)
 Punting RB in the draft intentionally. If team is competitive, trade WR depth or picks for RB upgrade mid-season. Maye + McBride + Bowers core is strong enough to be a seller at RB.
 
 ## Target ceilings
-- **QB2**: $65 max — Bo Nix preferred (22.6 PPG, 34/34 games)
+- **QB2**: $65 max — Bo Nix gone at $200 (revskip). Next tier: Tua Tagovailoa, Dak Prescott, Jordan Love, Trevor Lawrence, Anthony Richardson. Hold $65 ceiling.
 
 ## Players removed from target list
-- Justin Herbert — 18.5 PPG 3-yr avg, sack penalty consistently hurts him
-- Joe Burrow — only 35 games in 3 seasons, injury risk too high
+- Justin Herbert — gone at $203 (gpeisert1)
+- Joe Burrow — gone at $212 (SunnyBrown)
+- Bo Nix — gone at $200 (revskip), was QB2 target

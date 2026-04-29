@@ -7,7 +7,7 @@ The auction is live. 14 picks made league-wide. $304 remaining.
 - [x] Build live auction tracker (auction-tracker.html — served at localhost:8765)
 - [x] Build player-specific bid ceilings for all positions — baked into tracker
 - [x] Win both TEs — McBride ($225) and Bowers ($251) secured
-- [ ] QB2 — Bo Nix preferred, $65 max
+- [ ] QB2 — Bo Nix **GONE** ($200, revskip). Next: Tua/Dak/Love/Lawrence/Richardson, $65 max ceiling holds
 - [ ] 4 WR starters — $169 budget, stars-and-scrubs approach
 - [ ] 3 RB starters — $30 budget ($10/each), intentional punt; plan to trade for upgrades in-season
 - [ ] Bench depth — $40 budget, mostly $1 bids
@@ -39,7 +39,7 @@ Bowers came in $51 over original $200 ceiling — WR/RB/bench budgets compressed
 ### Known active ceilings
 | Player | Ceil |
 |---|---|
-| QB2 (Bo Nix preferred) | $65 |
+| QB2 (Tua/Dak/Love/Lawrence/Richardson) | $65 |
 
 ### Tracker notes
 - Run: `python3 -m http.server 8765` from `no-flex-zone/` directory

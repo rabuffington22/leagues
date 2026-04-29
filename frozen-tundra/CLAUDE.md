@@ -16,17 +16,17 @@
 ## Ryan's 2026 Draft Picks (post-trade)
 | Pick | Overall | Player | Status |
 |------|---------|--------|--------|
-| 1.02 | 2  | Fernando Mendoza (QB, LVR) | ✓ Drafted |
-| 1.10 | 10 | Omar Cooper Jr. (WR, NYJ)  | ✓ Drafted |
-| 1.12 | 12 | Ty Simpson (QB, LAR)       | ✓ Drafted |
-| 2.02 | 14 | — | Pending |
-| 2.11 | 23 | — | Pending |
-| 2.12 | 24 | — | Pending |
-| 3.02 | 26 | — | Pending |
+| 1.02 | 2  | Fernando Mendoza (QB, LVR)  | ✓ Drafted |
+| 1.10 | 10 | Omar Cooper Jr. (WR, NYJ)   | ✓ Drafted |
+| 1.12 | 12 | Ty Simpson (QB, LAR)        | ✓ Drafted |
+| 2.02 | 14 | Germie Bernard (WR, PIT)    | ✓ Drafted |
+| 2.11 | 23 | Zachariah Branch (WR, ATL)  | ✓ Drafted |
+| 2.12 | 24 | Chris Brazzell II (WR, CAR) | ✓ Drafted |
+| 3.02 | 26 | Ja'Kobi Lane (WR, BAL)      | ✓ Drafted |
 | 3.09 | 33 | — | Pending |
 | 4.02 | 38 | — | Pending |
 
-Note: Draft is live as of 2026-04-28 — 13 picks made total.
+Note: Draft is live as of 2026-04-29 — 26 picks made total. 2 Ryan picks remaining.
 
 ## Draft slot order (linear, repeats each round)
 | Slot | Team | Roster |
