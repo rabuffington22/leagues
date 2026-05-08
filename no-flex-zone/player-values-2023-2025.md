@@ -27,6 +27,17 @@ Key scoring vs standard: 6pt pass TDs, -2.5/sack, 1.9 TE PPR, 1.25 WR PPR, 5pt r
 | 17 | Justin Herbert | 28 | 18.5 | 265 (13g) | 313 (17g) | 274 (16g) | 46 |
 | 18 | Caleb Williams | 24 | 17.8 | — | 209 (17g) | 395 (17g) | 34 |
 | 21 | C.J. Stroud | 24 | 16.6 | 309 (15g) | 209 (17g) | 246 (14g) | 46 |
+| — | Tua Tagovailoa | 28 | 17.5 | 334 (17g) | 232 (11g) | 170 (14g) | 42 |
+| — | Aaron Rodgers | 42 | 15.8 | -3 (1g) | 282 (17g) | 258 (16g) | 34 |
+| — | Geno Smith | 35 | 13.8 | 261 (15g) | 264 (17g) | 125 (15g) | 47 |
+| — | Daniel Jones | 28 | 13.6 | -2 (6g) | 126 (10g) | 269 (13g) | 29 |
+| — | Justin Fields | 27 | 13.6 | 200 (13g) | 110 (10g) | 125 (9g) | 32 |
+| — | Mac Jones | 27 | 11.6 | 98 (11g) | 109 (10g) | 164 (11g) | 32 |
+| — | Bryce Young | 24 | 11.4 | 73 (16g) | 193 (14g) | 256 (16g) | 46 |
+| — | Michael Penix | 26 | 14.2 | — | 52 (5g) | 146 (9g) | 14 |
+| — | J.J. McCarthy | 23 | 10.0 | — | — | 100 (10g) | 10 |
+| — | Cam Ward | 23 | 8.3 | — | — | 141 (17g) | 17 |
+| — | Shedeur Sanders | 24 | 7.2 | — | — | 57 (8g) | 8 |
 
 **Notes:**
 - Allen #1 with 51/51 games played — most consistent elite QB in this format.
@@ -55,6 +66,26 @@ Key scoring vs standard: 6pt pass TDs, -2.5/sack, 1.9 TE PPR, 1.25 WR PPR, 5pt r
 | 13 | Breece Hall | 24 | 16.7 | 318 (17g) | 262 (16g) | 237 (16g) | 49 |
 | 16 | Ashton Jeanty | 22 | 15.5 | — | — | 263 (17g) | 17 |
 | 20 | Chase Brown | 26 | 14.2 | 60 (12g) | 277 (16g) | 304 (17g) | 45 |
+| — | Cam Skattebo | 24 | 17.3 | — | — | 139 (8g) | 8 |
+| — | Travis Etienne | 27 | 14.7 | 304 (17g) | 148 (15g) | 270 (17g) | 49 |
+| — | D'Andre Swift | 27 | 14.3 | 218 (16g) | 233 (17g) | 250 (16g) | 49 |
+| — | Aaron Jones | 31 | 13.8 | 154 (11g) | 266 (17g) | 133 (12g) | 40 |
+| — | Tony Pollard | 29 | 13.5 | 246 (17g) | 222 (16g) | 205 (17g) | 50 |
+| — | Rachaad White | 27 | 13.4 | 294 (17g) | 218 (16g) | 158 (17g) | 50 |
+| — | RJ Harvey | 25 | 12.7 | — | — | 217 (17g) | 17 |
+| — | Jaylen Warren | 27 | 12.5 | 217 (17g) | 144 (15g) | 238 (16g) | 48 |
+| — | Najee Harris | 27 | 12.2 | 211 (17g) | 226 (17g) | 13 (3g) | 37 |
+| — | Tyrone Tracy | 26 | 11.9 | — | 198 (17g) | 183 (15g) | 32 |
+| — | Isiah Pacheco | 27 | 11.7 | 232 (14g) | 65 (7g) | 100 (13g) | 34 |
+| — | David Montgomery | 28 | 14.1 | 218 (14g) | 237 (14g) | 180 (17g) | 45 |
+| — | Zach Charbonnet | 25 | 10.3 | 123 (16g) | 194 (17g) | 190 (16g) | 49 |
+| — | Tyjae Spears | 24 | 9.9 | 172 (17g) | 122 (12g) | 123 (13g) | 42 |
+| — | Justice Hill | 28 | 8.0 | 119 (16g) | 141 (15g) | 67 (10g) | 41 |
+| — | Tyler Allgeier | 26 | 7.9 | 153 (17g) | 122 (17g) | 130 (17g) | 51 |
+| — | Bhayshul Tuten | 23 | 6.2 | — | — | 93 (15g) | 15 |
+| — | Trey Benson | 23 | 5.5 | — | 55 (13g) | 39 (4g) | 17 |
+| — | Blake Corum | 25 | 5.2 | — | 42 (17g) | 133 (17g) | 34 |
+| — | Tank Bigsby | 23 | 4.5 | 26 (17g) | 137 (16g) | 60 (17g) | 50 |
 
 **Notes:**
 - CMC: highest PPG (25.2) but only 37 games in 3 years — massive injury risk. Age 29.
@@ -81,6 +112,32 @@ Key scoring vs standard: 6pt pass TDs, -2.5/sack, 1.9 TE PPR, 1.25 WR PPR, 5pt r
 | 12 | Jaxon Smith-Njigba | 24 | 18.4 | 182 (17g) | 312 (17g) | 442 (17g) | 51 |
 | 14 | Drake London | 24 | 18.0 | 223 (16g) | 341 (17g) | 246 (12g) | 45 |
 | 19 | George Pickens | 25 | 17.2 | 258 (17g) | 207 (14g) | 360 (17g) | 48 |
+| — | Davante Adams | 33 | 19.6 | 324 (17g) | 293 (14g) | 264 (14g) | 45 |
+| — | Mike Evans | 32 | 18.7 | 336 (17g) | 288 (14g) | 105 (8g) | 39 |
+| — | Stefon Diggs | 32 | 17.7 | 332 (17g) | 150 (8g) | 264 (17g) | 42 |
+| — | Brandon Aiyuk | 28 | 17.0 | 311 (16g) | 81 (7g) | — (0g) | 23 |
+| — | DeVonta Smith | 27 | 16.7 | 276 (16g) | 242 (13g) | 250 (17g) | 46 |
+| — | DJ Moore | 29 | 16.6 | 351 (17g) | 288 (17g) | 205 (17g) | 51 |
+| — | Brian Thomas Jr. | 23 | 16.5 | — | 341 (17g) | 172 (14g) | 31 |
+| — | Terry McLaurin | 30 | 16.3 | 253 (17g) | 318 (17g) | 144 (10g) | 44 |
+| — | Zay Flowers | 25 | 16.2 | 251 (16g) | 262 (17g) | 298 (17g) | 50 |
+| — | DK Metcalf | 28 | 16.0 | 275 (16g) | 234 (15g) | 225 (15g) | 46 |
+| — | Jakobi Meyers | 29 | 16.0 | 260 (16g) | 270 (15g) | 221 (16g) | 47 |
+| — | Courtland Sutton | 30 | 15.8 | 226 (16g) | 297 (17g) | 268 (17g) | 50 |
+| — | Jordan Addison | 24 | 14.7 | 262 (17g) | 252 (15g) | 163 (14g) | 46 |
+| — | Calvin Ridley | 31 | 14.3 | 280 (17g) | 245 (17g) | 62 (7g) | 41 |
+| — | Jameson Williams | 25 | 14.1 | 95 (12g) | 255 (15g) | 271 (17g) | 44 |
+| — | Cooper Kupp | 32 | 13.8 | 199 (12g) | 209 (12g) | 144 (16g) | 40 |
+| — | Wan'Dale Robinson | 25 | 13.7 | 166 (15g) | 225 (17g) | 267 (16g) | 48 |
+| — | Jayden Reed | 26 | 13.7 | 253 (16g) | 235 (17g) | 59 (7g) | 40 |
+| — | Romeo Doubs | 26 | 12.5 | 209 (17g) | 162 (13g) | 204 (16g) | 46 |
+| — | Christian Watson | 26 | 12.1 | 120 (9g) | 131 (15g) | 159 (10g) | 34 |
+| — | Khalil Shakir | 26 | 11.8 | 141 (17g) | 223 (15g) | 201 (16g) | 48 |
+| — | Ricky Pearsall | 25 | 11.5 | — | 113 (11g) | 117 (9g) | 20 |
+| — | Xavier Worthy | 23 | 11.5 | — | 218 (17g) | 138 (14g) | 31 |
+| — | Quentin Johnston | 24 | 11.4 | 116 (17g) | 207 (15g) | 201 (14g) | 46 |
+| — | Travis Hunter | 22 | 11.3 | — | — | 79 (7g) | 7 |
+| — | Keon Coleman | 22 | 10.1 | — | 136 (13g) | 125 (13g) | 26 |
 
 **Notes:**
 - Amon-Ra most consistent WR: 50/51 games, elite PPG all 3 years. Underrated in auctions.
@@ -109,6 +166,14 @@ Key scoring vs standard: 6pt pass TDs, -2.5/sack, 1.9 TE PPR, 1.25 WR PPR, 5pt r
 | 18 | Hunter Henry | 31 | 13.9 | 170 (14g) | 226 (16g) | 256 (17g) | 47 |
 | 20 | Dalton Schultz | 29 | 13.8 | 222 (15g) | 180 (17g) | 272 (17g) | 49 |
 | 22 | Colston Loveland | 22 | 14.9 | — | — | 238 (16g) | 16 |
+| — | T.J. Hockenson | 28 | 16.1 | 333 (15g) | 141 (10g) | 170 (15g) | 40 |
+| — | Evan Engram | 31 | 15.7 | 359 (17g) | 141 (9g) | 159 (16g) | 42 |
+| — | Jake Ferguson | 27 | 14.7 | 263 (17g) | 170 (14g) | 274 (17g) | 48 |
+| — | Brenton Strange | 25 | 14.7 | 20 (14g) | 140 (17g) | 176 (12g) | 43 |
+| — | Mark Andrews | 30 | 14.4 | 190 (10g) | 257 (17g) | 187 (17g) | 44 |
+| — | Jonnu Smith | 30 | 12.5 | 184 (17g) | 328 (17g) | 124 (17g) | 51 |
+| — | Theo Johnson | 25 | 10.6 | — | 104 (12g) | 183 (15g) | 27 |
+| — | Chig Okonkwo | 26 | 10.6 | 177 (17g) | 172 (17g) | 189 (17g) | 51 |
 
 **Notes:**
 - Bowers edges McBride on 3-yr PPG (22.5 vs 22.4) but only 29 games vs McBride's 50.
