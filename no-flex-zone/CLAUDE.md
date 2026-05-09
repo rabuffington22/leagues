@@ -77,10 +77,13 @@ Single-file tool: `no-flex-zone/auction-tracker.html`
 - League tab shows all team cards (Ryan first, others by spend); Unattributed section for picks with no team assigned yet
 - Sleeper usernames for all 14 teams: AmadorFSU, coleh44, revskip, kolt78, Chauncey, SunnyBrown, TimboDAsavage, tking1456, mhaas10, yaba1234, rcasper22, gpeisert1, Huddy20
 - Each player in TARGETS has `y25: { pts, g }` for 2025 season totals (derived from trend data in notes; estimated where not available). Player tabs sort by `y25.pts` descending. Stats columns show 2025 data; 3yr context shown as note line under player name.
+- When adding players to TARGETS mid-draft, compute PPG from actual Sleeper stats — pull `/v1/stats/nfl/regular/{2023,2024,2025}` and `/v1/players/nfl`, apply NFZ scoring (see `/tmp/nfz_3yr.py` from the 2026-05-08 session, or recreate from `league.json` scoring_settings). The values file (`player-values-2023-2025.md`) appends new entries with `Rk = —` to mark unranked additions.
 
-### Tracker design system (as of 2026-04-28)
+### Tracker design system (as of 2026-05-08)
 - Aesthetic: "dimly-lit auction room" — true black, no rounded cards, sharp architectural feel
 - Colors: oxblood (`#b3463f`) is dominant accent; brass (`#c9a14b`) for luxury moments (title, Won buttons); sage green (`#7fbf6e`) for won state only. All positions share oxblood — no QB-blue/WR-green color coding.
+- Text palette (post readability pass): `--text: #f4ead2` (cream), `--text-2: #cfc4a0`, `--text-3: #a89f7e` (label/muted), `--text-4: #6f6852` (dim). Each one step brighter than original.
+- Body font-size: 14px. Common label sizes 11-12px (mono). Display headers 21-26px serif. Common font-weight: 600.
 - Fonts: Fraunces (serif, headings + brand title), JetBrains Mono (labels, stat numbers, buttons), Inter (body) — all from Google Fonts
 - **No italics anywhere** — `font-style: normal` on all elements including `.ital` spans and `.roster-section-pos`
 - **Section titles all oxblood** — `.section-title { color: var(--bad-2) }`, `.ital` spans inherit; no white/oxblood split

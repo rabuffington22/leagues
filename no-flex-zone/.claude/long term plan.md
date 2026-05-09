@@ -7,8 +7,10 @@ The auction is live. 14 picks made league-wide. $304 remaining.
 - [x] Build live auction tracker (auction-tracker.html — served at localhost:8765)
 - [x] Build player-specific bid ceilings for all positions — baked into tracker
 - [x] Win both TEs — McBride ($225) and Bowers ($251) secured
-- [ ] QB2 — Bo Nix **GONE** ($200, revskip). Next: Tua/Dak/Love/Lawrence/Richardson, $65 max ceiling holds
-- [ ] 4 WR starters — $169 budget, stars-and-scrubs approach
+- [x] Expand TARGETS list mid-draft — +64 players added (QB +11, WR +26, RB +20, TE +8) with NFZ-scored 3-yr PPG from real Sleeper stats
+- [x] Tracker readability pass — fonts +1px, secondary text colors brightened one step, font-weights bumped 500→600
+- [ ] QB2 — Bo Nix **GONE** ($200, revskip). Next: Tua ($30 ceil)/Daniel Jones ($25)/Penix ($25)/Bryce Young ($20)/McCarthy ($15), $65 max ceiling holds
+- [ ] 4 WR starters — $169 budget, stars-and-scrubs approach (added depth: Flowers, BTJ, DeVonta, DK, DJ Moore, Jameson Williams, etc.)
 - [ ] 3 RB starters — $30 budget ($10/each), intentional punt; plan to trade for upgrades in-season
 - [ ] Bench depth — $40 budget, mostly $1 bids
 - [ ] Keep tracker SEED updated as picks are made

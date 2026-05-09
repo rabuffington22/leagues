@@ -41,6 +41,18 @@
 - Updated CLAUDE.md and long term plan across NFZ and FTZ
 - Synced FTZ picks through pick 26: Mendoza, Cooper Jr., Simpson, Germie Bernard, Zachariah Branch, Chris Brazzell II, Ja'Kobi Lane. Two picks remaining (3.09 at 33, 4.02 at 38).
 
+## 2026-05-08 — Session 6 (Mid-draft target expansion + readability pass)
+- Auction is mid-draft and TARGETS lists running thin — Ryan asked to add depth.
+- Pulled Sleeper player DB and 2023/2024/2025 stats, wrote `/tmp/nfz_3yr.py` to apply NFZ scoring (league.json scoring_settings) and compute 3-yr PPG. Verified against existing entries (McBride 461 pts, Maye 384 pts) — matches.
+- Added 64 players: QB +11, WR +26, RB +20, TE +8. Notable additions: Daniel Jones (269 pts in 13 games — surprise 2025 stud), Cam Skattebo (17.3 PPG late-season NYG breakout), Brian Thomas Jr. (buy-low at 16.5 3yr PPG after sophomore slump), Penix, McCarthy, Zay Flowers, Jameson Williams, Davante Adams.
+- Ceilings tuned to remaining $304 budget posture: $25-30 for realistic QB2 plays, $20-50 for WR1-2 candidates, $1-5 for RB dart throws and bench fliers.
+- Both `auction-tracker.html` (TARGETS const) and `player-values-2023-2025.md` (tables marked `Rk: —`) updated.
+- Readability pass on tracker:
+  - Pass 1: bumped all font-sizes 9-16px up by 1px (sed ascending order to avoid cascading: 16→17, 14→15, 13→14, 12→13, 11→12, 10→11, 9→10). Display headers 21/22/26 untouched.
+  - Pass 2: brightened secondary text colors one step (`--text-3: #6f6852 → #a89f7e` was the biggest gain; `--text-2` and `--text-4` also lifted). Bumped `font-weight: 500 → 600` (34 spots) and `400 → 500` (2 spots).
+- Pushed all three commits directly to `main` via `git push origin claude/silly-mendel-46432d:main` (fast-forward) since Ryan runs the tracker live from main.
+- Stats files are cached at `/tmp/nfl_stats_{2023,2024,2025}.json` and `/tmp/nfz_players.json` — reusable for the rest of the auction without re-downloading.
+
 ## 2026-04-26 — Session 2 (Tracker build + draft start)
 - Auction went live during this session. Josh Allen nominated first — bid up to $251, won by AmadorFSU.
 - Bijan Robinson nominated second by tking.
